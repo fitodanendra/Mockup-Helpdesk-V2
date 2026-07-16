@@ -199,17 +199,24 @@
               </div>
               <div style="display:flex;align-items:center;gap:8px;flex:none;">
                 <div style="position:relative;">
-                  <select value="{{ appTrendSelValue }}" onChange="{{ onAppTrendSelect }}" style="appearance:none;-webkit-appearance:none;font-family:var(--font-sans);font-size:12px;font-weight:700;color:var(--ink-800);background:var(--surface-tint);border:none;border-radius:999px;padding:7px 30px 7px 14px;cursor:pointer;outline:none;max-width:180px;">
-                    <option value="">Semua aplikasi</option>
-                    <sc-for list="{{ appOptions }}" as="o" hint-placeholder-count="8"><option value="{{ o }}">{{ o }}</option></sc-for>
-                  </select>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M6 9l6 6 6-6"></path></svg>
+                  <button onClick="{{ toggleAppTrendDd }}" style="display:flex;align-items:center;gap:8px;font-family:var(--font-sans);font-size:12px;font-weight:700;color:var(--ink-800);background:var(--surface-tint);border:none;border-radius:999px;padding:8px 14px;cursor:pointer;outline:none;max-width:190px;" style-hover="background:var(--blue-050);">
+                    <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ appTrendSelLabel }}</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M6 9l6 6 6-6"></path></svg>
+                  </button>
+                  <sc-if value="{{ appTrendDdOpen }}" hint-placeholder-val="{{ no }}">
+                    <div style="position:absolute;top:42px;right:0;width:220px;max-height:300px;overflow-y:auto;background:var(--white);border:1px solid var(--border);border-radius:12px;box-shadow:var(--elev-pop);z-index:25;padding:6px;">
+                      <sc-for list="{{ appTrendItems }}" as="o" hint-placeholder-count="8">
+                        <button onClick="{{ o.onClick }}" style="{{ o.style }}">{{ o.label }}<sc-if value="{{ o.active }}" hint-placeholder-val="{{ no }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-11"></path></svg></sc-if></button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
                 </div>
                 <sc-if value="{{ appTrendSelActive }}" hint-placeholder-val="{{ no }}">
                   <button onClick="{{ appTrendReset }}" style="border:none;cursor:pointer;font-family:var(--font-sans);font-size:11px;font-weight:700;padding:7px 12px;border-radius:999px;background:var(--blue-050);color:var(--blue-ink);" style-hover="background:var(--blue-050-alt)">Reset</button>
                 </sc-if>
               </div>
             </div>
+            <sc-if value="{{ appTrendDdOpen }}" hint-placeholder-val="{{ no }}"><div onClick="{{ closeAppTrendDd }}" style="position:fixed;inset:0;z-index:20;"></div></sc-if>
             <div style="position:relative;height:180px;width:100%;margin-top:8px;padding-left:34px;">
               <div style="position:absolute;left:0;top:0;bottom:0;width:30px;">
                 <sc-for list="{{ appYLabels }}" as="y" hint-placeholder-count="3">
@@ -505,6 +512,15 @@
           </sc-for>
           <sc-if value="{{ slaTopEmpty }}" hint-placeholder-val="{{ no }}">
             <div style="padding:28px 24px;text-align:center;font-size:13px;color:var(--slate-500);">Tidak ada subjek yang cocok dengan filter.</div>
+          </sc-if>
+          <sc-if value="{{ slaTopPager.show }}" hint-placeholder-val="{{ no }}">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-top:1px solid var(--border-soft);">
+              <span style="font-size:12px;font-weight:600;color:var(--slate-500);">{{ slaTopPager.label }}</span>
+              <div style="display:flex;gap:8px;">
+                <button onClick="{{ slaTopPager.prev }}" style="{{ slaTopPager.prevStyle }}">Sebelumnya</button>
+                <button onClick="{{ slaTopPager.next }}" style="{{ slaTopPager.nextStyle }}">Berikutnya</button>
+              </div>
+            </div>
           </sc-if>
         </div>
       </div>
@@ -1434,7 +1450,7 @@ const ICON = {
 };
 
 class Component extends DCLogic {
-  state = { active:"operational", period:"30d", priority:"all", sortNB:false, reportType:"sla_compliance", escalated:{}, reassignFor:null, reassigned:{}, escHandled:{}, warnDismissed:false, detailFor:null, notes:{}, noteDraft:"", escT:{}, notifOpen:false, profileOpen:false, monQuery:"", filterOpen:false, appFilter:"all", unitFilter:"all", tegFilter:"all", tegSent:{}, repFrom:"2026-06-01", repTo:"2026-06-30", repUnit:"Semua Unit", monPage:1, statusFilter:"all", priOverride:{}, escView:"sla", apprFwd:{}, appTrendSel:null, typeFilter:"all", tick:0, autoRefresh:true, agentFor:null, audit:[], auditFilter:"all", appDirQuery:"", appFilterQuery:"", reassignTab:"agen", reassignQuery:"", picQuery:"", swQuery:"", slaTopQuery:"", slaTopApp:"all", slaTopSub:"all", slaTopType:"all", slaTopCompFilter:"all", slaTopOpen:null, slaTopFilterOpen:false, reccTier:"sub" };
+  state = { active:"operational", period:"30d", priority:"all", sortNB:false, reportType:"sla_compliance", escalated:{}, reassignFor:null, reassigned:{}, escHandled:{}, warnDismissed:false, detailFor:null, notes:{}, noteDraft:"", escT:{}, notifOpen:false, profileOpen:false, monQuery:"", filterOpen:false, appFilter:"all", unitFilter:"all", tegFilter:"all", tegSent:{}, repFrom:"2026-06-01", repTo:"2026-06-30", repUnit:"Semua Unit", monPage:1, statusFilter:"all", priOverride:{}, escView:"sla", apprFwd:{}, appTrendSel:null, typeFilter:"all", tick:0, autoRefresh:true, agentFor:null, audit:[], auditFilter:"all", appDirQuery:"", appFilterQuery:"", reassignTab:"agen", reassignQuery:"", picQuery:"", swQuery:"", slaTopQuery:"", slaTopApp:"all", slaTopSub:"all", slaTopType:"all", slaTopCompFilter:"all", slaTopOpen:null, slaTopFilterOpen:false, reccTier:"sub", appTrendDdOpen:false, slaTopPage:1 };
 
   ip = (n) => ICON[n] || ICON.info;
   nav = (k) => this.setState({ active:k, notifOpen:false, profileOpen:false, filterOpen:false, agentFor:null });
@@ -2243,8 +2259,10 @@ class Component extends DCLogic {
         style:"display:flex;align-items:center;gap:7px;border:none;cursor:pointer;font-family:var(--font-sans);font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px;transition:all .15s ease;"+(active ? "background:var(--blue-050);color:var(--blue-ink);box-shadow:inset 0 0 0 1px var(--blue-400);" : (sel ? "background:var(--surface-tint);color:var(--slate-500);opacity:.7;" : "background:var(--surface-tint);color:var(--ink-700);")) };
     });
     const appTrendHint = sel ? ("Menampilkan tren "+sel) : "Klik chip aplikasi teratas atau pilih dari daftar untuk fokus";
-    const appOptions = this._allApps().map(a => a.name);
-    const onAppTrendSelect = (e) => this.setState({ appTrendSel: e.target.value || null });
+    const _appOpts = [""].concat(this._allApps().map(a => a.name));
+    const appTrendItems = _appOpts.map(nm => ({ label: nm||"Semua aplikasi", active:(sel||"")===nm,
+      onClick:()=>this.setState({ appTrendSel: nm||null, appTrendDdOpen:false }),
+      style:"display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;border:none;cursor:pointer;text-align:left;font-family:var(--font-sans);font-size:12.5px;font-weight:"+((sel||"")===nm?"700":"500")+";padding:8px 11px;border-radius:8px;background:"+((sel||"")===nm?"var(--blue-050)":"transparent")+";color:"+((sel||"")===nm?"var(--blue-ink)":"var(--ink-700)")+";" }));
 
     // ---- monitoring: search + filter ----
     let mon = this._monData().map(r => this.state.priOverride[r.id] ? { ...r, pri:this.state.priOverride[r.id] } : r);
@@ -2431,7 +2449,8 @@ class Component extends DCLogic {
     return {
       yes, no,
       chartMonths, opBars, opCreatedPath, opResolvedPath, opCreatedArea, opResolvedArea, opSummary, mgmtPath, mgmtDots,
-      appLines, appLegend, appTrendHint, appDots, appYLabels, appOptions, onAppTrendSelect, appTrendSelValue:sel||"",
+      appLines, appLegend, appTrendHint, appDots, appYLabels, appTrendItems, appTrendSelLabel:sel||"Semua aplikasi",
+      appTrendDdOpen:this.state.appTrendDdOpen, toggleAppTrendDd:()=>this.setState(s=>({ appTrendDdOpen:!s.appTrendDdOpen })), closeAppTrendDd:()=>this.setState({ appTrendDdOpen:false }),
       appTrendSelActive:!!sel, appTrendReset:() => this.setState({ appTrendSel:null }),
       chartSub:({today:"Tren per jam · hari ini","7d":"Tren harian · 7 hari terakhir","30d":"Tren mingguan · 30 hari terakhir",quarter:"Tren bulanan · kuartal ini"})[this.state.period],
       escalations, escPending,
@@ -2624,20 +2643,31 @@ class Component extends DCLogic {
         if(cf==="breach") rows=rows.filter(r=>r.compN<90);
         else if(cf==="warning") rows=rows.filter(r=>r.compN>=90&&r.compN<95);
         else if(cf==="ok") rows=rows.filter(r=>r.compN>=95);
-        return rows.map((r,i) => ({ rank:i+1, subject:r.subject, app:r.app, sub:r.sub, typeLabel:r.typeLabel, typeBg:r.typeBg, typeColor:r.typeColor, volume:this._nf(r.vol), breach:this._nf(r.br), compliance:r.comp, color:r.color,
-          barW:Math.round(r.vol/maxVol*100)+"%", barColor:i===0?"var(--red-600)":(i<3?"var(--orange-500)":"var(--blue-450)"),
+        const per=6, tot=Math.max(1,Math.ceil(rows.length/per));
+        const pg=Math.min(this.state.slaTopPage||1, tot);
+        return rows.slice((pg-1)*per, pg*per).map((r,i) => ({ rank:(pg-1)*per+i+1, subject:r.subject, app:r.app, sub:r.sub, typeLabel:r.typeLabel, typeBg:r.typeBg, typeColor:r.typeColor, volume:this._nf(r.vol), breach:this._nf(r.br), compliance:r.comp, color:r.color,
+          barW:Math.round(r.vol/maxVol*100)+"%", barColor:r.compN<90?"var(--red-600)":(r.compN<95?"var(--orange-500)":"var(--blue-450)"),
           causes:r.causes, open:this.state.slaTopOpen===r.subject, chevron:this.state.slaTopOpen===r.subject?"rotate(180deg)":"rotate(0deg)",
           onToggle:()=>this.setState(s=>({ slaTopOpen:s.slaTopOpen===r.subject?null:r.subject })) }));
+      })(),
+      slaTopPager:(() => {
+        const sc=({today:0.15,"7d":0.4,"30d":1,quarter:2.7})[this.state.period]||1;
+        const n=this._slaTopCount((this.state.slaTopQuery||"").trim().toLowerCase(), this.state.slaTopApp||"all", this.state.slaTopCompFilter||"all", this.state.slaTopSub||"all", this.state.slaTopType||"all");
+        const per=6, tot=Math.max(1,Math.ceil(n/per)), pg=Math.min(this.state.slaTopPage||1,tot);
+        return { show:n>per, label:"Halaman "+pg+" / "+tot, atStart:pg<=1, atEnd:pg>=tot,
+          prev:()=>this.setState(s=>({ slaTopPage:Math.max(1,(s.slaTopPage||1)-1) })), next:()=>this.setState(s=>({ slaTopPage:(s.slaTopPage||1)+1 })),
+          prevStyle:"border:none;cursor:pointer;font-family:var(--font-sans);font-size:12px;font-weight:700;padding:7px 14px;border-radius:9px;background:var(--white);color:"+(pg<=1?"var(--ink-400)":"var(--ink-700)")+";box-shadow:inset 0 0 0 1px var(--border);",
+          nextStyle:"border:none;cursor:pointer;font-family:var(--font-sans);font-size:12px;font-weight:700;padding:7px 14px;border-radius:9px;background:var(--white);color:"+(pg>=tot?"var(--ink-400)":"var(--ink-700)")+";box-shadow:inset 0 0 0 1px var(--border);" };
       })(),
       slaTopEmpty:(() => {
         const q=(this.state.slaTopQuery||"").trim().toLowerCase(), af=this.state.slaTopApp||"all", cf=this.state.slaTopCompFilter||"all", sf=this.state.slaTopSub||"all", tf=this.state.slaTopType||"all";
         return !!(q||af!=="all"||cf!=="all"||sf!=="all"||tf!=="all") && this._slaTopCount(q,af,cf,sf,tf)===0;
       })(),
-      slaTopTypes:[["all","Semua"],["incident","Incident"],["service","Service Request"],["access","Access Request"]].map(([k,l])=>({ label:l, onClick:()=>this.setState({ slaTopType:k }), style:this._chip((this.state.slaTopType||"all")===k) })),
-      slaTopQuery:this.state.slaTopQuery, onSlaTopQuery:(e)=>this.setState({ slaTopQuery:e.target.value }),
-      slaTopApps:[["all","Semua"]].concat(this._allAppNames().map(a=>[a,a])).map(([k,l])=>({ label:l, onClick:()=>this.setState({ slaTopApp:k }), style:this._chip((this.state.slaTopApp||"all")===k) })),
-      slaTopSubs:[["all","Semua"]].concat(this._allSubcats().map(a=>[a,a])).map(([k,l])=>({ label:l, onClick:()=>this.setState({ slaTopSub:k }), style:this._chip((this.state.slaTopSub||"all")===k) })),
-      slaTopComp:[["all","Semua"],["breach","< 90%"],["warning","90-95%"],["ok","≥ 95%"]].map(([k,l])=>({ label:l, onClick:()=>this.setState({ slaTopCompFilter:k }), style:this._chip((this.state.slaTopCompFilter||"all")===k) })),
+      slaTopTypes:[["all","Semua"],["incident","Incident"],["service","Service Request"],["access","Access Request"]].map(([k,l])=>({ label:l, onClick:()=>this.setState({ slaTopType:k, slaTopPage:1 }), style:this._chip((this.state.slaTopType||"all")===k) })),
+      slaTopQuery:this.state.slaTopQuery, onSlaTopQuery:(e)=>this.setState({ slaTopQuery:e.target.value, slaTopPage:1 }),
+      slaTopApps:[["all","Semua"]].concat(this._allAppNames().map(a=>[a,a])).map(([k,l])=>({ label:l, onClick:()=>this.setState({ slaTopApp:k, slaTopPage:1 }), style:this._chip((this.state.slaTopApp||"all")===k) })),
+      slaTopSubs:[["all","Semua"]].concat(this._allSubcats().map(a=>[a,a])).map(([k,l])=>({ label:l, onClick:()=>this.setState({ slaTopSub:k, slaTopPage:1 }), style:this._chip((this.state.slaTopSub||"all")===k) })),
+      slaTopComp:[["all","Semua"],["breach","< 90%"],["warning","90-95%"],["ok","≥ 95%"]].map(([k,l])=>({ label:l, onClick:()=>this.setState({ slaTopCompFilter:k, slaTopPage:1 }), style:this._chip((this.state.slaTopCompFilter||"all")===k) })),
       slaTopFilterOpen:this.state.slaTopFilterOpen,
       toggleSlaTopFilter:()=>this.setState(s=>({ slaTopFilterOpen:!s.slaTopFilterOpen })),
       closeSlaTopFilter:()=>this.setState({ slaTopFilterOpen:false }),
