@@ -1,0 +1,54 @@
+/* ============================================================
+   Helpdesk v2.0 — Webfonts
+   SF Pro Rounded (Apple system rounded). Uploaded OTF binaries.
+   ============================================================ */
+
+@font-face {
+  font-family: "SF Pro Rounded";
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/SF-Pro-Rounded-Light.otf") format("opentype");
+}
+@font-face {
+  font-family: "SF Pro Rounded";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/SF-Pro-Rounded-Regular.otf") format("opentype");
+}
+@font-face {
+  font-family: "SF Pro Rounded";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/SF-Pro-Rounded-Medium.otf") format("opentype");
+}
+@font-face {
+  font-family: "SF Pro Rounded";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/SF-Pro-Rounded-Semibold.otf") format("opentype");
+}
+@font-face {
+  font-family: "SF Pro Rounded";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/SF-Pro-Rounded-Bold.otf") format("opentype");
+}
+@font-face {
+  font-family: "SF Pro Rounded";
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/SF-Pro-Rounded-Heavy.otf") format("opentype");
+}
+@font-face {
+  font-family: "SF Pro Rounded";
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/SF-Pro-Rounded-Black.otf") format("opentype");
+}

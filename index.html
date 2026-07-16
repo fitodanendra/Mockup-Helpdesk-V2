@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Helpdesk v2.0 — Mockup Review</title>
+<style>
+  :root {
+    --ink: #171B24; --ink2: #3D4453; --slate: #6C7486;
+    --line: #E3E6EE; --canvas: #F3F4F9;
+    --blue: #2F6BF0; --blue-ink: #2359D6; --blue-050: #EAF1FE;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--canvas); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 56px 24px 80px; }
+  header { margin-bottom: 40px; }
+  header .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--blue-ink); margin-bottom: 8px; }
+  header h1 { font-size: 28px; font-weight: 800; margin: 0 0 8px; letter-spacing: -0.3px; }
+  header p { font-size: 14px; color: var(--slate); max-width: 640px; line-height: 1.6; margin: 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 22px; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: box-shadow .15s, transform .15s; }
+  .card:hover { box-shadow: 0 10px 28px rgba(23,27,36,.10); transform: translateY(-2px); border-color: var(--blue); }
+  .card .role { font-size: 15px; font-weight: 700; }
+  .card .desc { font-size: 13px; color: var(--slate); line-height: 1.5; flex: 1; }
+  .card .screens { font-size: 12px; color: var(--blue-ink); font-weight: 600; }
+  .badge { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 10px; background: var(--blue-050); color: var(--blue-ink); font-size: 16px; font-weight: 800; }
+  footer { margin-top: 48px; font-size: 12px; color: var(--slate); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">Adhi Karya · Helpdesk 2.0</div>
+      <h1>Mockup Review — Pilih Role</h1>
+      <p>Setiap kartu di bawah membuka tampilan mulai untuk role tersebut. Setelah masuk ke salah satu screen, gunakan tombol <b>"⇄ Switch Role"</b> di pojok kanan bawah untuk berpindah ke role atau screen lain kapan saja.</p>
+    </header>
+    <div class="grid">
+      <a class="card" href="/requester/dashboard.html">
+        <span class="badge">R</span>
+        <span class="role">Requester</span>
+        <span class="desc">Membuat tiket baru, memantau status permintaan, dan melihat riwayat tiket sendiri.</span>
+        <span class="screens">Dashboard · My Tickets · Ticket Detail →</span>
+      </a>
+      <a class="card" href="/approver/workspace.html">
+        <span class="badge">A</span>
+        <span class="role">Approver</span>
+        <span class="desc">Meninjau dan menyetujui atau menolak permintaan yang membutuhkan approval.</span>
+        <span class="screens">Approval Workspace →</span>
+      </a>
+      <a class="card" href="/support/workspace.html">
+        <span class="badge">S</span>
+        <span class="role">Support</span>
+        <span class="desc">Menangani tiket masuk sesuai aplikasi/PIC, mengelola progres penyelesaian.</span>
+        <span class="screens">Support Workspace →</span>
+      </a>
+      <a class="card" href="/team-lead/dashboard.html">
+        <span class="badge">T</span>
+        <span class="role">Team Lead</span>
+        <span class="desc">Memantau performa tim support, menangani eskalasi SLA, dan referensi data model.</span>
+        <span class="screens">Dashboard · Workflow · ERD · Relasi →</span>
+      </a>
+      <a class="card" href="/admin/index.html">
+        <span class="badge">Ad</span>
+        <span class="role">Admin</span>
+        <span class="desc">Konfigurasi user & role, SLA, approval matrix, katalog layanan, dan audit trail.</span>
+        <span class="screens">Admin Console →</span>
+      </a>
+    </div>
+    <footer>Mockup interaktif — bukan aplikasi produksi. Data yang ditampilkan bersifat dummy.</footer>
+  </div>
+</body>
+</html>

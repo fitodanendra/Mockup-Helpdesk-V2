@@ -1,0 +1,83 @@
+/* ============================================================
+   Helpdesk v2.0 — Typography tokens
+   SF Pro Rounded throughout. Sizes/weights/tracking transcribed
+   from the Helpdesk.fig text layers.
+   ============================================================ */
+
+:root {
+  --font-sans: "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* "USER" caption in the nav is the only Inter usage in the file */
+  --font-meta: "Inter", var(--font-sans);
+
+  /* Weights */
+  --fw-light: 300; /* @kind font */
+  --fw-regular: 400; /* @kind font */
+  --fw-medium: 500; /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold: 700; /* @kind font */
+
+  /* ---- Type scale (size / line-height / tracking) -------------
+     Named by role; matches the exact figma values.               */
+
+  /* Display — stat card values */
+  --text-display-size: 48px;
+  --text-display-lh: 52.8px;
+  --text-display-track: -0.96px;
+  --text-display-weight: var(--fw-bold);
+
+  /* H1 — page title "Dashboard Overview" */
+  --text-h1-size: 32px;
+  --text-h1-lh: 38.4px;
+  --text-h1-track: -0.32px;
+  --text-h1-weight: var(--fw-semibold);
+
+  /* H2 — card title "Ticket Priority Distribution" */
+  --text-h2-size: 24px;
+  --text-h2-lh: 31.2px;
+  --text-h2-track: 0;
+  --text-h2-weight: var(--fw-semibold);
+
+  /* Title — form-card header "Informasi Tiket" */
+  --text-title-size: 18px;
+  --text-title-lh: 24px;
+  --text-title-weight: var(--fw-semibold);
+
+  /* Body-lg — page subtitle */
+  --text-body-lg-size: 15px;
+  --text-body-lg-lh: 22.5px;
+  --text-body-lg-weight: var(--fw-regular);
+
+  /* Body — input text / row subject */
+  --text-body-size: 14px;
+  --text-body-lh: 20px;
+  --text-body-weight: var(--fw-regular);
+
+  /* Label — form field labels (warm brown, tracked) */
+  --text-label-size: 13px;
+  --text-label-lh: 18px;
+  --text-label-track: 0.65px;
+  --text-label-weight: var(--fw-semibold);
+
+  /* Meta — table cell text / links */
+  --text-meta-size: 13px;
+  --text-meta-lh: 15.6px;
+  --text-meta-track: 0.13px;
+  --text-meta-weight: var(--fw-medium);
+
+  /* Eyebrow — stat card uppercase label */
+  --text-eyebrow-size: 12px;
+  --text-eyebrow-lh: 18px;
+  --text-eyebrow-track: 1.2px;
+  --text-eyebrow-weight: var(--fw-bold);
+
+  /* Badge — status/priority pill text */
+  --text-badge-size: 12px;
+  --text-badge-lh: 1;
+  --text-badge-weight: var(--fw-semibold);
+
+  /* Caption — dropzone hint */
+  --text-caption-size: 12px;
+  --text-caption-lh: 16px;
+  --text-caption-weight: var(--fw-regular);
+}

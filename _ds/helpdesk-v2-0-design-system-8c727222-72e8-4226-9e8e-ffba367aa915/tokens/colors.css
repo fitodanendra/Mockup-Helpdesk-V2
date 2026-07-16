@@ -1,0 +1,65 @@
+/* ============================================================
+   Helpdesk v2.0 — Color tokens
+   Extracted verbatim from the Helpdesk.fig source. Hex values are
+   the exact rgb() the file uses; do not round or snap.
+   ============================================================ */
+
+:root {
+  /* ---- Brand / primary blues ---------------------------------- */
+  --hd-blue-500: #007aff;        /* rgb(0,122,255)  iOS system blue — links, active accents */
+  --hd-blue-450: #419aff;        /* rgb(65,154,255) bright blue — primary buttons, active nav/priority */
+  --hd-blue-600: #0051d5;        /* rgb(0,81,213)   pressed/secondary label blue */
+  --hd-blue-glow: #0066ff;       /* rgb(0,102,255)  form-card glow shadow */
+
+  /* ---- Ink / text --------------------------------------------- */
+  --hd-ink-900: #1a1b1f;         /* rgb(26,27,31)   primary headings & big numbers */
+  --hd-ink-850: #191c1e;         /* rgb(25,28,30)   strong labels (nav user name) */
+  --hd-navy-900: #0b1c30;        /* rgb(11,28,48)   form input/heading text */
+  --hd-slate-600: #414755;       /* rgb(65,71,85)   secondary body text */
+  --hd-slate-500: #717786;       /* rgb(113,119,134) muted caption / uppercase eyebrow */
+  --hd-gray-500: #6b7280;        /* rgb(107,114,128) placeholder text */
+  --hd-mocha-700: #5b403e;       /* rgb(91,64,62)   warm-brown form labels */
+  --hd-mocha-650: #5c403d;       /* rgb(92,64,61)   warm-brown icon / meta */
+
+  /* ---- Surfaces ----------------------------------------------- */
+  --hd-canvas: #f1f1f9;          /* rgb(241,241,249) app background */
+  --hd-surface: #ffffff;         /* card / nav surface */
+  --hd-surface-tint: #f8f9ff;    /* rgb(248,249,255) input field fill */
+  --hd-surface-header: #eff4ff;  /* rgb(239,244,255) form-card header band */
+  --hd-surface-dropzone: #e5eeff;/* rgb(229,238,255) file dropzone fill */
+  --hd-chip: #eeedf3;            /* rgb(238,237,243) app tag chip fill */
+  --hd-status-blue-bg: #eff6ff;  /* rgb(239,246,255) "In Progress" pill bg */
+
+  /* ---- Lines / tracks ----------------------------------------- */
+  --hd-border: #e3e2e7;          /* rgb(227,226,231) default hairline border */
+  --hd-border-btn: #ededed;      /* rgb(237,237,237) secondary-button border */
+  --hd-track: #e9e7ed;           /* rgb(233,231,237) progress-bar track */
+  --hd-divider-rose: rgba(228,189,186,0.2); /* nav vertical divider */
+
+  /* ---- Semantic status ---------------------------------------- */
+  --hd-success: #34c759;         /* rgb(52,199,89)  Resolved / Low */
+  --hd-warning: #ff9f0a;         /* rgb(255,159,10) Medium badge */
+  --hd-danger: #ef4444;          /* rgb(239,68,68)  Critical bar start */
+  --hd-danger-soft: #f87171;     /* rgb(248,113,113) Critical bar end */
+  --hd-danger-deep: #a30014;     /* rgb(163,0,20)   notification dot */
+  --hd-danger-alt: #ba1a1a;      /* rgb(186,26,26)  critical priority icon */
+
+  /* Priority-bar gradients (dashboard "Ticket Priority Distribution") */
+  --hd-grad-critical: linear-gradient(90deg, #ef4444 0%, #f87171 100%); /* @kind color */
+  --hd-grad-high:     linear-gradient(90deg, #f97316 0%, #fb923c 100%); /* @kind color */
+  --hd-grad-medium:   linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%); /* @kind color */
+  --hd-grad-low:      linear-gradient(90deg, #22c55e 0%, #4ade80 100%); /* @kind color */
+
+  /* ---- Semantic aliases (use these in components) ------------- */
+  --color-bg: var(--hd-canvas);
+  --color-surface: var(--hd-surface);
+  --color-text: var(--hd-ink-900);
+  --color-text-secondary: var(--hd-slate-600);
+  --color-text-muted: var(--hd-slate-500);
+  --color-text-placeholder: var(--hd-gray-500);
+  --color-label: var(--hd-mocha-700);
+  --color-primary: var(--hd-blue-450);
+  --color-link: var(--hd-blue-500);
+  --color-border: var(--hd-border);
+  --color-field: var(--hd-surface-tint);
+}

@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../shared/support.js"></script>
+<script src="../shared/nav-widget.js" defer></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/fonts.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/colors.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/typography.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/spacing.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/legacy-tokens.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/styles.css">
+  <script src="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/_ds_bundle.js"></script>
+  <script src="../shared/kelola-role.js"></script>
+  <style>
+    html, body { margin: 0; padding: 0; background: var(--canvas); font-family: var(--font-sans); }
+    * { box-sizing: border-box; }
+    a { color: var(--blue-500); text-decoration: none; }
+    a:hover { color: var(--blue-ink); }
+    @keyframes swtoast { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  </style>
+</helmet>
+
+<div data-screen-label="Support Workspace" style="display: flex; flex-direction: column; min-height: 100vh; background: var(--canvas); font-family: var(--font-sans); color: var(--ink-900);">
+
+  <!-- ============ TOP BAR ============ -->
+  <header style="height: 62px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 24px; padding: 0 28px; position: sticky; top: 0; z-index: 20;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 32px; height: 32px; border-radius: 10px; background: var(--blue-500); display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 800; font-size: 14px;">A</div>
+      <div style="display: flex; flex-direction: column;">
+        <span style="font-size: 14px; font-weight: 700; color: var(--ink-900); line-height: 1.1;">Adhi Helpdesk</span>
+        <span style="font-size: 10px; color: var(--slate-500);">Enterprise ITSM</span>
+      </div>
+    </div>
+
+    <nav style="display: flex; align-items: center; gap: 4px;">
+      <button type="button" onClick="{{ goQueue }}" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border: none; border-radius: 10px; font-family: var(--font-sans); font-size: 13px; cursor: pointer; background: {{ navQueueBg }}; color: {{ navQueueColor }}; font-weight: {{ navQueueWeight }};">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z"></path><path d="M14 5v14"></path></svg>
+        Antrean Tiket
+      </button>
+      <button type="button" onClick="{{ goRiwayat }}" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border: none; border-radius: 10px; font-family: var(--font-sans); font-size: 13px; cursor: pointer; background: {{ navRiwayatBg }}; color: {{ navRiwayatColor }}; font-weight: {{ navRiwayatWeight }};">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18v4H3z"></path><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"></path><path d="M10 12h4"></path></svg>
+        Riwayat Tiket
+      </button>
+    </nav>
+
+    <div style="flex: 1;"></div>
+
+    <div style="width: 280px; display: flex; align-items: center; gap: 8px; background: var(--surface-tint); border-radius: 10px; padding: 8px 12px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: var(--slate-500);"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <span style="font-size: 13px; color: var(--slate-500);">Cari tiket, aplikasi…</span>
+    </div>
+
+    <div style="position: relative;">
+      <button type="button" onClick="{{ toggleNotif }}" style="position: relative; width: 36px; height: 36px; border-radius: 10px; border: none; display: flex; align-items: center; justify-content: center; color: var(--ink-700); cursor: pointer; background: {{ notifBtnBg }};">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z"></path><path d="M10 21h4"></path></svg>
+        <sc-if value="{{ hasUnread }}" hint-placeholder-val="{{ true }}">
+          <span style="position: absolute; top: 4px; right: 4px; min-width: 9px; height: 9px; border-radius: 999px; background: var(--red-600);"></span>
+        </sc-if>
+      </button>
+      <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ stop }}" style="position: absolute; top: 48px; right: 0; width: 380px; background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-pop); z-index: 50; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border-soft);">
+            <span style="font-size: 14px; font-weight: 700; color: var(--ink-900);">Notifikasi</span>
+            <button type="button" onClick="{{ markAllRead }}" style="border: none; background: none; font-size: 11px; font-weight: 600; color: var(--blue-500); cursor: pointer;">Tandai semua dibaca</button>
+          </div>
+          <div style="max-height: 360px; overflow-y: auto;">
+            <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="4">
+              <div onClick="{{ n.onOpen }}" style="display: flex; gap: 11px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border-soft); background: {{ n.rowBg }};">
+                <span style="width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: {{ n.iconBg }}; color: {{ n.iconColor }};">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.iconPath }}"></path></svg>
+                </span>
+                <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+                  <span style="font-size: 12.5px; color: var(--ink-800); line-height: 1.45;"><span style="font-weight: 700;">{{ n.title }}</span> {{ n.body }}</span>
+                  <span style="font-size: 11px; color: var(--slate-500);">{{ n.time }}</span>
+                </span>
+                <sc-if value="{{ n.unread }}" hint-placeholder-val="{{ true }}"><span style="width: 7px; height: 7px; border-radius: 999px; background: var(--blue-500); flex-shrink: 0; margin-top: 5px;"></span></sc-if>
+              </div>
+            </sc-for>
+            <sc-if value="{{ notifEmpty }}">
+              <div style="padding: 32px 16px; text-align: center; font-size: 13px; color: var(--slate-500);">Tidak ada notifikasi baru.</div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="position: relative;">
+      <button type="button" onClick="{{ toggleProfile }}" style="display: flex; align-items: center; gap: 10px; border: none; background: {{ profileBtnBg }}; border-radius: 10px; padding: 4px 6px; cursor: pointer;">
+        <div style="width: 34px; height: 34px; border-radius: 999px; background: var(--blue-050-alt); color: var(--blue-ink); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;">{{ initials }}</div>
+        <div style="display: flex; flex-direction: column; text-align: left;">
+          <span style="font-size: 13px; font-weight: 600; color: var(--ink-900); line-height: 1.2;">{{ userName }}</span>
+          <span style="font-size: 11px; color: var(--slate-500);">IT Support · Tier 2</span>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 2px;"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+      <sc-if value="{{ profileOpen }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ stop }}" style="position: absolute; top: 54px; right: 0; width: 250px; background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-pop); z-index: 50; overflow: hidden; display: flex; flex-direction: column; padding: 6px;">
+          <div style="display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-bottom: 1px solid var(--border-soft); margin-bottom: 6px;">
+            <div style="width: 40px; height: 40px; border-radius: 999px; background: var(--blue-050-alt); color: var(--blue-ink); font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center;">{{ initials }}</div>
+            <div style="display: flex; flex-direction: column; min-width: 0;">
+              <span style="font-size: 13px; font-weight: 700; color: var(--ink-900);">{{ userName }}</span>
+              <span style="font-size: 11px; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">rizky.pratama@adhi.co.id</span>
+            </div>
+          </div>
+          <button type="button" onClick="{{ goQueue }}" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border: none; background: transparent; border-radius: 9px; color: var(--ink-700); font-size: 13px; font-weight: 500; cursor: pointer; text-align: left; font-family: var(--font-sans);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z"></path><path d="M14 5v14"></path></svg>
+            Antrean Tiket
+          </button>
+          <button type="button" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border: none; background: transparent; border-radius: 9px; color: var(--ink-700); font-size: 13px; font-weight: 500; cursor: pointer; text-align: left; font-family: var(--font-sans);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z"></path><path d="M10 21h4"></path></svg>
+            Preferensi Notifikasi
+          </button>
+          <button type="button" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border: none; background: transparent; border-radius: 9px; color: var(--ink-700); font-size: 13px; font-weight: 500; cursor: pointer; text-align: left; font-family: var(--font-sans);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z"></path><path d="M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3"></path><path d="M12 17h.01"></path></svg>
+            Bantuan
+          </button>
+          <div style="border-top: 1px solid var(--border-soft); margin-top: 6px; padding-top: 6px;">
+            <button type="button" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border: none; background: transparent; border-radius: 9px; color: var(--red-600); font-size: 13px; font-weight: 600; cursor: pointer; text-align: left; font-family: var(--font-sans); width: 100%;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"></path><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path></svg>
+              Keluar
+            </button>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ anyMenuOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeMenus }}" style="position: fixed; inset: 0; z-index: 15;"></div>
+    </sc-if>
+  </header>
+
+  <main style="padding: 28px; display: flex; flex-direction: column; gap: 20px; max-width: 1280px; width: 100%; margin: 0 auto;">
+
+    <!-- ============================ QUEUE ============================ -->
+    <sc-if value="{{ isQueue }}" hint-placeholder-val="{{ true }}">
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div>
+          <h1 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 800; color: var(--ink-900); letter-spacing: -0.2px;">Antrean Tiket</h1>
+          
+        </div>
+      </div>
+
+      <!-- KPI cards -->
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
+        <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+          <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: var(--elev-card); display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 12px; font-weight: 600; color: var(--slate-500);">{{ k.label }}</span>
+              <span style="width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: {{ k.iconBg }}; color: {{ k.iconColor }};">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ k.iconPath }}"></path></svg>
+              </span>
+            </div>
+            <div style="font-size: 32px; font-weight: 800; color: var(--ink-900); line-height: 1;">{{ k.value }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- Ringkasan header + period switch -->
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div>
+          <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Ringkasan · {{ periodLabel }}</h2>
+          <p style="margin: 2px 0 0; font-size: 12px; color: var(--slate-500);">{{ queueTotal }} tiket masuk · {{ periodResolved }} selesai</p>
+        </div>
+        <div style="display: flex; gap: 6px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 6px;">
+          <sc-for list="{{ periodSegments }}" as="s" hint-placeholder-count="3">
+            <button type="button" onClick="{{ s.onClick }}" style="display: flex; align-items: center; gap: 8px; padding: 7px 15px; border: none; border-radius: 8px; font-family: var(--font-sans); font-size: 13px; cursor: pointer; background: {{ s.bg }}; color: {{ s.color }}; font-weight: {{ s.weight }};">{{ s.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- charts row -->
+      <div style="display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 14px;">
+        <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 20px 22px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <h3 style="margin: 0; font-size: 14px; font-weight: 700; color: var(--ink-900);">Tiket per Prioritas</h3>
+            <span style="font-size: 11px; color: var(--slate-500);">Total {{ queueTotal }}</span>
+          </div>
+          <div style="display: flex; align-items: flex-end; gap: 18px; padding: 0 4px; height: 150px;">
+            <sc-for list="{{ barChart }}" as="b" hint-placeholder-count="4">
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; justify-content: flex-end; height: 100%;">
+                <span style="font-size: 14px; font-weight: 700; color: var(--ink-900);">{{ b.count }}</span>
+                <div style="width: 100%; max-width: 46px; border-radius: 6px 6px 0 0; background: {{ b.color }}; height: {{ b.barPx }}px;"></div>
+                <span style="font-size: 11px; font-weight: 600; color: var(--slate-500);">{{ b.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 20px 22px; display: flex; flex-direction: column; gap: 16px;">
+          <h3 style="margin: 0; font-size: 14px; font-weight: 700; color: var(--ink-900);">Distribusi Kategori</h3>
+          <div style="display: flex; align-items: center; gap: 18px;">
+            <div style="position: relative; width: 104px; height: 104px; flex-shrink: 0;">
+              <div style="width: 104px; height: 104px; border-radius: 50%; background: {{ pieGradient }};"></div>
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 58px; height: 58px; border-radius: 50%; background: var(--white); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <span style="font-size: 17px; font-weight: 800; color: var(--ink-900); line-height: 1;">{{ queueTotal }}</span>
+                <span style="font-size: 9px; letter-spacing: 0.4px; text-transform: uppercase; color: var(--slate-500);">Tiket</span>
+              </div>
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+              <sc-for list="{{ pieLegend }}" as="c" hint-placeholder-count="3">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; background: {{ c.color }};"></span>
+                  <span style="flex: 1; font-size: 11.5px; color: var(--ink-700); line-height: 1.2;">{{ c.key }}</span>
+                  <span style="font-size: 12px; font-weight: 700; color: var(--ink-900);">{{ c.pct }}%</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 20px 22px; display: flex; flex-direction: column; gap: 16px;">
+          <h3 style="margin: 0; font-size: 14px; font-weight: 700; color: var(--ink-900);">Kepatuhan SLA</h3>
+          <div style="display: flex; align-items: center; gap: 18px;">
+            <div style="position: relative; width: 104px; height: 104px; flex-shrink: 0;">
+              <div style="width: 104px; height: 104px; border-radius: 50%; background: {{ slaGauge }};"></div>
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 70px; height: 70px; border-radius: 50%; background: var(--white); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <span style="font-size: 20px; font-weight: 800; line-height: 1; color: {{ slaColor }};">{{ slaPct }}%</span>
+                <span style="font-size: 9px; letter-spacing: 0.4px; text-transform: uppercase; color: var(--slate-500); margin-top: 2px;">Tercapai</span>
+              </div>
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; background: {{ slaColor }};"></span>
+                <span style="flex: 1; font-size: 11.5px; color: var(--ink-700);">Dalam SLA</span>
+                <span style="font-size: 12px; font-weight: 700; color: var(--ink-900);">{{ slaMet }}</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; background: var(--border);"></span>
+                <span style="flex: 1; font-size: 11.5px; color: var(--ink-700);">SLA Breach</span>
+                <span style="font-size: 12px; font-weight: 700; color: var(--red-600);">{{ slaBreach }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- filters -->
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 12px; font-weight: 600; color: var(--slate-500);">Urutkan</span>
+            <div style="display: flex; gap: 6px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 6px;">
+              <sc-for list="{{ sortControl }}" as="s" hint-placeholder-count="2">
+                <button type="button" onClick="{{ s.onClick }}" style="display: flex; align-items: center; gap: 8px; padding: 7px 15px; border: none; border-radius: 8px; font-family: var(--font-sans); font-size: 13px; cursor: pointer; background: {{ s.bg }}; color: {{ s.color }}; font-weight: {{ s.weight }};">{{ s.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <sc-for list="{{ prios }}" as="p" hint-placeholder-count="5">
+              <button type="button" onClick="{{ p.onClick }}" style="height: 30px; padding: 0 14px; border-radius: 999px; cursor: pointer; font-family: var(--font-sans); font-weight: 600; font-size: 12px; border: 1px solid {{ p.border }}; background: {{ p.bg }}; color: {{ p.color }};">{{ p.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px; width: 230px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: var(--slate-500); flex-shrink: 0;"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+          <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="Cari tiket, aplikasi…" style="flex: 1; border: none; outline: none; background: transparent; font-family: var(--font-sans); font-size: 13px; color: var(--ink-900); min-width: 0;">
+        </div>
+      </div>
+
+      <!-- ticket table -->
+      <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); overflow: hidden;">
+        <div style="min-width: 1040px; display: grid; grid-template-columns: 1.1fr 2.1fr 0.85fr 1.15fr 1.35fr 1.3fr 1.15fr; gap: 12px; padding: 10px 22px; background: var(--canvas); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">
+          <span>No. Tiket</span><span>Judul</span><span>Prioritas</span><span>Status</span><span>SLA Penyelesaian</span><span>Requester</span><span>Pembuatan Tiket</span>
+        </div>
+
+        <sc-if value="{{ queueEmpty }}">
+          <div style="padding: 64px; text-align: center;">
+            <div style="font-size: 15px; font-weight: 700; color: var(--ink-700);">Tidak ada tiket</div>
+            <div style="font-size: 13px; margin-top: 4px; color: var(--slate-500);">Coba ubah filter prioritas atau segmen antrean.</div>
+          </div>
+        </sc-if>
+
+        <sc-for list="{{ rows }}" as="item" hint-placeholder-count="6">
+          <div onClick="{{ item.onOpen }}" style="min-width: 1040px; display: grid; grid-template-columns: 1.1fr 2.1fr 0.85fr 1.15fr 1.35fr 1.3fr 1.15fr; gap: 12px; align-items: center; padding: 14px 22px; border-bottom: 1px solid var(--border-soft); cursor: pointer;" style-hover="background: var(--blue-050-cool);">
+            <div style="font-size: 12.5px; font-weight: 700; color: var(--blue-500); font-variant-numeric: tabular-nums;">#{{ item.id }}</div>
+            <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+              <span style="font-size: 13.5px; font-weight: 700; color: var(--ink-900); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.subject }}</span>
+              <span style="font-size: 11.5px; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.metaLine }}</span>
+            </div>
+            <div><span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ item.prioBg }}; color: {{ item.prioColor }};">{{ item.priorityLabel }}</span></div>
+            <div><span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ item.statusBg }}; color: {{ item.statusColor }}; white-space: nowrap;">{{ item.statusLabel }}</span></div>
+            <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0; padding-right: 8px;">
+              <span style="font-size: 12.5px; font-weight: 700; color: {{ item.sla.color }}; white-space: nowrap;">{{ item.sla.text }}</span>
+              <span style="width: 100%; height: 4px; border-radius: 999px; background: var(--surface-tint); overflow: hidden;">
+                <span style="display: block; height: 100%; border-radius: 999px; width: {{ item.slaFill }}; background: {{ item.sla.color }};"></span>
+              </span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0;">
+              <span style="font-size: 12.5px; font-weight: 600; color: var(--ink-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.requesterName }}</span>
+              <span style="font-size: 11px; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.requesterUnit }}</span>
+            </div>
+            <div style="font-size: 12px; color: var(--slate-500); white-space: nowrap;">{{ item.createdLabel }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============================ RIWAYAT TIKET ============================ -->
+    <sc-if value="{{ isRiwayat }}">
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      <div>
+        <h1 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 800; color: var(--ink-900); letter-spacing: -0.2px;">Riwayat Tiket</h1>
+        <p style="margin: 0; font-size: 13px; color: var(--slate-500);">{{ historySub }}</p>
+      </div>
+
+      <!-- Summary KPI cards -->
+      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;">
+        <sc-for list="{{ historyKpis }}" as="k" hint-placeholder-count="5">
+          <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: var(--elev-card); display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 12px; font-weight: 600; color: var(--slate-500);">{{ k.label }}</span>
+              <span style="width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: {{ k.iconBg }}; color: {{ k.iconColor }};">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ k.iconPath }}"></path></svg>
+              </span>
+            </div>
+            <div style="font-size: 32px; font-weight: 800; color: var(--ink-900); line-height: 1;">{{ k.value }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <sc-for list="{{ historyChips }}" as="c" hint-placeholder-count="5">
+            <button type="button" onClick="{{ c.onClick }}" style="height: 32px; padding: 0 16px; border-radius: 999px; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 13px; font-weight: 600; background: {{ c.bg }}; color: {{ c.fg }};">{{ c.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display: flex; gap: 6px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 6px;">
+          <sc-for list="{{ historyPeriodSegments }}" as="s" hint-placeholder-count="3">
+            <button type="button" onClick="{{ s.onClick }}" style="display: flex; align-items: center; gap: 8px; padding: 7px 15px; border: none; border-radius: 8px; font-family: var(--font-sans); font-size: 13px; cursor: pointer; background: {{ s.bg }}; color: {{ s.color }}; font-weight: {{ s.weight }};">{{ s.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); overflow: hidden;">
+        <div style="min-width: 900px; display: grid; grid-template-columns: 2.6fr 1.5fr 0.9fr 1.3fr 1.25fr 1.1fr; gap: 12px; padding: 10px 22px; background: var(--canvas); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">
+          <span>Tiket</span><span>Kategori</span><span>Prioritas</span><span>Status</span><span>SLA</span><span>Diselesaikan</span>
+        </div>
+
+        <sc-if value="{{ historyEmpty }}">
+          <div style="padding: 64px; text-align: center;">
+            <div style="font-size: 15px; font-weight: 700; color: var(--ink-700);">Tidak ada tiket</div>
+            <div style="font-size: 13px; margin-top: 4px; color: var(--slate-500);">Coba ubah filter status atau periode di atas.</div>
+          </div>
+        </sc-if>
+
+        <sc-for list="{{ historyRows }}" as="item" hint-placeholder-count="5">
+          <div onClick="{{ item.onOpen }}" style="min-width: 900px; display: grid; grid-template-columns: 2.6fr 1.5fr 0.9fr 1.3fr 1.25fr 1.1fr; gap: 12px; align-items: center; padding: 14px 22px; border-bottom: 1px solid var(--border-soft); cursor: pointer;" style-hover="background: var(--blue-050-cool);">
+            <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+              <span style="font-size: 12px; font-weight: 700; color: var(--blue-500);">#{{ item.id }}</span>
+              <span style="font-size: 13px; font-weight: 600; color: var(--ink-900); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.subject }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-start; min-width: 0;">
+              <span style="font-size: 11px; color: var(--slate-500);">{{ item.category }}</span>
+              <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--surface-tint); color: var(--ink-700);">{{ item.app }}</span>
+            </div>
+            <div><span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ item.prioBg }}; color: {{ item.prioColor }};">{{ item.priorityLabel }}</span></div>
+            <div><span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ item.statusBg }}; color: {{ item.statusColor }}; white-space: nowrap;">{{ item.statusLabel }}</span></div>
+            <div style="font-size: 12.5px; font-weight: 700; color: var(--green-500);">{{ item.sla.text }}</div>
+            <div style="font-size: 12px; color: var(--slate-500);">{{ item.closedAt }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============================ DETAIL ============================ -->
+    <sc-if value="{{ isDetail }}">
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--slate-500);">
+        <button type="button" onClick="{{ goBack }}" style="border: none; background: transparent; padding: 0; font-size: 12px; font-weight: 600; color: var(--blue-500); cursor: pointer; font-family: var(--font-sans);">{{ backLabel }}</button>
+        <span>/</span>
+        <span style="font-weight: 600; color: var(--ink-700);">#{{ ticket.id }}</span>
+      </div>
+
+      <!-- Dialihkan oleh Team Lead -->
+      <sc-if value="{{ ticket.hasReassign }}">
+      <div style="background: var(--rose-200); border: 1px solid rgba(180,83,9,0.28); border-radius: 14px; padding: 16px 20px; display: flex; gap: 14px; align-items: flex-start;">
+        <span style="width: 36px; height: 36px; border-radius: 999px; flex-shrink: 0; background: rgba(180,83,9,0.14); color: var(--clay-700); display: flex; align-items: center; justify-content: center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"></path><path d="M21 3l-7 7"></path><path d="M8 21H3v-5"></path><path d="M3 21l7-7"></path></svg>
+        </span>
+        <div style="display: flex; flex-direction: column; gap: 8px; min-width: 0; flex: 1;">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 13px; font-weight: 800; color: var(--ink-900);">Tiket Dialihkan kepada Anda</span>
+            <span style="font-size: 11px; color: var(--slate-500);">{{ ticket.reassign.by }} · {{ ticket.reassign.time }}</span>
+          </div>
+          <p style="margin: 0; font-size: 13px; line-height: 1.6; color: var(--ink-700);">{{ ticket.reassign.reason }}</p>
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 9px 12px; background: rgba(255,255,255,0.6); border: 1px solid rgba(180,83,9,0.18); border-radius: 10px;">
+            <span style="font-size: 12px; font-weight: 600; color: var(--slate-500); text-decoration: line-through;">{{ ticket.reassign.from }}</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--clay-700)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>
+            <span style="font-size: 12px; font-weight: 800; color: var(--ink-900);">{{ ticket.assigneeLabel }}</span>
+            <span style="font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: rgba(52,199,89,0.16); color: var(--green-500);">PIC saat ini</span>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- Catatan dari Requester -->
+      <sc-if value="{{ ticket.hasReqNote }}">
+      <div style="background: var(--blue-050-cool); border: 1px solid var(--blue-050-alt); border-radius: 14px; padding: 16px 20px; display: flex; gap: 14px; align-items: flex-start;">
+        <span style="width: 36px; height: 36px; border-radius: 999px; flex-shrink: 0; background: var(--blue-050-alt); color: var(--blue-ink); display: flex; align-items: center; justify-content: center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.5 0-3-.4-4.2-1.1L3 20l1.1-5.3A8.5 8.5 0 1 1 21 11.5Z"></path></svg>
+        </span>
+        <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 13px; font-weight: 800; color: var(--ink-900);">Catatan dari Requester</span>
+            <span style="font-size: 11px; color: var(--slate-500);">{{ ticket.reqNoteBy }} · {{ ticket.reqNoteTime }}</span>
+          </div>
+          <p style="margin: 0; font-size: 13px; line-height: 1.6; color: var(--ink-700);">{{ ticket.reqNote }}</p>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============ TICKET HEADER ============ -->
+      <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 20px 24px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; flex-direction: column; gap: 8px; min-width: 0;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span style="font-size: 13px; font-weight: 800; color: var(--blue-500); font-variant-numeric: tabular-nums;">#{{ ticket.id }}</span>
+            <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ ticket.statusBg }}; color: {{ ticket.statusColor }};">{{ ticket.statusLabel }}</span>
+            <span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ ticket.prioBg }}; color: {{ ticket.prioColor }};">{{ ticket.priorityLabel }}</span>
+          </div>
+          <h1 style="margin: 0; font-size: 21px; font-weight: 800; color: var(--ink-900); letter-spacing: -0.2px;">{{ ticket.subject }}</h1>
+          <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--slate-500); flex-wrap: wrap;">
+            <span style="display: flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18"></path></svg>{{ ticket.category }}</span>
+            <span style="display: flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"></rect><path d="M8 21h8"></path><path d="M12 18v3"></path></svg>{{ ticket.app }}</span>
+            <span style="display: flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg>Dibuat {{ ticket.created }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ BODY GRID ============ -->
+      <div style="display: grid; grid-template-columns: 1fr 340px; gap: 18px; align-items: start;">
+
+        <!-- LEFT column -->
+        <div style="display: flex; flex-direction: column; gap: 18px; min-width: 0;">
+
+          <!-- Ticket information -->
+          <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 20px 24px; display: flex; flex-direction: column; gap: 14px;">
+            <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Informasi Tiket</h2>
+            <p style="margin: 0; font-size: 13px; color: var(--ink-700); line-height: 1.65;">{{ ticket.desc }}</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; padding-top: 4px; border-top: 1px solid var(--border-soft);">
+              <div style="display: flex; flex-direction: column; gap: 3px; padding-top: 10px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Requester</span>
+                <span style="font-size: 13px; font-weight: 600; color: var(--ink-900);">{{ ticket.requester.name }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 3px; padding-top: 10px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Unit Kerja</span>
+                <span style="font-size: 13px; font-weight: 600; color: var(--ink-900);">{{ ticket.unitLoc }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Sub-kategori / Jenis</span>
+                <span style="font-size: 13px; font-weight: 600; color: var(--ink-900);">{{ ticket.sub }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Kontak</span>
+                <span style="font-size: 13px; font-weight: 600; color: var(--ink-900);">{{ ticket.requester.contact }}</span>
+              </div>
+            </div>
+            <sc-if value="{{ ticket.hasAtt }}">
+              <div>
+                <span style="display: block; font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px;">Lampiran</span>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                  <sc-for list="{{ ticket.attachments }}" as="att" hint-placeholder-count="1">
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 9px 12px; background: var(--canvas); border: 1px solid var(--border); border-radius: 10px; font-size: 12.5px; color: var(--ink-700);">
+                      <span style="font-weight: 600; color: var(--ink-900);">{{ att.name }}</span>
+                      <span style="font-size: 11px; color: var(--slate-500);">{{ att.size }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+
+          <!-- Discussion forum -->
+          <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); display: flex; flex-direction: column; overflow: hidden;">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 24px 0;">
+              <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Forum Diskusi</h2>
+              <sc-if value="{{ ticket.needsResponse }}"><span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: rgba(124, 58, 237, 0.12); color: rgb(109, 40, 217);">Menunggu tanggapan requester</span></sc-if>
+              <sc-if value="{{ ticket.forumClosed }}"><span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--surface-tint); color: var(--slate-500);">Ditutup</span></sc-if>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 16px; padding: 18px 24px;">
+              <sc-for list="{{ ticketForum }}" as="msg" hint-placeholder-count="2">
+                <div style="display: flex; gap: 12px; flex-direction: {{ msg.rowDir }};">
+                  <span style="width: 34px; height: 34px; flex-shrink: 0; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: {{ msg.avatarColor }}; background: {{ msg.avatarBg }};">{{ msg.initial }}</span>
+                  <div style="max-width: 78%; min-width: 0; display: flex; flex-direction: column; gap: 5px; align-items: {{ msg.align }};">
+                    <div style="display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; flex-direction: {{ msg.rowDir }};">
+                      <span style="font-size: 13px; font-weight: 700; color: var(--ink-900);">{{ msg.author }}</span>
+                      <span style="font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: {{ msg.roleBg }}; color: {{ msg.roleColor }};">{{ msg.roleLabel }}</span>
+                      <span style="font-size: 11px; color: var(--slate-500);">{{ msg.time }}</span>
+                    </div>
+                    <div style="font-size: 13px; line-height: 1.6; color: {{ msg.textColor }}; background: {{ msg.bubbleBg }}; border: 1px solid {{ msg.bubbleBorder }}; padding: 10px 14px; border-radius: {{ msg.bubbleRadius }}; text-align: left;">{{ msg.text }}</div>
+                  </div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ forumEmpty }}">
+                <div style="font-size: 13px; color: var(--slate-500); padding: 4px 0;">Belum ada diskusi pada tiket ini.</div>
+              </sc-if>
+            </div>
+
+            <sc-if value="{{ ticket.canReply }}">
+              <div style="border-top: 1px solid var(--border-soft); padding: 16px 24px; display: flex; flex-direction: column; gap: 10px; background: var(--canvas);">
+                <textarea rows="3" value="{{ reply }}" onChange="{{ onReply }}" placeholder="Tulis tanggapan untuk requester… (mis. minta detail transaksi, konfirmasi penyelesaian)" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--white); font-family: var(--font-sans); font-size: 13px; color: var(--ink-900); outline: none; resize: vertical;" style-focus="border-color: var(--blue-500);"></textarea>
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <button type="button" style="display: flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--white); color: var(--ink-700); font-family: var(--font-sans); font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: var(--surface-tint);">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.4 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                    Lampirkan
+                  </button>
+                  <button type="button" onClick="{{ sendReply }}" style="display: flex; align-items: center; gap: 7px; padding: 9px 18px; border-radius: 999px; border: none; background: var(--blue-500); color: var(--white); font-family: var(--font-sans); font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: var(--elev-card);" style-hover="background: var(--blue-600);">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-4 14-4-5z"></path><path d="m11 14 8-9"></path></svg>
+                    Kirim Tanggapan
+                  </button>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ ticket.forumClosed }}">
+              <div style="border-top: 1px solid var(--border-soft); padding: 16px 24px; display: flex; align-items: center; gap: 10px; background: var(--canvas);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="4" y="10" width="16" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+                <span style="font-size: 12px; color: var(--slate-500); line-height: 1.5;">Tiket ini sudah ditutup. Diskusi bersifat baca-saja.</span>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
+        <!-- RIGHT column -->
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+
+          <!-- Aksi Penanganan -->
+          <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+            <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Aksi Penanganan</h2>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-soft);">
+              <span style="font-size: 12px; color: var(--slate-500);">Status saat ini</span>
+              <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ ticket.statusBg }}; color: {{ ticket.statusColor }};">{{ ticket.statusLabel }}</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-soft); margin-bottom: 4px;">
+              <span style="font-size: 12px; color: var(--slate-500);">PIC</span>
+              <span style="display: flex; flex-direction: column; align-items: flex-end; gap: 1px;">
+                <span style="font-size: 13px; font-weight: 600; color: var(--ink-900);">{{ ticket.assigneeLabel }}</span>
+                <span style="font-size: 11px; font-weight: 700; color: var(--blue-ink);">{{ ticket.supportRole }}</span>
+              </span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <sc-if value="{{ hasActions }}" hint-placeholder-val="{{ true }}">
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label style="font-size: 12px; font-weight: 700; color: var(--ink-800);">Catatan <span style="font-weight: 500; color: var(--slate-500);">(wajib)</span></label>
+                <textarea rows="3" value="{{ confirmNote }}" onChange="{{ onConfirmNote }}" placeholder="Tulis catatan penanganan…" style="width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--white); font-family: var(--font-sans); font-size: 13px; color: var(--ink-900); outline: none; resize: vertical;" style-focus="border-color: var(--blue-500);"></textarea>
+                <sc-if value="{{ noteError }}" hint-placeholder-val="{{ false }}"><span style="font-size: 11.5px; font-weight: 600; color: var(--red-600);">{{ noteError }}</span></sc-if>
+              </div>
+              </sc-if>
+              <sc-for list="{{ actions }}" as="a" hint-placeholder-count="2">
+                <button type="button" onClick="{{ a.onClick }}" style="width: 100%; height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer; border: {{ a.border }}; background: {{ a.bg }}; color: {{ a.color }}; box-shadow: {{ a.shadow }};">{{ a.label }}</button>
+              </sc-for>
+              <sc-if value="{{ noActions }}">
+                <div style="font-size: 12.5px; color: var(--slate-500); padding: 4px 0; line-height: 1.5;">Tiket Sudah Dieskalasi ke Tim IT.</div>
+              </sc-if>
+              <sc-if value="{{ ticket.escalated }}">
+                <div style="font-size: 12.5px; color: var(--blue-ink); background: var(--blue-050); padding: 9px 11px; border-radius: 9px; line-height: 1.5;">✓ Sudah dieskalasi ke Tim IT Lanjutan</div>
+              </sc-if>
+            </div>
+          </div>
+
+          <!-- Penilaian requester (muncul saat requester sudah konfirmasi selesai) -->
+          <sc-if value="{{ ticket.hasRating }}">
+          <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Penilaian Layanan</h2>
+              <span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: rgba(52,199,89,0.14); color: var(--green-500);">Dikonfirmasi requester</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="display: flex; gap: 3px;">
+                <sc-for list="{{ ticket.ratingStars }}" as="s" hint-placeholder-count="5">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="{{ s.fill }}" stroke="{{ s.stroke }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 18.9l-5.8 3.05 1.1-6.45-4.7-4.6 6.5-.95z"></path></svg>
+                </sc-for>
+              </div>
+              <span style="font-size: 15px; font-weight: 800; color: var(--ink-900);">{{ ticket.ratingValue }}<span style="font-size: 12px; font-weight: 600; color: var(--slate-500);">/5</span></span>
+            </div>
+            <div style="font-size: 13px; line-height: 1.6; color: var(--ink-700); background: var(--canvas); border: 1px solid var(--border-soft); border-radius: 12px; padding: 12px 14px;">“{{ ticket.ratingNote }}”</div>
+            <div style="font-size: 11px; color: var(--slate-500);">{{ ticket.ratingBy }} · {{ ticket.ratingDate }}</div>
+          </div>
+          </sc-if>
+
+          <!-- SLA panel -->
+          <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 18px 20px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">SLA</h2>
+              <span style="font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: {{ ticket.sla.pillBg }}; color: {{ ticket.sla.pillColor }};">{{ ticket.sla.pillLabel }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                <span style="font-size: 12px; color: var(--slate-500);">Target Penyelesaian</span>
+                <span style="font-size: 13px; font-weight: 700; color: {{ ticket.sla.color }}; font-variant-numeric: tabular-nums;">{{ ticket.sla.text }}</span>
+              </div>
+              <div style="height: 6px; border-radius: 999px; background: var(--border-soft); overflow: hidden;">
+                <div style="height: 100%; width: {{ ticket.sla.barPct }}%; border-radius: 999px; background: {{ ticket.sla.color }};"></div>
+              </div>
+              <span style="font-size: 11px; color: var(--slate-500);">Target {{ ticket.slaResLabel }} sejak tiket dibuat</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--border-soft); padding-top: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                <span style="color: var(--slate-500);">Target Respons</span>
+                <span style="display: flex; align-items: center; gap: 5px; font-weight: 700; color: {{ ticket.respColor }};">{{ ticket.respLabel }}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                <span style="color: var(--slate-500);">Prioritas · Kelas SLA</span>
+                <span style="font-weight: 600; color: var(--ink-700);">{{ ticket.priorityLabel }} · {{ ticket.slaResLabel }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- People -->
+          <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+            <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">People</h2>
+            <sc-for list="{{ ticketPeople }}" as="person" hint-placeholder-count="3">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 32px; height: 32px; border-radius: 999px; background: {{ person.bg }}; color: {{ person.color }}; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">{{ person.initials }}</div>
+                <div style="display: flex; flex-direction: column; min-width: 0;">
+                  <span style="font-size: 13px; font-weight: 600; color: var(--ink-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ person.name }}</span>
+                  <span style="font-size: 11px; color: var(--slate-500);">{{ person.role }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- Status timeline -->
+          <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 18px 20px; display: flex; flex-direction: column; gap: 4px;">
+            <h2 style="margin: 0 0 10px 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Riwayat Status</h2>
+            <sc-for list="{{ ticketTimeline }}" as="ev" hint-placeholder-count="3">
+              <div style="display: flex; gap: 12px;">
+                <div style="display: flex; flex-direction: column; align-items: center; width: 18px; flex-shrink: 0;">
+                  <span style="width: 12px; height: 12px; border-radius: 999px; background: {{ ev.dotBg }}; border: 2.5px solid {{ ev.dotBorder }}; flex-shrink: 0; margin-top: 3px;"></span>
+                  <sc-if value="{{ ev.hasLine }}" hint-placeholder-val="{{ true }}">
+                    <span style="width: 2px; flex: 1; min-height: 26px; background: {{ ev.lineBg }};"></span>
+                  </sc-if>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 1px; padding-bottom: 14px; min-width: 0;">
+                  <span style="font-size: 13px; font-weight: 700; color: {{ ev.labelColor }};">{{ ev.label }}</span>
+                  <span style="font-size: 11px; color: var(--slate-500); line-height: 1.5;">{{ ev.actor }}</span>
+                  <span style="font-size: 11px; color: var(--slate-500); font-variant-numeric: tabular-nums;">{{ ev.time }}</span>
+                </div>
+              </div>
+            </sc-for>
+            <div style="border-top: 1px solid var(--border-soft); padding-top: 12px; font-size: 11px; color: var(--slate-500); line-height: 1.6;">{{ ticket.timelineNote }}</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+  </main>
+
+  <sc-if value="{{ toast }}">
+    <div style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--ink-900); color: var(--white); padding: 12px 22px; border-radius: 12px; box-shadow: var(--elev-pop); font-size: 13px; font-weight: 600; z-index: 100; animation: swtoast .2s ease;">{{ toast }}</div>
+  </sc-if>
+
+  <sc-if value="{{ confirmOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 90; background: rgba(11, 28, 48, 0.45); display: flex; align-items: center; justify-content: center; padding: 24px;" onClick="{{ cancelConfirm }}">
+      <div onClick="{{ stop }}" style="width: 100%; max-width: 380px; background: var(--white); border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--elev-pop); padding: 24px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="width: 40px; height: 40px; border-radius: 999px; background: var(--blue-050); color: var(--blue-500); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.29 3.86 1.82 18a1 1 0 0 0 .86 1.5h18.64a1 1 0 0 0 .86-1.5L13.71 3.86a1 1 0 0 0-1.72 0Z"></path></svg>
+          </span>
+          <span style="font-size: 16px; font-weight: 700; color: var(--ink-900);">{{ confirmModal.title }}</span>
+        </div>
+        <p style="margin: 0; font-size: 13px; line-height: 1.6; color: var(--ink-700);">{{ confirmModal.body }}</p>
+        <div style="background: var(--canvas); border: 1px solid var(--border-soft); border-radius: 10px; padding: 11px 13px;">
+          <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Catatan Anda</span>
+          <p style="margin: 4px 0 0; font-size: 13px; line-height: 1.5; color: var(--ink-800);">{{ confirmNote }}</p>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px;">
+          <button type="button" onClick="{{ cancelConfirm }}" style="padding: 10px 18px; border-radius: 999px; border: 1px solid var(--border); background: var(--white); color: var(--ink-700); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: var(--surface-tint);">Tidak</button>
+          <button type="button" onClick="{{ confirmYes }}" style="padding: 10px 18px; border-radius: 999px; border: none; background: var(--blue-500); color: var(--white); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: var(--elev-card);" style-hover="background: var(--blue-600);">{{ confirmModal.yesLabel }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  ME = "Rizky Pratama";
+
+  STATUS = {
+    "draft": { label: "Draft", bg: "var(--surface-tint)", color: "var(--slate-500)" },
+    "waiting-approval": { label: "Waiting for Approval", bg: "var(--blue-050-cool)", color: "var(--navy-700)" },
+    "rejected": { label: "Rejected", bg: "rgba(186,26,26,0.10)", color: "var(--red-600)" },
+    "open": { label: "Open", bg: "var(--surface-tint)", color: "var(--ink-700)" },
+    "assigned": { label: "Assigned", bg: "var(--blue-050-alt)", color: "var(--blue-ink)" },
+    "in-progress": { label: "In Progress", bg: "var(--blue-050)", color: "var(--blue-ink)" },
+    "waiting-response": { label: "Waiting for Response", bg: "rgba(124,58,237,0.12)", color: "rgb(109,40,217)" },
+    "resolved": { label: "Resolved", bg: "rgba(52,199,89,0.14)", color: "var(--green-500)" },
+    "completed": { label: "Completed", bg: "rgba(52,199,89,0.14)", color: "var(--green-500)" },
+    "closed": { label: "Closed", bg: "var(--surface-tint)", color: "var(--slate-500)" },
+  };
+
+  PRIORITY = {
+    critical: { label: "Critical", bg: "rgba(186,26,26,0.10)", color: "var(--red-600)", solid: "var(--red-600)" },
+    high: { label: "High", bg: "rgba(255,149,0,0.16)", color: "rgb(180,83,9)", solid: "rgb(255,149,0)" },
+    medium: { label: "Medium", bg: "var(--blue-050)", color: "var(--blue-ink)", solid: "var(--blue-500)" },
+    low: { label: "Low", bg: "var(--surface-tint)", color: "var(--slate-500)", solid: "var(--slate-500)" },
+  };
+
+  // Canonical end-to-end status flow per category — every ticket shows the full
+  // path Open → … → Closed, with reached steps solid and upcoming steps hollow.
+  FLOWS = {
+    incident: [
+      { label: "Open", match: ["open"], at: ["open"], pend: "Menunggu tiket masuk antrean" },
+      { label: "Assigned", match: ["assigned", "ditugaskan", "dialihkan", "team lead", "sla respons"], at: ["assigned"], pend: "Menunggu penugasan PIC" },
+      { label: "In Progress", match: ["in progress", "dikerjakan", "waiting for response", "klarifikasi"], at: ["in-progress", "waiting-response"], pend: "Menunggu penanganan Support" },
+      { label: "Resolved", match: ["resolved"], at: ["resolved"], pend: "Menunggu penyelesaian" },
+      { label: "Completed → Closed", match: ["completed", "closed", "service closed", "ditutup"], at: ["completed", "closed"], pend: "Menunggu konfirmasi requester" },
+    ],
+    service: [
+      { label: "Open", match: ["open"], at: ["open"], pend: "Menunggu tiket masuk antrean" },
+      { label: "Approval", match: ["approval", "persetujuan", "disetujui"], at: ["waiting-approval"], pend: "Menunggu persetujuan" },
+      { label: "Assigned", match: ["assigned", "ditugaskan"], at: ["assigned"], pend: "Menunggu penugasan PIC" },
+      { label: "In Progress", match: ["in progress", "dikerjakan", "waiting for response", "klarifikasi"], at: ["in-progress", "waiting-response"], pend: "Menunggu penanganan Support" },
+      { label: "Completed", match: ["completed"], at: ["completed", "resolved"], pend: "Menunggu penyelesaian" },
+      { label: "Closed", match: ["closed", "service closed", "ditutup"], at: ["closed"], pend: "Menunggu konfirmasi requester" },
+    ],
+    access: [
+      { label: "Open", match: ["open"], at: ["open"], pend: "Menunggu tiket masuk antrean" },
+      { label: "Manager Approval", match: ["manager approval"], at: ["waiting-approval"], pend: "Menunggu approval Manager (Level 1)" },
+      { label: "App Owner Approval", match: ["app owner", "application owner", "owner"], at: [], pend: "Menunggu approval Application Owner (Level 2)" },
+      { label: "In Progress · Provisioning", match: ["in progress", "provisioning", "dikerjakan", "waiting for response", "klarifikasi"], at: ["assigned", "in-progress", "waiting-response"], pend: "Menunggu provisioning oleh Support" },
+      { label: "Completed", match: ["completed"], at: ["completed", "resolved"], pend: "Menunggu penyelesaian" },
+      { label: "Closed", match: ["closed", "service closed", "ditutup"], at: ["closed"], pend: "Menunggu konfirmasi requester" },
+    ],
+  };
+
+  ICONS = {
+    ticket: "M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z M14 5v14",
+    pencil: "M15.5 3.5 20.5 8.5 8.5 20.5H3.5V15.5Z",
+    warning: "M12 9v4 M12 17h.01 M10.29 3.86 1.82 18a1 1 0 0 0 .86 1.5h18.64a1 1 0 0 0 .86-1.5L13.71 3.86a1 1 0 0 0-1.72 0Z",
+    checkCircle: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M8.5 12l2.5 2.5 4.5-5",
+    clock: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M12 7v5l3 3",
+    archive: "M3 4h18v4H3z M5 8v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8 M9 12h6",
+    bell: "M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z M10 21h4",
+    check: "M20 6 9 17l-5-5",
+    arrowRight: "M5 12h14 M13 6l6 6-6 6",
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      view: "queue",
+      activeId: null,
+      segment: "all",
+      sortBy: "sla",
+      noteError: "",
+      priority: "all",
+      query: "",
+      reply: "",
+      toast: null,
+      now: Date.now(),
+      tickets: this.seed(),
+      notifOpen: false,
+      profileOpen: false,
+      notifications: this.seedNotifications(),
+      period: "month",
+      historyFilter: "all",
+      historyPeriod: "month",
+      confirmOpen: false,
+      confirmKey: null,
+      confirmNote: "",
+    };
+  }
+
+  confirmModal() {
+    const label = "#" + (this.state.activeId || "");
+    const defs = {
+      escalate: {
+        icon: "M12 9v4 M12 17h.01 M10.29 3.86 1.82 18a1 1 0 0 0 .86 1.5h18.64a1 1 0 0 0 .86-1.5L13.71 3.86a1 1 0 0 0-1.72 0Z",
+        title: "Eskalasi ke Tim IT?",
+        body: "Tiket " + label + " akan dieskalasi ke Tim IT Lanjutan untuk penanganan lebih dalam. Tindakan ini tercatat di riwayat status.",
+        yesLabel: "Ya, Eskalasi", noteHint: "(opsional)", notePlaceholder: "Alasan / konteks eskalasi…",
+      },
+      serviceClose: {
+        icon: "M3 4h18v4H3z M5 8v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8 M9 12h6",
+        title: "Tutup Layanan (Service Closed)?",
+        body: "Tiket " + label + " akan ditandai selesai dan ditutup. Requester akan diminta memberi penilaian atas layanan. Tindakan ini tercatat di riwayat status.",
+        yesLabel: "Ya, Tutup Layanan", noteHint: "(opsional)", notePlaceholder: "Ringkasan penyelesaian untuk requester…",
+      },
+    };
+    const d = defs[this.state.confirmKey] || defs.escalate;
+    return { iconPath: d.icon, title: d.title, body: d.body, yesLabel: d.yesLabel, noteHint: d.noteHint, notePlaceholder: d.notePlaceholder };
+  }
+
+  requestConfirm(key) {
+    if (!this.state.confirmNote.trim()) { this.setState({ noteError: "Catatan wajib diisi." }); return; }
+    this.setState({ confirmOpen: true, confirmKey: key, noteError: "" });
+  }
+  cancelConfirm() { this.setState({ confirmOpen: false, confirmKey: null }); }
+  confirmYes() {
+    const key = this.state.confirmKey;
+    const note = this.state.confirmNote;
+    this.setState({ confirmOpen: false, confirmKey: null, confirmNote: "", noteError: "" });
+    if (key) this.doAction(key, note);
+  }
+
+  periodData() {
+    return {
+      week:  { label: "Minggu Ini", total: 42,   resolved: 38,   breach: 3,   prio: { critical: 4,   high: 11,  medium: 19,  low: 8   }, cat: { Incident: 26,   "Service Request": 9,   "Access Request": 7   } },
+      month: { label: "Bulan Ini",  total: 186,  resolved: 171,  breach: 12,  prio: { critical: 15,  high: 52,  medium: 83,  low: 36  }, cat: { Incident: 118,  "Service Request": 41,  "Access Request": 27  } },
+      year:  { label: "Tahun Ini",  total: 2214, resolved: 2098, breach: 141, prio: { critical: 178, high: 642, medium: 983, low: 411 }, cat: { Incident: 1402, "Service Request": 486, "Access Request": 326 } },
+    };
+  }
+
+  workloadPeriodData() {
+    return {
+      week: {
+        label: "7 Hari Terakhir", shortLabel: "7 Hari",
+        axis: ["Rab", "Kam", "Jum", "Sab", "Min", "Sen", "Sel"],
+        created: [6, 8, 5, 2, 1, 9, 7],
+        resolved: [5, 7, 6, 3, 1, 7, 8],
+      },
+      month: {
+        label: "6 Minggu Terakhir", shortLabel: "6 Minggu",
+        axis: ["M1", "M2", "M3", "M4", "M5", "M6"],
+        created: [34, 29, 31, 38, 33, 40],
+        resolved: [30, 28, 27, 35, 31, 37],
+      },
+      year: {
+        label: "12 Bulan Terakhir", shortLabel: "12 Bulan",
+        axis: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"],
+        created: [120, 110, 130, 125, 140, 135, 150, 145, 160, 155, 148, 162],
+        resolved: [110, 105, 120, 118, 132, 128, 142, 138, 150, 148, 140, 155],
+      },
+    };
+  }
+
+  seedNotifications() {
+    return [
+      { id: "n0", icon: "arrowRight", bg: "var(--rose-200)", color: "var(--clay-700)", title: "Tiket dialihkan ke Anda ·", body: "Arif Budiman (Team Lead) mengalihkan #HD-2039 (VPN FortiClient terputus) kepada Anda karena melewati SLA. Mohon segera ditangani.", time: "Baru saja", unread: true, target: "HD-2039" },
+      { id: "n1", icon: "warning", bg: "rgba(186,26,26,0.10)", color: "var(--red-600)", title: "SLA Warning ·", body: "#HD-2033 tersisa kurang dari 30 menit sebelum breach.", time: "Baru saja", unread: true, target: "HD-2033" },
+      { id: "n2", icon: "ticket", bg: "var(--blue-050)", color: "var(--blue-ink)", title: "Tiket baru ditugaskan ·", body: "#HD-2048 (SAP GUI Error saat login) masuk ke antrean Anda.", time: "12 menit lalu", unread: true, target: "HD-2048" },
+      { id: "n3", icon: "pencil", bg: "var(--blue-050)", color: "var(--blue-ink)", title: "Balasan baru ·", body: "Dewi Anggraini membalas diskusi pada #HD-2033.", time: "35 menit lalu", unread: true, target: "HD-2033" },
+      { id: "n4", icon: "checkCircle", bg: "rgba(52,199,89,0.14)", color: "var(--green-500)", title: "Approval selesai ·", body: "Rantai approval #HD-2051 (Access Request) telah lengkap, siap diproses.", time: "1 jam lalu", unread: false, target: "HD-2051" },
+      { id: "n5", icon: "warning", bg: "var(--rose-200)", color: "var(--clay-700)", title: "Mendekati SLA ·", body: "#HD-2039 (VPN terputus) mendekati batas waktu respons.", time: "2 jam lalu", unread: false, target: "HD-2039" },
+      { id: "n6", icon: "ticket", bg: "var(--blue-050)", color: "var(--blue-ink)", title: "Tiket baru ditugaskan ·", body: "#HD-2052 (Reset Password MAILIA) menunggu diproses.", time: "3 jam lalu", unread: false, target: "HD-2052" },
+      { id: "n7", icon: "checkCircle", bg: "rgba(52,199,89,0.14)", color: "var(--green-500)", title: "Tiket ditutup ·", body: "#HD-2027 (Report PS Error Dump) telah dikonfirmasi selesai oleh requester.", time: "Kemarin, 09:00", unread: false, target: "HD-2027" },
+      { id: "n8", icon: "pencil", bg: "var(--blue-050)", color: "var(--blue-ink)", title: "Balasan baru ·", body: "Bagas Nugroho menambahkan komentar pada #HD-2039.", time: "Kemarin, 08:20", unread: false, target: "HD-2039" },
+    ];
+  }
+
+  componentDidMount() {
+    this._timer = setInterval(() => this.setState({ now: Date.now() }), 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this._timer);
+    clearTimeout(this._toastTimer);
+  }
+
+  seed() {
+    const m = 60000, now = Date.now();
+    const D = (mins, t) => ({ ...t, slaDeadline: now + mins * m, slaMins: mins });
+    return [
+      D(-38, {
+        id: "HD-2033", subject: "Faulty PO Header Data pada transaksi MM", catKey: "incident", category: "Incident", daysAgo: 0,
+        app: "SAP MM", sub: "Transaksi MM · Faulty PO Header Data", priority: "critical", status: "in-progress",
+        assignee: this.ME, requester: { name: "Dewi Anggraini", unit: "Dept. Supply Chain Management", contact: "dewi.a@adhi.co.id" },
+        created: "Hari ini, 07:42", location: "Kantor Pusat · Lt. 5", slaRespLabel: "15 menit", slaResLabel: "4 jam",
+        reqNote: "Mohon segera dibantu, PO ini deadline hari ini untuk pengadaan material proyek. Sudah saya coba ulang beberapa kali tetap gagal tersimpan.", reqNoteTime: "Hari ini, 07:45",
+        desc: "Saat membuat Purchase Order, header data tidak tersimpan dengan benar — field organisasi pembelian dan mata uang ter-reset. Transaksi PO tidak bisa dilanjutkan sehingga proses pengadaan tertahan.",
+        attachments: [{ name: "po-header-error.png", size: "248 KB" }, { name: "log-me21n.txt", size: "12 KB" }],
+        forum: [
+          { side: "requester", author: "Dewi Anggraini", role: "Requester", time: "07:45", text: "Halo tim IT, saya tidak bisa lanjut buat PO. Header-nya selalu error. Ini urgent, deadline pengadaan hari ini." },
+          { side: "support", author: "Rizky Pratama", role: "IT Support", time: "07:58", text: "Baik Bu Dewi, saya cek dulu konfigurasi release strategy-nya. Sementara mohon jangan tutup transaksi ME21N-nya." },
+        ],
+        timeline: [
+          { label: "Open", actor: "Sistem", time: "07:42" },
+          { label: "Assigned", actor: "Rizky Pratama · IT Support", time: "07:50" },
+          { label: "In Progress", actor: "Rizky Pratama · IT Support", time: "07:58" },
+        ],
+      }),
+      D(19, {
+        id: "HD-2039", subject: "VPN FortiClient terputus berulang", catKey: "incident", category: "Incident", daysAgo: 0,
+        app: "NETWORK", sub: "VPN · VPN terputus", priority: "high", status: "in-progress",
+        assignee: this.ME, requester: { name: "Bagas Nugroho", unit: "Dept. Perkeretaapian", contact: "bagas.n@adhi.co.id" },
+        created: "Hari ini, 08:15", location: "Site MRT Fatmawati", slaRespLabel: "30 menit", slaResLabel: "8 jam",
+        desc: "Koneksi VPN FortiClient dari site putus setiap 5-10 menit, sehingga akses ke aplikasi internal (SAP, ELISA) tidak stabil. Sudah coba reconnect beberapa kali tapi tetap sama.",
+        attachments: [],
+        reassigned: {
+          by: "Arif Budiman · Team Lead IT Support",
+          from: "Yusuf Maulana · IT Support",
+          reason: "Tiket melewati batas SLA respons (30 menit) tanpa progres. Dialihkan agar segera ditangani.",
+          time: "Hari ini, 09:35",
+        },
+        forum: [
+          { side: "requester", author: "Bagas Nugroho", role: "Requester", time: "08:18", text: "Pak, VPN putus terus dari tadi pagi. Sinyal internet di site normal kok." },
+        ],
+        timeline: [
+          { label: "Open", actor: "Sistem", time: "08:15" },
+          { label: "Assigned", actor: "Yusuf Maulana · IT Support", time: "08:22" },
+          { label: "SLA Respons Terlewati", actor: "Sistem · Monitoring SLA", time: "08:52" },
+          { label: "Dialihkan oleh Team Lead", actor: "Arif Budiman · Team Lead IT Support", time: "09:35" },
+          { label: "Assigned", actor: "Rizky Pratama · IT Support", time: "09:35" },
+          { label: "In Progress", actor: "Rizky Pratama · IT Support", time: "09:42" },
+        ],
+      }),
+      D(340, {
+        id: "HD-2045", subject: "Tidak bisa mengirim email di Outlook", catKey: "incident", category: "Incident", daysAgo: 0,
+        app: "MAILIA", sub: "Tidak Bisa Kirim Email", priority: "medium", status: "in-progress",
+        assignee: this.ME, requester: { name: "Sinta Melati", unit: "Dept. Legal", contact: "sinta.m@adhi.co.id" },
+        created: "Hari ini, 09:02", location: "Kantor Pusat · Lt. 8", slaRespLabel: "2 jam", slaResLabel: "2 hari kerja",
+        desc: "Email masuk normal, tetapi setiap kirim email selalu mengendap di Outbox dan tidak terkirim. Muncul pesan error 0x800CCC0F.",
+        attachments: [{ name: "outlook-error.png", size: "96 KB" }],
+        forum: [],
+        timeline: [
+          { label: "Open", actor: "Sistem", time: "09:02" },
+          { label: "Assigned", actor: "Rizky Pratama · IT Support", time: "09:20" },
+          { label: "In Progress", actor: "Rizky Pratama · IT Support", time: "09:35" },
+        ],
+      }),
+      D(300, {
+        id: "HD-2048", subject: "SAP GUI Error saat login", catKey: "incident", category: "Incident", daysAgo: 0,
+        app: "SAP", sub: "Login SAP · SAP GUI Error", priority: "high", status: "assigned",
+        assignee: this.ME, requester: { name: "Andini Puteri", unit: "Dept. Keuangan", contact: "andini.p@adhi.co.id" },
+        created: "Hari ini, 09:40", location: "Kantor Pusat · Lt. 6", slaRespLabel: "30 menit", slaResLabel: "8 jam",
+        desc: "Saat membuka SAP Logon muncul error 'Partner not reached' dan GUI langsung tertutup. Sudah restart aplikasi namun tetap gagal login.",
+        attachments: [],
+        forum: [],
+        timeline: [
+          { label: "Open", actor: "Sistem", time: "09:40" },
+          { label: "Assigned", actor: "Sistem (auto-assign)", time: "09:44" },
+        ],
+      }),
+      D(58, {
+        id: "HD-2051", subject: "Pembuatan akun SAP baru — staf baru SCM", catKey: "access", category: "Access Request", daysAgo: 1,
+        app: "SAP", sub: "Akun Aplikasi SAP · Pembuatan akun baru", priority: "medium", status: "in-progress",
+        assignee: this.ME, requester: { name: "Hendra Wijaya", unit: "Dept. Supply Chain Management", contact: "hendra.w@adhi.co.id" },
+        created: "Kemarin, 16:05", location: "Kantor Pusat · Lt. 5", slaRespLabel: "2 jam", slaResLabel: "2 hari kerja",
+        reqNote: "Staf ybs sudah mulai bekerja Senin depan, jadi akun diharapkan aktif sebelum tanggal tersebut. Terima kasih.", reqNoteTime: "Kemarin, 16:08",
+        desc: "Permintaan pembuatan user SAP untuk staf baru a.n. Putri Ramadhani (NIP 2026-0417), modul MM & PS, unit SCM. Role sesuai template staf procurement.",
+        attachments: [{ name: "form-akses-sap.pdf", size: "184 KB" }],
+        forum: [
+          { side: "approver", author: "Divisi Human Capital", role: "Approver · HC", time: "8 Jul 08:05", text: "Data kepegawaian valid, staf aktif per 1 Juli 2026. Disetujui." },
+        ],
+        approvals: [
+          { level: "Level 1 · Manager", name: "Hendra Wijaya (Manager SCM)", decision: "Approved", time: "7 Jul 16:20" },
+          { level: "Level 2 · Human Capital", name: "Divisi HC", decision: "Approved", time: "8 Jul 08:05" },
+          { level: "Level 2 · Application Owner", name: "Owner SAP · IT", decision: "Approved", time: "8 Jul 09:12" },
+        ],
+        provision: [
+          { label: "Buat user SAP (SU01)", done: true },
+          { label: "Assign role MM & PS", done: false },
+          { label: "Set password awal & kirim ke user", done: false },
+          { label: "Verifikasi login user", done: false },
+        ],
+        timeline: [
+          { label: "Open", actor: "Hendra Wijaya · Requester", time: "7 Jul 16:05" },
+          { label: "Manager Approval", actor: "Hendra Wijaya", time: "7 Jul 16:20" },
+          { label: "Application Owner Approval", actor: "Owner SAP · IT", time: "8 Jul 09:12" },
+          { label: "In Progress (Provisioning)", actor: "Rizky Pratama · IT Support", time: "8 Jul 09:30" },
+        ],
+      }),
+      D(180, {
+        id: "HD-2052", subject: "Reset Password akun email MAILIA", catKey: "access", category: "Access Request", daysAgo: 0,
+        app: "MAILIA", sub: "Akun Aplikasi · Reset Password", priority: "low", status: "open",
+        assignee: null, requester: { name: "Rudi Hartono", unit: "Dept. Infrastruktur I", contact: "rudi.h@adhi.co.id" },
+        created: "Hari ini, 08:50", location: "Site APG Cikampek", slaRespLabel: "4 jam", slaResLabel: "5 hari kerja",
+        desc: "Lupa password email dan akun terkunci setelah beberapa kali percobaan. Mohon reset password. (Reset Password tidak memerlukan approval sesuai ketetapan korporasi.)",
+        attachments: [],
+        forum: [],
+        provision: [
+          { label: "Verifikasi identitas requester", done: false },
+          { label: "Reset password MAILIA", done: false },
+          { label: "Kirim kredensial sementara", done: false },
+        ],
+        timeline: [
+          { label: "Open", actor: "Sistem", time: "08:50" },
+        ],
+      }),
+      D(600, {
+        id: "HD-2044", subject: "Instalasi software AutoCAD 2026", catKey: "service", category: "Service Request", daysAgo: 0,
+        app: "SILO", sub: "Aplikasi & Software · Instalasi aplikasi", priority: "medium", status: "open",
+        assignee: null, requester: { name: "Fajar Ramadhan", unit: "Adhi Learning Center", contact: "fajar.r@adhi.co.id" },
+        created: "Hari ini, 07:20", location: "Kantor Pusat · Lt. 3", slaRespLabel: "2 jam", slaResLabel: "2 hari kerja",
+        desc: "Permintaan instalasi AutoCAD 2026 pada laptop kerja untuk kebutuhan pemodelan BIM. Approval BPO sudah disetujui.",
+        attachments: [],
+        forum: [],
+        timeline: [
+          { label: "Open", actor: "Sistem", time: "07:20" },
+          { label: "Service Approval", actor: "BPO ALC", time: "07:55" },
+        ],
+      }),
+      D(0, {
+        id: "HD-2050", subject: "Permintaan laptop baru", catKey: "service", category: "Service Request", daysAgo: 0,
+        app: "PERANGKAT", sub: "Perangkat · Pengajuan Laptop", priority: "medium", status: "waiting-approval",
+        assignee: null, requester: { name: "Nadia Kusuma", unit: "Dept. Pengembangan Bisnis", contact: "nadia.k@adhi.co.id" },
+        created: "Hari ini, 06:55", location: "Kantor Pusat · Lt. 9", slaRespLabel: "2 jam", slaResLabel: "2 hari kerja",
+        desc: "Pengajuan unit laptop baru untuk karyawan pindah divisi. Menunggu approval berjenjang Manager → Application Owner.",
+        attachments: [],
+        forum: [],
+        timeline: [
+          { label: "Open", actor: "Sistem", time: "06:55" },
+          { label: "Waiting for Approval", actor: "Menunggu Manager", time: "06:56" },
+        ],
+      }),
+      D(0, {
+        id: "HD-2029", subject: "WiFi lemah di lantai 7", catKey: "incident", category: "Incident", daysAgo: 1,
+        app: "NETWORK", sub: "WiFi · Sinyal WiFi lemah", priority: "low", status: "resolved",
+        assignee: this.ME, requester: { name: "Yoga Pratama", unit: "Satuan Pengawas Internal", contact: "yoga.p@adhi.co.id" },
+        created: "Kemarin, 13:10", location: "Kantor Pusat · Lt. 7", slaRespLabel: "4 jam", slaResLabel: "5 hari kerja",
+        desc: "Sinyal WiFi di area lantai 7 lemah dan sering drop. Sudah dilakukan penambahan access point dan re-channel.",
+        attachments: [],
+        forum: [],
+        timeline: [
+          { label: "Open", actor: "Sistem", time: "Kemarin 13:10" },
+          { label: "In Progress", actor: "Rizky Pratama · IT Support", time: "Kemarin 14:00" },
+          { label: "Resolved", actor: "Rizky Pratama · IT Support", time: "Kemarin 16:30" },
+        ],
+      }),
+      D(0, {
+        id: "HD-2027", subject: "Report PS Error Dump", catKey: "incident", category: "Incident", daysAgo: 2,
+        app: "SAP PS", sub: "Transaksi PS · Report PS (Error Dump)", priority: "high", status: "closed",
+        assignee: this.ME, requester: { name: "Rina Oktaviani", unit: "Dept. Akuntansi", contact: "rina.o@adhi.co.id" },
+        created: "2 hari lalu", location: "Kantor Pusat · Lt. 6", slaRespLabel: "30 menit", slaResLabel: "8 jam",
+        desc: "Report PS menghasilkan runtime error (dump) saat dijalankan periode tertentu. Sudah diperbaiki bersama BPO & tim IT, dikonfirmasi selesai oleh requester.",
+        attachments: [],
+        forum: [],
+        timeline: [
+          { label: "Open", actor: "Sistem", time: "6 Jul 10:00" },
+          { label: "In Progress", actor: "Rizky Pratama · IT Support", time: "6 Jul 11:20" },
+          { label: "Resolved", actor: "Rizky Pratama · IT Support", time: "6 Jul 15:40" },
+          { label: "Closed", actor: "Rina Oktaviani · Requester", time: "7 Jul 09:00" },
+        ],
+        rating: 5, ratingBy: "Rina Oktaviani · Requester", ratingDate: "7 Jul 09:02",
+        ratingNote: "Report PS sudah normal kembali. Penanganan cepat dan komunikatif, terima kasih tim IT.",
+      }),
+      D(0, {
+        id: "HD-2018", subject: "Aktivasi VPN FortiClient — Site APG Cikampek", catKey: "access", category: "Access Request", daysAgo: 4,
+        app: "VPN", sub: "VPN · Aktivasi VPN FortiClient", priority: "medium", status: "completed",
+        assignee: this.ME, requester: { name: "Rudi Hartono", unit: "Dept. Infrastruktur I", contact: "rudi.h@adhi.co.id" },
+        created: "4 hari lalu", location: "Site APG Cikampek", slaRespLabel: "2 jam", slaResLabel: "2 hari kerja",
+        desc: "Aktivasi VPN FortiClient untuk akses SAP dan ADELE dari site. Provisioning selesai dan sudah diverifikasi oleh requester.",
+        attachments: [],
+        forum: [],
+        timeline: [
+          { label: "Open", actor: "Sistem", time: "4 Jul 08:10" },
+          { label: "In Progress", actor: "Rizky Pratama · IT Support", time: "4 Jul 09:00" },
+          { label: "Completed", actor: "Rizky Pratama · IT Support", time: "4 Jul 13:45" },
+        ],
+      }),
+      D(0, {
+        id: "HD-2011", subject: "Instalasi Printer Jaringan Lt. 4", catKey: "service", category: "Service Request", daysAgo: 6,
+        app: "SILO", sub: "Aplikasi & Software · Instalasi aplikasi", priority: "low", status: "closed",
+        assignee: this.ME, requester: { name: "Melati Puspita", unit: "Dept. Human Capital", contact: "melati.p@adhi.co.id" },
+        created: "6 hari lalu", location: "Kantor Pusat · Lt. 4", slaRespLabel: "4 jam", slaResLabel: "5 hari kerja",
+        desc: "Instalasi driver dan konfigurasi printer jaringan baru di Lt. 4. Sudah selesai dan dikonfirmasi oleh requester.",
+        attachments: [],
+        forum: [],
+        timeline: [
+          { label: "Open", actor: "Sistem", time: "2 Jul 09:00" },
+          { label: "In Progress", actor: "Rizky Pratama · IT Support", time: "2 Jul 10:00" },
+          { label: "Completed", actor: "Rizky Pratama · IT Support", time: "2 Jul 14:00" },
+          { label: "Closed", actor: "Melati Puspita · Requester", time: "3 Jul 08:30" },
+        ],
+        rating: 4, ratingBy: "Melati Puspita · Requester", ratingDate: "3 Jul 08:32",
+        ratingNote: "Printer sudah bisa dipakai bersama. Sempat menunggu jadwal teknisi, tapi hasil akhirnya baik.",
+      }),
+    ];
+  }
+
+  fmtDur(ms) {
+    ms = Math.abs(ms);
+    const h = Math.floor(ms / 3600000);
+    const mn = Math.floor((ms % 3600000) / 60000);
+    const s = Math.floor((ms % 60000) / 1000);
+    if (h > 0) return h + "j " + mn + "m";
+    if (mn > 0) return mn + "m " + s + "d";
+    return s + "d";
+  }
+
+  SLA_WINDOW_MIN = { critical: 240, high: 480, medium: 2880, low: 7200 };
+
+  computeSla(t, now) {
+    if (["resolved", "completed", "closed"].includes(t.status))
+      return { state: "done", color: "var(--green-500)", pillBg: "rgba(52,199,89,0.14)", pillColor: "var(--green-500)", text: "Selesai dalam SLA", pillLabel: "Resolved", barPct: 100, fillPct: 100, slaSort: -3e9 };
+    if (t.status === "rejected")
+      return { state: "none", color: "var(--slate-500)", pillBg: "var(--surface-tint)", pillColor: "var(--slate-500)", text: "—", pillLabel: "Rejected", barPct: 0, fillPct: 0, slaSort: -2e9 };
+    if (["draft", "waiting-approval"].includes(t.status))
+      return { state: "pending", color: "var(--slate-500)", pillBg: "var(--surface-tint)", pillColor: "var(--slate-500)", text: "Menunggu approval", pillLabel: "Menunggu", barPct: 0, fillPct: 0, slaSort: -1e9 };
+    const windowMin = this.SLA_WINDOW_MIN[t.priority] || 480;
+    const remain = t.slaDeadline - now;
+    const remainMin = remain / 60000;
+    const elapsedPct = Math.max(0, Math.min(100, ((windowMin * 60000 - remain) / (windowMin * 60000)) * 100));
+    if (remain <= 0)
+      return { state: "breach", color: "var(--red-600)", pillBg: "rgba(186,26,26,0.10)", pillColor: "var(--red-600)", text: "Breach · lewat " + this.fmtDur(remain), pillLabel: "SLA Breach", barPct: 100, fillPct: 100, slaSort: 2e9 + (-remainMin) };
+    const warn = remain < 30 * 60000;
+    return {
+      state: warn ? "warning" : "ontrack",
+      color: warn ? "var(--clay-600)" : "var(--green-500)",
+      pillBg: warn ? "var(--rose-200)" : "rgba(52,199,89,0.14)",
+      pillColor: warn ? "var(--clay-700)" : "var(--green-500)",
+      text: this.fmtDur(remain) + " lagi",
+      pillLabel: warn ? "SLA Warning" : "On Track",
+      barPct: elapsedPct,
+      fillPct: Math.max(6, Math.min(100, 100 - elapsedPct)),
+      slaSort: 1e9 - remainMin,
+    };
+  }
+
+  decorate(t) {
+    const st = this.STATUS[t.status] || { label: t.status, bg: "var(--surface-tint)", color: "var(--slate-500)" };
+    const pr = this.PRIORITY[t.priority] || this.PRIORITY.low;
+    const responded = !["draft", "waiting-approval", "open"].includes(t.status);
+    const timelineNotes = {
+      resolved: "Tiket akan otomatis ditutup 3 hari setelah requester tidak menindaklanjuti balasan Resolved.",
+      completed: "Tiket akan otomatis ditutup 3 hari setelah requester tidak menindaklanjuti balasan Completed.",
+      closed: "Tiket ini telah ditutup dan diarsipkan.",
+    };
+    return {
+      ...t,
+      statusLabel: st.label,
+      statusBg: st.bg,
+      statusColor: st.color,
+      priorityLabel: pr.label,
+      prioBg: pr.bg,
+      prioColor: pr.color,
+      sla: this.computeSla(t, this.state.now),
+      isMine: t.assignee === this.ME,
+      assigneeLabel: t.assignee || "Belum ditugaskan",
+      supportRole: (window.KelolaRole ? window.KelolaRole.findSupport(t.app, "IT").role : "Support IT - " + (t.app || "")),
+      metaLine: (t.app || "") + (t.sub ? " · " + t.sub.split(" · ")[0] : ""),
+      requesterName: (t.requester && t.requester.name) || "—",
+      requesterUnit: (t.requester && t.requester.unit) || "",
+      createdLabel: t.created || "—",
+      hasReassign: !!t.reassigned,
+      reassign: t.reassigned || {},
+      isAccess: t.catKey === "access",
+      hasAtt: (t.attachments || []).length > 0,
+      hasProvision: (t.provision || []).length > 0,
+      needsResponse: t.status === "waiting-response",
+      forumClosed: t.status === "closed",
+      canReply: t.status !== "closed",
+      respLabel: responded ? "✓ Terpenuhi" : "Menunggu",
+      respColor: responded ? "var(--green-500)" : "var(--slate-500)",
+      timelineNote: timelineNotes[t.status] || "Status akan tercatat otomatis setiap kali tiket ini diperbarui.",
+      hasRating: !!t.rating,
+      ratingValue: t.rating || 0,
+      ratingStars: [1, 2, 3, 4, 5].map((n) => ({
+        fill: n <= (t.rating || 0) ? "#FF9F0A" : "none",
+        stroke: n <= (t.rating || 0) ? "#FF9F0A" : "var(--border)",
+      })),
+      ratingNote: t.ratingNote || "",
+      ratingBy: t.ratingBy || (t.requester && t.requester.name) || "Requester",
+      ratingDate: t.ratingDate || "",
+      hasReqNote: !!t.reqNote,
+      reqNote: t.reqNote || "",
+      reqNoteBy: (t.requester && t.requester.name) || "Requester",
+      reqNoteTime: t.reqNoteTime || t.created || "",
+      unitLoc: ((t.requester && t.requester.unit) || "").split("·")[0].trim(),
+      requester: { ...t.requester, initials: ((t.requester && t.requester.name) || "R").split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase() },
+    };
+  }
+
+  clock() {
+    const d = new Date(this.state.now);
+    return "Hari ini, " + String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+  }
+
+  showToast(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => this.setState({ toast: null }), 2600);
+  }
+
+  updateTicket(id, fn) {
+    this.setState((s) => ({ tickets: s.tickets.map((t) => (t.id === id ? fn({ ...t }) : t)) }));
+  }
+
+  addTimeline(t, label) {
+    t.timeline = [...t.timeline, { label, actor: this.ME + " · IT Support", time: this.clock() }];
+    return t;
+  }
+
+  // Build the full Open→Closed status path for a ticket, marking each stage
+  // done / current / future and overlaying real timeline actor+time where known.
+  buildTimeline(t) {
+    const flow = this.FLOWS[t.catKey] || this.FLOWS.incident;
+    const real = t.timeline || [];
+    let cur = flow.findIndex((s) => (s.at || []).includes(t.status));
+    if (cur < 0) cur = ["completed", "closed"].includes(t.status) ? flow.length - 1 : 0;
+    return flow.map((s, i) => {
+      const state = i < cur ? "done" : (i === cur ? "current" : "future");
+      let actor = s.pend, time = "—";
+      if (state !== "future") {
+        const ev = real.find((e) => { const l = (e.label || "").toLowerCase(); return (s.match || []).some((k) => l.includes(k)); });
+        if (ev) { actor = ev.actor; time = ev.time; }
+        else { actor = state === "current" ? "Sedang berjalan" : "Selesai"; time = "—"; }
+      }
+      return { label: s.label, actor, time, state };
+    });
+  }
+
+  openTicket(id, from) { this.setState({ view: "detail", activeId: id, notifOpen: false, returnView: from || this.state.view }); }
+
+  toggleNotif() { this.setState((s) => ({ notifOpen: !s.notifOpen, profileOpen: false })); }
+  toggleProfile() { this.setState((s) => ({ profileOpen: !s.profileOpen, notifOpen: false })); }
+  closeMenus() { this.setState({ notifOpen: false, profileOpen: false }); }
+  markAllRead() { this.setState((s) => ({ notifications: s.notifications.map((n) => ({ ...n, unread: false })) })); }
+
+  doAction(key, note) {
+    const id = this.state.activeId;
+    const map = {
+      assign: { status: (s) => (s === "open" ? "assigned" : s), tl: "Assigned", assign: true, toast: "Tiket ditugaskan ke Anda" },
+      start: { status: () => "in-progress", tl: "In Progress", toast: "Status → In Progress" },
+      serviceClose: { status: () => "closed", tl: "Service Closed", toast: "Layanan ditutup (Service Closed)" },
+      escalate: { status: (s) => s, tl: "Dieskalasi ke Tim IT Lanjutan", escalate: true, toast: "Tiket dieskalasi ke Tim IT Lanjutan" },
+      complete: { status: () => "completed", tl: "Completed", toast: "Tiket ditandai Completed" },
+    }[key];
+    if (!map) return;
+    const n = (note || "").trim();
+    this.updateTicket(id, (t) => {
+      t.status = map.status(t.status);
+      if (map.assign) t.assignee = this.ME;
+      if (map.escalate) t.escalated = true;
+      return this.addTimeline(t, n ? map.tl + " — " + n : map.tl);
+    });
+    this.showToast(map.toast);
+  }
+
+  buildActions(t) {
+    const a = [];
+    const btn = (key, label, kind) => a.push({ key, label, ...this.btnStyle(kind) });
+    if (t.assignee === this.ME) {
+      if (t.status === "open" || t.status === "assigned") btn("start", "Mulai Kerjakan", "primary");
+      if (t.status === "in-progress" && !t.escalated) {
+        btn("serviceClose", "Service Closed", "outline");
+        if (t.catKey === "access") btn("complete", "Tandai Completed", "primary");
+        else btn("escalate", "Eskalasi IT", "primary");
+      }
+    }
+    return a;
+  }
+
+  btnStyle(kind) {
+    const v = {
+      primary: { bg: "var(--blue-500)", color: "var(--white)", border: "none", shadow: "var(--elev-card)" },
+      outline: { bg: "var(--white)", color: "var(--ink-700)", border: "1px solid var(--border)", shadow: "none" },
+      ghost: { bg: "transparent", color: "var(--slate-500)", border: "1px solid var(--border)", shadow: "none" },
+    }[kind] || {};
+    return v;
+  }
+
+  segStyle(active) {
+    return active
+      ? { bg: "var(--blue-500)", color: "var(--white)", weight: 700 }
+      : { bg: "transparent", color: "var(--ink-700)", weight: 600 };
+  }
+
+  chipStyle(key, active) {
+    const solid = (this.PRIORITY[key] || {}).solid || "var(--ink-700)";
+    if (active) return { border: "transparent", bg: solid, color: "var(--white)" };
+    return { border: "var(--border)", bg: "var(--white)", color: "var(--ink-700)" };
+  }
+
+  toggleProvision(i) {
+    this.updateTicket(this.state.activeId, (t) => {
+      t.provision = t.provision.map((p, idx) => (idx === i ? { ...p, done: !p.done } : p));
+      return t;
+    });
+  }
+
+  addReply() {
+    const txt = this.state.reply.trim();
+    if (!txt) return;
+    this.updateTicket(this.state.activeId, (t) => {
+      t.forum = [...t.forum, { side: "support", author: this.ME, role: "IT Support", time: "Baru saja", text: txt }];
+      return t;
+    });
+    this.setState({ reply: "" });
+    this.showToast("Tanggapan terkirim ke forum diskusi");
+  }
+
+  renderVals() {
+    const dec = this.state.tickets.map((t) => this.decorate(t));
+    const mine = dec.filter((t) => t.isMine);
+    const unassigned = dec.filter((t) => !t.assignee);
+
+    // queue filtering
+    let list = dec;
+    if (this.state.segment === "assigned") list = list.filter((t) => t.isMine);
+    else if (this.state.segment === "unassigned") list = list.filter((t) => !t.assignee);
+    if (this.state.priority !== "all") list = list.filter((t) => t.priority === this.state.priority);
+    const q = this.state.query.trim().toLowerCase();
+    if (q) list = list.filter((t) => (t.id + " " + t.subject + " " + t.app).toLowerCase().includes(q));
+    const sortBy = this.state.sortBy;
+    list = [...list].sort((a, b) => sortBy === "created"
+      ? (a.daysAgo || 0) - (b.daysAgo || 0)
+      : ((b.sla.slaSort || 0) - (a.sla.slaSort || 0)));
+    const sortControl = [["sla", "SLA Penyelesaian"], ["created", "Pembuatan Tiket"]].map(([k, l]) => ({
+      key: k, label: l, onClick: () => this.setState({ sortBy: k }), ...this.segStyle(k === sortBy),
+    }));
+    const rows = list.map((t) => ({ ...t, onOpen: () => this.openTicket(t.id), slaFill: (t.sla.fillPct || 0) + "%" }));
+
+    const segDefs = [
+      { key: "assigned", label: "Ditugaskan ke Saya", count: mine.length },
+      { key: "unassigned", label: "Belum Ditugaskan", count: unassigned.length },
+      { key: "all", label: "Semua", count: dec.length },
+    ];
+    const segments = segDefs.map((s) => {
+      const active = s.key === this.state.segment;
+      return { ...s, onClick: () => this.setState({ segment: s.key }), ...this.segStyle(active), countBg: active ? "rgba(255,255,255,0.25)" : "var(--surface-tint)", countColor: active ? "var(--white)" : "var(--slate-500)" };
+    });
+
+    const prios = [["all", "Semua"], ["critical", "Critical"], ["high", "High"], ["medium", "Medium"], ["low", "Low"]]
+      .map(([k, l]) => ({ key: k, label: l, onClick: () => this.setState({ priority: k }), ...this.chipStyle(k, k === this.state.priority) }));
+
+    const kpis = [
+      { icon: this.ICONS.ticket, tone: "blue", label: "Ditugaskan ke Saya", value: mine.filter((t) => ["open", "assigned"].includes(t.status)).length },
+      { icon: this.ICONS.pencil, tone: "blue", label: "In Progress", value: mine.filter((t) => t.status === "in-progress").length },
+      { icon: this.ICONS.warning, tone: "red", label: "Mendekati / Lewat SLA", value: mine.filter((t) => t.sla.state === "warning" || t.sla.state === "breach").length },
+      { icon: this.ICONS.checkCircle, tone: "green", label: "Selesai", value: mine.filter((t) => ["resolved", "completed", "closed"].includes(t.status)).length },
+    ].map((k) => {
+      const tone = { blue: { bg: "var(--blue-050)", color: "var(--blue-500)" }, red: { bg: "rgba(186,26,26,0.10)", color: "var(--red-600)" }, green: { bg: "rgba(52,199,89,0.14)", color: "var(--green-500)" } }[k.tone];
+      return { ...k, iconPath: k.icon, iconBg: tone.bg, iconColor: tone.color };
+    });
+
+    // dashboard charts — driven by selected period
+    const pdAll = this.periodData();
+    const pd = pdAll[this.state.period] || pdAll.month;
+    const periodSegments = [["week", "Minggu"], ["month", "Bulan"], ["year", "Tahun"]]
+      .map(([k, l]) => ({ key: k, label: l, onClick: () => this.setState({ period: k }), ...this.segStyle(k === this.state.period) }));
+
+    const prioDefs = [["critical", "Critical"], ["high", "High"], ["medium", "Medium"], ["low", "Low"]];
+    const prioCounts = prioDefs.map(([k, l]) => ({ key: k, label: l, color: this.PRIORITY[k].solid, count: pd.prio[k] }));
+    const bmax = Math.max(1, ...prioCounts.map((p) => p.count));
+    const barChart = prioCounts.map((p) => ({ ...p, barPx: Math.max(6, Math.round((p.count / bmax) * 122)) }));
+
+    const catDefs = [["Incident", "var(--blue-500)"], ["Service Request", "rgb(255,149,0)"], ["Access Request", "var(--green-500)"]];
+    const catCounts = catDefs.map(([k, c]) => ({ key: k, color: c, count: pd.cat[k] }));
+    const catTotal = catCounts.reduce((a, b) => a + b.count, 0) || 1;
+    let acc = 0;
+    const stops = catCounts.map((c) => { const s = (acc / catTotal) * 100; acc += c.count; const e = (acc / catTotal) * 100; return c.color + " " + s + "% " + e + "%"; });
+    const pieGradient = "conic-gradient(" + stops.join(", ") + ")";
+    const pieLegend = catCounts.map((c) => ({ ...c, pct: Math.round((c.count / catTotal) * 100) }));
+    const queueTotal = pd.total;
+
+    // SLA compliance gauge
+    const slaPct = Math.round(((pd.total - pd.breach) / pd.total) * 100);
+    const slaColor = slaPct >= 95 ? "var(--green-500)" : slaPct >= 90 ? "var(--clay-600)" : "var(--red-600)";
+    const slaGauge = "conic-gradient(" + slaColor + " 0% " + slaPct + "%, var(--border) " + slaPct + "% 100%)";
+    const slaMet = pd.total - pd.breach;
+    const periodLabel = pd.label;
+    const periodResolved = pd.resolved;
+
+    // ---- riwayat tiket (history) ----
+    const HISTORY_PERIOD_MAX = { week: 7, month: 31, year: 366 };
+    const historyPeriod = this.state.historyPeriod;
+    const historyPeriodMax = HISTORY_PERIOD_MAX[historyPeriod] || HISTORY_PERIOD_MAX.month;
+    const historyAll = mine.filter((t) => t.daysAgo <= historyPeriodMax);
+
+    const STATUS_BUCKET = {
+      open: ["open", "assigned"],
+      progress: ["in-progress", "waiting-response"],
+      resolved: ["resolved"],
+      closed: ["completed", "closed"],
+    };
+    const bucketOf = (status) => Object.keys(STATUS_BUCKET).find((k) => STATUS_BUCKET[k].includes(status)) || "open";
+
+    const HFILTERS = [
+      { key: "all", label: "Semua" },
+      { key: "open", label: "Open" },
+      { key: "progress", label: "In Progress" },
+      { key: "resolved", label: "Resolved" },
+      { key: "closed", label: "Closed" },
+    ];
+    const historyFilter = this.state.historyFilter;
+    const historyList = historyFilter === "all" ? historyAll : historyAll.filter((t) => bucketOf(t.status) === historyFilter);
+    const historyChips = HFILTERS.map((f) => ({
+      key: f.key, label: f.label,
+      onClick: () => this.setState({ historyFilter: f.key }),
+      bg: historyFilter === f.key ? "var(--blue-500)" : "var(--surface-tint)",
+      fg: historyFilter === f.key ? "var(--white)" : "var(--ink-700)",
+    }));
+
+    const historyPeriodDefs = [["week", "Minggu"], ["month", "Bulan"], ["year", "Tahun"]];
+    const historyPeriodSegments = historyPeriodDefs.map(([key, label]) => {
+      const active = historyPeriod === key;
+      return {
+        key, label, onClick: () => this.setState({ historyPeriod: key }),
+        bg: active ? "var(--blue-500)" : "transparent",
+        color: active ? "var(--white)" : "var(--ink-700)",
+        weight: active ? 700 : 600,
+      };
+    });
+
+    const historyOpenCount = historyAll.filter((t) => bucketOf(t.status) === "open").length;
+    const historyProgressCount = historyAll.filter((t) => bucketOf(t.status) === "progress").length;
+    const historyResolvedCount = historyAll.filter((t) => bucketOf(t.status) === "resolved").length;
+    const historyClosedCount = historyAll.filter((t) => bucketOf(t.status) === "closed").length;
+    const historyKpis = [
+      { icon: "ticket", tone: "blue", label: "Total Tiket", value: historyAll.length },
+      { icon: "clock", tone: "amber", label: "Open", value: historyOpenCount },
+      { icon: "pencil", tone: "blue", label: "In Progress", value: historyProgressCount },
+      { icon: "checkCircle", tone: "green", label: "Resolved", value: historyResolvedCount },
+      { icon: "archive", tone: "slate", label: "Closed", value: historyClosedCount },
+    ].map((k) => {
+      const tone = {
+        blue: { bg: "var(--blue-050)", color: "var(--blue-500)" },
+        amber: { bg: "var(--rose-200)", color: "var(--clay-700)" },
+        green: { bg: "rgba(52,199,89,0.14)", color: "var(--green-500)" },
+        slate: { bg: "var(--surface-tint)", color: "var(--slate-500)" },
+      }[k.tone];
+      return { ...k, iconPath: this.ICONS[k.icon], iconBg: tone.bg, iconColor: tone.color };
+    });
+
+    const historyPeriodLabel = { week: "7 hari terakhir", month: "30 hari terakhir", year: "setahun terakhir" }[historyPeriod];
+    const historyRows = historyList.map((t) => ({ ...t, onOpen: () => this.openTicket(t.id), closedAt: t.timeline[t.timeline.length - 1].time }));
+    const historySub = historyAll.length + " tiket tercatat dalam " + historyPeriodLabel + " — mencakup seluruh status penanganan Anda.";
+    const historyEmpty = historyList.length === 0;
+
+    // detail
+    const raw = this.state.tickets.find((t) => t.id === this.state.activeId);
+    const ticket = raw ? this.decorate(raw) : null;
+    const roleColors = { support: { bg: "rgba(52,199,89,0.14)", color: "var(--green-500)" }, requester: { bg: "var(--blue-050)", color: "var(--blue-ink)" }, approver: { bg: "var(--rose-200)", color: "var(--clay-700)" } };
+    const avatarColors = { support: { bg: "rgba(52,199,89,0.14)", color: "var(--green-500)" }, requester: { bg: "var(--blue-050-alt)", color: "var(--blue-ink)" }, approver: { bg: "var(--rose-200)", color: "var(--clay-700)" } };
+
+    let actions = [], ticketForum = [], ticketTimeline = [], ticketProvision = [], provisionProgress = "", ticketPeople = [];
+    if (raw) {
+      actions = this.buildActions(raw).map((a) => ({ ...a, onClick: () => this.requestConfirm(a.key) }));
+      const initialsOf = (name) => (name || "?").split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
+      const peopleRaw = [{ name: raw.requester.name, role: "Requester", key: "requester" }];
+      if (raw.assignee) peopleRaw.push({ name: raw.assignee, role: (window.KelolaRole ? window.KelolaRole.findSupport(raw.app, "IT").role : "Support IT - " + (raw.app || "")), key: "support" });
+      if (raw.catKey === "access" && raw.approvals) raw.approvals.forEach((ap) => peopleRaw.push({ name: ap.name, role: "Approver · " + ap.level, key: "approver" }));
+      ticketPeople = peopleRaw.map((p) => ({ ...p, initials: initialsOf(p.name), bg: avatarColors[p.key].bg, color: avatarColors[p.key].color }));
+      ticketForum = (raw.forum || []).map((msg) => {
+        const mine = msg.side === "support";
+        const rc = roleColors[msg.side] || roleColors.requester;
+        const ac = avatarColors[msg.side] || avatarColors.requester;
+        return {
+          ...msg,
+          roleLabel: mine ? (window.KelolaRole ? window.KelolaRole.findSupport(raw.app, "IT").role : "Support IT - " + (raw.app || "")) : msg.role,
+          initial: (msg.author || "?").trim()[0].toUpperCase(),
+          avatarBg: ac.bg, avatarColor: ac.color,
+          roleBg: rc.bg, roleColor: rc.color,
+          bubbleBg: mine ? "var(--blue-500)" : "var(--canvas)",
+          bubbleBorder: mine ? "var(--blue-500)" : "var(--border-soft)",
+          textColor: mine ? "var(--white)" : "var(--ink-700)",
+          rowDir: mine ? "row-reverse" : "row",
+          align: mine ? "flex-end" : "flex-start",
+          bubbleRadius: mine ? "12px 4px 12px 12px" : "4px 12px 12px 12px",
+        };
+      });
+      const tl = this.buildTimeline(raw);
+      ticketTimeline = tl.map((ev, i) => {
+        const dot = {
+          done: { bg: "var(--green-500)", border: "rgba(52,199,89,0.20)", label: "var(--ink-900)" },
+          current: { bg: "var(--blue-500)", border: "rgba(0,122,255,0.18)", label: "var(--blue-ink)" },
+          future: { bg: "var(--white)", border: "var(--border)", label: "var(--slate-500)" },
+        }[ev.state];
+        return {
+          ...ev,
+          dotBg: dot.bg,
+          dotBorder: dot.border,
+          lineBg: "var(--border-soft)",
+          labelColor: dot.label,
+          hasLine: i < tl.length - 1,
+        };
+      });
+      const prov = raw.provision || [];
+      ticketProvision = prov.map((p, i) => ({
+        ...p,
+        onToggle: () => this.toggleProvision(i),
+        check: p.done ? "✓" : "",
+        boxBg: p.done ? "var(--blue-500)" : "var(--white)",
+        boxRing: p.done ? "none" : "inset 0 0 0 2px var(--border)",
+        textColor: p.done ? "var(--slate-500)" : "var(--ink-900)",
+        strike: p.done ? "line-through" : "none",
+      }));
+      const done = prov.filter((p) => p.done).length;
+      provisionProgress = done + "/" + prov.length + " selesai";
+    }
+
+    return {
+      goQueue: () => this.setState({ view: "queue" }),
+      goRiwayat: () => this.setState({ view: "riwayat" }),
+      navQueueBg: this.state.view === "queue" ? "var(--blue-050)" : "transparent",
+      navQueueColor: this.state.view === "queue" ? "var(--blue-ink)" : "var(--ink-700)",
+      navQueueWeight: this.state.view === "queue" ? 600 : 500,
+      navRiwayatBg: this.state.view === "riwayat" ? "var(--blue-050)" : "transparent",
+      navRiwayatColor: this.state.view === "riwayat" ? "var(--blue-ink)" : "var(--ink-700)",
+      navRiwayatWeight: this.state.view === "riwayat" ? 600 : 500,
+      isQueue: this.state.view === "queue",
+      isRiwayat: this.state.view === "riwayat",
+      isDetail: this.state.view === "detail",
+      rows, queueEmpty: rows.length === 0, segments, prios, kpis, sortControl,
+      query: this.state.query, onQuery: (e) => this.setState({ query: e.target.value }),
+      barChart, pieGradient, pieLegend, queueTotal,
+      periodSegments, periodLabel, periodResolved,
+      slaPct, slaColor, slaGauge, slaMet, slaBreach: pd.breach,
+      historySub, historyChips, historyRows, historyEmpty, historyKpis, historyPeriodSegments,
+      ticket, actions, noActions: actions.length === 0, hasActions: actions.length > 0,
+      ticketForum, forumEmpty: ticketForum.length === 0, ticketTimeline, ticketProvision, provisionProgress, ticketPeople,
+      reply: this.state.reply, onReply: (e) => this.setState({ reply: e.target.value }), sendReply: () => this.addReply(),
+      goBack: () => this.setState({ view: this.state.returnView === "riwayat" ? "riwayat" : "queue", activeId: null }),
+      backLabel: this.state.returnView === "riwayat" ? "Riwayat Tiket" : "Antrean Tiket",
+      toast: this.state.toast,
+      confirmOpen: this.state.confirmOpen,
+      confirmTicketLabel: "#" + (this.state.activeId || ""),
+      confirmModal: this.confirmModal(),
+      confirmNote: this.state.confirmNote,
+      onConfirmNote: (e) => this.setState({ confirmNote: e.target.value, noteError: "" }),
+      noteError: this.state.noteError,
+      cancelConfirm: () => this.cancelConfirm(),
+      confirmYes: () => this.confirmYes(),
+      userName: this.ME,
+      initials: this.ME.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase(),
+      notifOpen: this.state.notifOpen,
+      profileOpen: this.state.profileOpen,
+      anyMenuOpen: this.state.notifOpen || this.state.profileOpen,
+      toggleNotif: () => this.toggleNotif(),
+      toggleProfile: () => this.toggleProfile(),
+      closeMenus: () => this.closeMenus(),
+      notifBtnBg: this.state.notifOpen ? "var(--surface-tint)" : "transparent",
+      profileBtnBg: this.state.profileOpen ? "var(--surface-tint)" : "transparent",
+      stop: (e) => e.stopPropagation(),
+      markAllRead: () => this.markAllRead(),
+      hasUnread: this.state.notifications.some((n) => n.unread),
+      notifEmpty: this.state.notifications.length === 0,
+      notifications: this.state.notifications.map((n) => ({
+        ...n,
+        iconBg: n.bg, iconColor: n.color, iconPath: this.ICONS[n.icon],
+        rowBg: n.unread ? "var(--blue-050-cool)" : "var(--white)",
+        onOpen: () => { this.setState({ notifications: this.state.notifications.map((x) => x.id === n.id ? { ...x, unread: false } : x) }); this.openTicket(n.target); },
+      })),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+/* ============================================================
+   Legacy token shim
+   These mockups were originally built against an earlier token
+   naming (--blue-500, --ink-900, --canvas, --elev-card, etc.).
+   This file maps those names onto the current Helpdesk v2.0
+   design-system tokens (tokens/colors.css, spacing.css) so the
+   existing markup renders without a full rewrite.
+   ============================================================ */
+
+:root {
+  /* surfaces */
+  --canvas: var(--hd-canvas);
+  --white: var(--hd-surface);
+  --surface-tint: var(--hd-surface-tint);
+
+  /* text */
+  --ink-900: var(--hd-ink-900);
+  --ink-800: var(--hd-ink-850);
+  --ink-700: var(--hd-slate-600);
+  --slate-500: var(--hd-slate-500);
+
+  /* brand blue */
+  --blue-500: var(--hd-blue-500);
+  --blue-600: var(--hd-blue-600);
+  --blue-400: var(--hd-blue-450);
+  --blue-ink: var(--hd-blue-600);
+  --blue-050: var(--hd-surface-header);
+  --blue-050-alt: var(--hd-surface-dropzone);
+  --blue-050-cool: var(--hd-status-blue-bg);
+
+  /* borders */
+  --border: var(--hd-border);
+  --border-soft: rgba(227, 226, 231, 0.65);
+
+  /* status */
+  --green-500: var(--hd-success);
+  --red-600: var(--hd-danger-alt);
+  --red-700: #931515;
+  --clay-600: #b45309;
+  --clay-700: #92400e;
+  --rose-200: #fef1e0;
+  --navy-700: #1e3a5f;
+
+  /* elevation (originals used real drop shadows, not the DS inset ring) */
+  --elev-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 2px 6px rgba(16, 24, 40, 0.06);
+  --elev-pop: 0 12px 32px rgba(16, 24, 40, 0.16), 0 2px 10px rgba(16, 24, 40, 0.08);
+}

@@ -1,0 +1,49 @@
+/* ============================================================
+   Helpdesk v2.0 — Spacing, radii, shadows
+   Values transcribed from the Helpdesk.fig source.
+   ============================================================ */
+
+:root {
+  /* ---- Spacing scale (px) ------------------------------------ */
+  --space-1: 2px;
+  --space-2: 4px;
+  --space-3: 6px;
+  --space-4: 8px;
+  --space-5: 10px;
+  --space-6: 16px;
+  --space-7: 24px;
+  --space-8: 32px;
+  --space-9: 40px;
+
+  /* Common layout gaps used in the file */
+  --gap-card: 24px;     /* stat grid gap */
+  --gap-section: 40px;  /* main vertical rhythm & chart columns */
+  --pad-card: 32px;     /* card inner padding */
+  --pad-shell: 40px;    /* page shell padding */
+
+  /* ---- Corner radii ------------------------------------------ */
+  --radius-sm: 8px;     /* selects, textarea, chips, dropzone */
+  --radius-md: 15px;    /* text inputs, priority buttons */
+  --radius-tile: 16px;  /* stat-card icon tile */
+  --radius-btn: 20px;   /* pill buttons */
+  --radius-lg: 24px;    /* cards */
+  --radius-pill: 9999px;/* status pills, avatar, icon buttons */
+
+  /* ---- Elevation / shadows ----------------------------------- */
+  /* Card: 1px hairline drawn as an inset ring (no offset shadow) */
+  --shadow-card: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+  /* Field: hairline ring + soft warm drop */
+  --shadow-field: inset 0 0 0 1px #e3e2e7, 0 4px 4px 0 rgba(104, 102, 102, 0.05);
+  --shadow-field-soft: inset 0 0 0 1px rgba(227, 226, 231, 0.89);
+  /* Buttons */
+  --shadow-btn: 0 4px 4px 0 rgba(104, 102, 102, 0.25);
+  --shadow-btn-secondary: inset 0 0 0 1px #ededed, 0 4px 4px 0 rgba(104, 102, 102, 0.25);
+  /* Priority button (active) */
+  --shadow-priority: 3px 4px 4px 0 rgba(0, 0, 0, 0.15);
+  /* Grid sections (dashboard) — soft blue lift */
+  --shadow-grid: 0 4px 4px 0 #cbdbf5;
+
+  /* ---- Effects ------------------------------------------------ */
+  --blur-nav: blur(24px); /* @kind other */
+  --nav-height: 72px;
+}

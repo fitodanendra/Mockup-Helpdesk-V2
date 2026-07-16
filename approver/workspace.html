@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../shared/support.js"></script>
+<script src="../shared/nav-widget.js" defer></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/fonts.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/colors.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/typography.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/spacing.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/legacy-tokens.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/styles.css">
+  <script src="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/_ds_bundle.js"></script>
+  <style>
+    html, body { margin: 0; padding: 0; background: var(--canvas); font-family: var(--font-sans); }
+    * { box-sizing: border-box; }
+    a { color: var(--blue-500); text-decoration: none; }
+    a:hover { color: var(--blue-ink); }
+    @keyframes awToastIn { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  </style>
+</helmet>
+
+<div data-screen-label="Approval Workspace" style="display: flex; flex-direction: column; min-height: 100vh; background: var(--canvas); font-family: var(--font-sans); color: var(--ink-900);">
+
+  <!-- ============ TOP BAR ============ -->
+  <header style="height: 62px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 24px; padding: 0 28px; position: sticky; top: 0; z-index: 20;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 32px; height: 32px; border-radius: 10px; background: var(--blue-500); display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 800; font-size: 14px;">A</div>
+      <div style="display: flex; flex-direction: column;">
+        <span style="font-size: 14px; font-weight: 700; color: var(--ink-900); line-height: 1.1;">Adhi Helpdesk</span>
+        <span style="font-size: 10px; color: var(--slate-500);">Enterprise ITSM</span>
+      </div>
+    </div>
+
+    <nav style="display: flex; align-items: center; gap: 4px;">
+      <button type="button" onClick="{{ goInbox }}" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border: none; border-radius: 10px; font-family: var(--font-sans); font-size: 13px; cursor: pointer; background: {{ navInboxBg }}; color: {{ navInboxColor }}; font-weight: {{ navInboxWeight }};">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6a1 1 0 0 1 1 1v1H8V4a1 1 0 0 1 1-1Z"></path><rect x="5" y="5" width="14" height="16" rx="2"></rect><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
+        Approval Inbox
+      </button>
+      <button type="button" onClick="{{ goRiwayat }}" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border: none; border-radius: 10px; font-family: var(--font-sans); font-size: 13px; cursor: pointer; background: {{ navRiwayatBg }}; color: {{ navRiwayatColor }}; font-weight: {{ navRiwayatWeight }};">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8"></path><path d="M1 3h22v5H1z"></path><path d="M10 12h4"></path></svg>
+        Riwayat Approval
+      </button>
+    </nav>
+
+    <div style="flex: 1;"></div>
+
+    <div style="position: relative;">
+      <button type="button" onClick="{{ toggleNotif }}" style="position: relative; width: 36px; height: 36px; border-radius: 10px; border: none; display: flex; align-items: center; justify-content: center; color: var(--ink-700); cursor: pointer; background: {{ notifBtnBg }};">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z"></path><path d="M10 21h4"></path></svg>
+        <sc-if value="{{ hasUnread }}" hint-placeholder-val="{{ true }}">
+          <span style="position: absolute; top: 4px; right: 4px; min-width: 9px; height: 9px; border-radius: 999px; background: var(--red-600);"></span>
+        </sc-if>
+      </button>
+      <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ stop }}" style="position: absolute; top: 48px; right: 0; width: 380px; background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-pop); z-index: 50; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border-soft);">
+            <span style="font-size: 14px; font-weight: 700; color: var(--ink-900);">Notifikasi</span>
+            <button type="button" onClick="{{ markAllRead }}" style="border: none; background: none; font-size: 11px; font-weight: 600; color: var(--blue-500); cursor: pointer;">Tandai semua dibaca</button>
+          </div>
+          <div style="max-height: 360px; overflow-y: auto;">
+            <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="4">
+              <div onClick="{{ n.onOpen }}" style="display: flex; gap: 11px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border-soft); background: {{ n.rowBg }};">
+                <span style="width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: {{ n.iconBg }}; color: {{ n.iconColor }};">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.iconPath }}"></path></svg>
+                </span>
+                <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+                  <span style="font-size: 12.5px; color: var(--ink-800); line-height: 1.45;"><span style="font-weight: 700;">{{ n.title }}</span> {{ n.body }}</span>
+                  <span style="font-size: 11px; color: var(--slate-500);">{{ n.time }}</span>
+                </span>
+                <sc-if value="{{ n.unread }}" hint-placeholder-val="{{ true }}"><span style="width: 7px; height: 7px; border-radius: 999px; background: var(--blue-500); flex-shrink: 0; margin-top: 5px;"></span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="position: relative;">
+      <button type="button" onClick="{{ toggleProfile }}" style="display: flex; align-items: center; gap: 10px; border: none; background: {{ profileBtnBg }}; border-radius: 10px; padding: 4px 6px; cursor: pointer;">
+        <div style="width: 34px; height: 34px; border-radius: 999px; background: var(--blue-050-alt); color: var(--blue-ink); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;">{{ initials }}</div>
+        <div style="display: flex; flex-direction: column; text-align: left;">
+          <span style="font-size: 13px; font-weight: 600; color: var(--ink-900); line-height: 1.2;">{{ userName }}</span>
+          <span style="font-size: 11px; color: var(--slate-500);">Approver · Manager</span>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 2px;"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+      <sc-if value="{{ profileOpen }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ stop }}" style="position: absolute; top: 54px; right: 0; width: 250px; background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-pop); z-index: 50; overflow: hidden; display: flex; flex-direction: column; padding: 6px;">
+          <div style="display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-bottom: 1px solid var(--border-soft); margin-bottom: 6px;">
+            <div style="width: 40px; height: 40px; border-radius: 999px; background: var(--blue-050-alt); color: var(--blue-ink); font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center;">{{ initials }}</div>
+            <div style="display: flex; flex-direction: column; min-width: 0;">
+              <span style="font-size: 13px; font-weight: 700; color: var(--ink-900);">{{ userName }}</span>
+              <span style="font-size: 11px; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">budi.santoso@adhi.co.id</span>
+            </div>
+          </div>
+          <button type="button" onClick="{{ goInbox }}" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border: none; background: transparent; border-radius: 9px; color: var(--ink-700); font-size: 13px; font-weight: 500; cursor: pointer; text-align: left; font-family: var(--font-sans);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="16" rx="2"></rect><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
+            Approval Inbox
+          </button>
+          <button type="button" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border: none; background: transparent; border-radius: 9px; color: var(--ink-700); font-size: 13px; font-weight: 500; cursor: pointer; text-align: left; font-family: var(--font-sans);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z"></path><path d="M10 21h4"></path></svg>
+            Preferensi Notifikasi
+          </button>
+          <div style="border-top: 1px solid var(--border-soft); margin-top: 6px; padding-top: 6px;">
+            <button type="button" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border: none; background: transparent; border-radius: 9px; color: var(--red-600); font-size: 13px; font-weight: 600; cursor: pointer; text-align: left; font-family: var(--font-sans); width: 100%;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"></path><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path></svg>
+              Keluar
+            </button>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ anyMenuOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeMenus }}" style="position: fixed; inset: 0; z-index: 15;"></div>
+    </sc-if>
+  </header>
+
+  <main style="padding: 28px; display: flex; flex-direction: column; gap: 20px; max-width: 1280px; width: 100%; margin: 0 auto;">
+
+    <!-- ============================ INBOX ============================ -->
+    <sc-if value="{{ isInbox }}" hint-placeholder-val="{{ true }}">
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+
+      <div>
+        <h1 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 800; color: var(--ink-900); letter-spacing: -0.2px;">Approval Inbox</h1>
+        
+      </div>
+
+      <!-- KPI cards -->
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
+        <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+          <div onClick="{{ k.onClick }}" style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: var(--elev-card); display: flex; flex-direction: column; gap: 10px; cursor: pointer;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 12px; font-weight: 600; color: var(--slate-500);">{{ k.label }}</span>
+              <span style="width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: {{ k.iconBg }}; color: {{ k.iconColor }};">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ k.iconPath }}"></path></svg>
+              </span>
+            </div>
+            <div style="font-size: 32px; font-weight: 800; color: var(--ink-900); line-height: 1;">{{ k.value }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- charts row -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 20px 22px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <h3 style="margin: 0; font-size: 14px; font-weight: 700; color: var(--ink-900);">Distribusi Prioritas · Bulan Ini</h3>
+            <span style="font-size: 11px; color: var(--slate-500);">Total {{ pendingCount }} menunggu</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <sc-for list="{{ priorityDist }}" as="p" hint-placeholder-count="4">
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12.5px;">
+                  <span style="font-weight: 600; color: var(--ink-700);">{{ p.label }}</span>
+                  <span style="font-weight: 700; color: var(--ink-900);">{{ p.pct }}%</span>
+                </div>
+                <div style="height: 8px; border-radius: 999px; background: var(--border-soft); overflow: hidden;">
+                  <div style="height: 100%; border-radius: 999px; background: {{ p.color }}; width: {{ p.pct }}%;"></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <p style="margin: 0; padding-top: 14px; border-top: 1px solid var(--border-soft); font-size: 12px; line-height: 1.55; color: var(--slate-500);">{{ priorityInsight }}</p>
+        </div>
+
+        <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 20px 22px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+            <div>
+              <h3 style="margin: 0 0 2px; font-size: 14px; font-weight: 700; color: var(--ink-900);">Tren Keputusan Approval</h3>
+              <span style="font-size: 11px; color: var(--slate-500);">6 minggu terakhir</span>
+            </div>
+            <div style="display: flex; gap: 14px; flex-shrink: 0;">
+              <span style="display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--slate-500);"><span style="width: 14px; height: 3px; border-radius: 2px; background: var(--blue-500);"></span>Disetujui</span>
+              <span style="display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--slate-500);"><span style="width: 14px; height: 0; border-top: 2px dashed var(--red-600);"></span>Ditolak &amp; Revisi</span>
+            </div>
+          </div>
+          <svg viewBox="0 0 560 200" preserveAspectRatio="none" style="display: block; width: 100%; height: 190px; overflow: visible;">
+            <line x1="10" y1="24" x2="550" y2="24" stroke="var(--border-soft)" stroke-width="1" stroke-dasharray="3 4" vector-effect="non-scaling-stroke"></line>
+            <line x1="10" y1="108" x2="550" y2="108" stroke="var(--border-soft)" stroke-width="1" stroke-dasharray="3 4" vector-effect="non-scaling-stroke"></line>
+            <line x1="10" y1="192" x2="550" y2="192" stroke="var(--border)" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+            <polyline points="{{ rejectedPoints }}" fill="none" stroke="var(--red-600)" stroke-width="2" stroke-dasharray="6 6" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+            <polyline points="{{ approvedPoints }}" fill="none" stroke="var(--blue-500)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+            <sc-for list="{{ approvedDots }}" as="d" hint-placeholder-count="6">
+              <circle cx="{{ d.x }}" cy="{{ d.y }}" r="3.5" fill="var(--blue-500)"></circle>
+            </sc-for>
+          </svg>
+          <div style="display: flex; justify-content: space-between; padding: 0 2px; margin-top: -8px;">
+            <sc-for list="{{ weekLabels }}" as="w" hint-placeholder-count="6">
+              <span style="font-size: 11px; color: var(--slate-500);">{{ w.label }}</span>
+            </sc-for>
+          </div>
+          <p style="margin: 0; padding-top: 14px; border-top: 1px solid var(--border-soft); font-size: 12px; line-height: 1.55; color: var(--slate-500);">{{ trendInsight }}</p>
+        </div>
+      </div>
+
+      <!-- pending table -->
+      <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); overflow: hidden;">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 18px 22px 14px;">
+          <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900); align-self: center;">Menunggu Persetujuan Anda</h2>
+          <div style="display: flex; flex-direction: column; gap: 8px; background: var(--canvas); border: 1px solid var(--border-soft); border-radius: 12px; padding: 12px 14px;">
+            <div style="display: grid; grid-template-columns: 72px 1fr; align-items: center; gap: 10px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Kategori</span>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <sc-for list="{{ categoryChips }}" as="c" hint-placeholder-count="4">
+                  <button type="button" onClick="{{ c.onClick }}" style="height: 30px; padding: 0 14px; border-radius: 999px; cursor: pointer; font-family: var(--font-sans); font-weight: 600; font-size: 12px; border: none; background: {{ c.bg }}; color: {{ c.fg }};">{{ c.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 72px 1fr; align-items: center; gap: 10px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Prioritas</span>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <sc-for list="{{ filterChips }}" as="c" hint-placeholder-count="5">
+                  <button type="button" onClick="{{ c.onClick }}" style="height: 30px; padding: 0 14px; border-radius: 999px; cursor: pointer; font-family: var(--font-sans); font-weight: 600; font-size: 12px; border: none; background: {{ c.bg }}; color: {{ c.fg }};">{{ c.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <sc-if value="{{ hasPendingView }}" hint-placeholder-val="{{ true }}">
+          <div style="min-width: 940px; display: grid; grid-template-columns: 1.1fr 2.2fr 1.1fr 0.9fr 1.1fr 1fr; gap: 12px; padding: 10px 22px; background: var(--canvas); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">
+            <span>No. Tiket</span><span>SUBJECT</span><span>Layanan</span><span>Prioritas</span><span>Requester</span><span>Dibuat</span>
+          </div>
+          <sc-for list="{{ pendingView }}" as="item" hint-placeholder-count="4">
+            <div onClick="{{ item.open }}" style="min-width: 940px; display: grid; grid-template-columns: 1.1fr 2.2fr 1.1fr 0.9fr 1.1fr 1fr; gap: 12px; align-items: center; padding: 14px 22px; border-bottom: 1px solid var(--border-soft); cursor: pointer;" style-hover="background: var(--blue-050-cool);">
+              <span style="font-size: 12.5px; font-weight: 700; color: var(--blue-500); font-variant-numeric: tabular-nums;">{{ item.idLabel }}</span>
+              <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+                <span style="font-size: 13.5px; font-weight: 700; color: var(--ink-900); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.judul }}</span>
+                <span style="font-size: 11.5px; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.requesterName }} · {{ item.requesterUnit }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-start; min-width: 0;">
+                <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--surface-tint); color: var(--ink-700);">{{ item.aplikasi }}</span>
+                <span style="font-size: 11px; color: var(--slate-500);">{{ item.kategori }}</span>
+              </div>
+              <div><span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ item.prioBg }}; color: {{ item.prioColor }};">{{ item.priorityLabel }}</span></div>
+              <span style="font-size: 12px; color: var(--ink-700);">{{ item.requesterName }}</span>
+              <span style="font-size: 12px; color: var(--slate-500);">{{ item.dibuat }}</span>
+            </div>
+          </sc-for>
+        </sc-if>
+
+        <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 64px 22px; text-align: center;">
+            <span style="width: 44px; height: 44px; border-radius: 999px; background: rgba(52,199,89,0.14); color: var(--green-500); display: flex; align-items: center; justify-content: center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z"></path><path d="M8.5 12l2.5 2.5 4.5-5"></path></svg>
+            </span>
+            <span style="font-size: 15px; font-weight: 700; color: var(--ink-900);">Tidak ada tiket menunggu persetujuan</span>
+            <span style="font-size: 13px; color: var(--slate-500); max-width: 340px;">Semua permohonan sudah Anda proses. Riwayat keputusan ada di tab Riwayat Approval.</span>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isFilterEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 56px 22px; text-align: center;">
+            <span style="font-size: 14px; font-weight: 700; color: var(--ink-900);">Tidak ada tiket dengan prioritas {{ activeFilterLabel }}</span>
+            <button type="button" onClick="{{ resetPendingFilter }}" style="border: none; background: none; font-size: 12px; font-weight: 600; color: var(--blue-500); cursor: pointer; font-family: var(--font-sans);">Reset filter</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============================ RIWAYAT ============================ -->
+    <sc-if value="{{ isRiwayat }}">
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      <div>
+        <h1 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 800; color: var(--ink-900); letter-spacing: -0.2px;">Riwayat Approval</h1>
+        <p style="margin: 0; font-size: 13px; color: var(--slate-500);">{{ historySub }}</p>
+      </div>
+
+      <!-- Summary KPI cards -->
+      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;">
+        <sc-for list="{{ historyKpis }}" as="k" hint-placeholder-count="5">
+          <button type="button" onClick="{{ k.onClick }}" style="text-align: left; background: var(--white); border: 1px solid {{ k.cardBorder }}; border-radius: 14px; padding: 16px 18px; box-shadow: {{ k.cardShadow }}; display: flex; flex-direction: column; gap: 10px; cursor: pointer; font-family: var(--font-sans);">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 12px; font-weight: 600; color: var(--slate-500);">{{ k.label }}</span>
+              <span style="width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: {{ k.iconBg }}; color: {{ k.iconColor }};">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ k.iconPath }}"></path></svg>
+              </span>
+            </div>
+            <div style="font-size: 32px; font-weight: 800; color: var(--ink-900); line-height: 1;">{{ k.value }}</div>
+          </button>
+        </sc-for>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 11px 16px; box-shadow: var(--elev-card);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input value="{{ historyQuery }}" onChange="{{ onHistoryQuery }}" placeholder="Cari tiket, judul, atau layanan…" style="flex: 1; border: none; outline: none; background: transparent; font-family: var(--font-sans); font-size: 13px; color: var(--ink-900);">
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <sc-for list="{{ historyChips }}" as="c" hint-placeholder-count="5">
+            <button type="button" onClick="{{ c.onClick }}" style="height: 32px; padding: 0 16px; border-radius: 999px; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 13px; font-weight: 600; background: {{ c.bg }}; color: {{ c.fg }};">{{ c.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display: flex; gap: 6px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 6px;">
+          <sc-for list="{{ historyPeriodSegments }}" as="s" hint-placeholder-count="3">
+            <button type="button" onClick="{{ s.onClick }}" style="display: flex; align-items: center; gap: 8px; padding: 7px 15px; border: none; border-radius: 8px; font-family: var(--font-sans); font-size: 13px; cursor: pointer; background: {{ s.bg }}; color: {{ s.color }}; font-weight: {{ s.weight }};">{{ s.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); overflow: hidden;">
+        <div style="min-width: 1000px; display: grid; grid-template-columns: 2fr 1.1fr 0.9fr 1fr 1.6fr 1.2fr 0.9fr; gap: 12px; padding: 10px 22px; background: var(--canvas); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">
+          <span>Tiket</span><span>Layanan</span><span>Status</span><span>Keputusan</span><span>Catatan</span><span>Diteruskan Ke</span><span>Waktu</span>
+        </div>
+        <sc-for list="{{ history }}" as="h" hint-placeholder-count="4">
+          <div onClick="{{ h.open }}" style="min-width: 1000px; display: grid; grid-template-columns: 2fr 1.1fr 0.9fr 1fr 1.6fr 1.2fr 0.9fr; gap: 12px; align-items: center; padding: 14px 22px; border-bottom: 1px solid var(--border-soft); cursor: pointer;" style-hover="background: var(--blue-050-cool);">
+            <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+              <span style="font-size: 12px; font-weight: 700; color: var(--blue-500);">{{ h.idLabel }}</span>
+              <span style="font-size: 13px; font-weight: 600; color: var(--ink-900); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ h.judul }}</span>
+            </div>
+            <span style="font-size: 12px; color: var(--ink-700);">{{ h.layananShort }}</span>
+            <div><span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ h.sBg }}; color: {{ h.sFg }};">{{ h.statusLabel }}</span></div>
+            <div><span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ h.kBg }}; color: {{ h.kFg }};">{{ h.kLabel }}</span></div>
+            <span style="font-size: 12px; line-height: 1.45; color: var(--slate-500);">{{ h.catatan }}</span>
+            <div><span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ h.nextBg }}; color: {{ h.nextFg }};">{{ h.nextHandler }}</span></div>
+            <span style="font-size: 12px; color: var(--slate-500);">{{ h.waktu }}</span>
+          </div>
+        </sc-for>
+        <sc-if value="{{ historyEmpty }}">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 56px 22px; text-align: center;">
+            <span style="font-size: 14px; font-weight: 700; color: var(--ink-900);">Tidak ada keputusan pada periode ini</span>
+            <span style="font-size: 13px; color: var(--slate-500);">Coba pilih periode atau filter keputusan yang lain.</span>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============================ DETAIL ============================ -->
+    <sc-if value="{{ isDetail }}">
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--slate-500);">
+        <button type="button" onClick="{{ back }}" style="border: none; background: transparent; padding: 0; font-size: 12px; font-weight: 600; color: var(--blue-500); cursor: pointer; font-family: var(--font-sans);">{{ backLabel }}</button>
+        <span>/</span>
+        <span style="font-weight: 600; color: var(--ink-700);">{{ t.idLabel }}</span>
+      </div>
+
+      <!-- Catatan dari Requester -->
+      <sc-if value="{{ t.hasReqNote }}">
+      <div style="background: var(--blue-050-cool); border: 1px solid var(--blue-050-alt); border-radius: 14px; padding: 16px 20px; display: flex; gap: 14px; align-items: flex-start;">
+        <span style="width: 36px; height: 36px; border-radius: 999px; flex-shrink: 0; background: var(--blue-050-alt); color: var(--blue-ink); display: flex; align-items: center; justify-content: center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.5 0-3-.4-4.2-1.1L3 20l1.1-5.3A8.5 8.5 0 1 1 21 11.5Z"></path></svg>
+        </span>
+        <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 13px; font-weight: 800; color: var(--ink-900);">Catatan dari Requester</span>
+            <span style="font-size: 11px; color: var(--slate-500);">{{ t.reqNoteBy }} · {{ t.reqNoteTime }}</span>
+          </div>
+          <p style="margin: 0; font-size: 13px; line-height: 1.6; color: var(--ink-700);">{{ t.reqNote }}</p>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- header -->
+      <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 20px 24px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <span style="font-size: 13px; font-weight: 800; color: var(--blue-500);">{{ t.idLabel }}</span>
+          <span style="font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--blue-050); color: var(--blue-ink); letter-spacing: 0.3px;">MODE APPROVAL</span>
+          <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ t.statusBg }}; color: {{ t.statusFg }};">{{ t.statusLabel }}</span>
+          <span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ t.prioBg }}; color: {{ t.prioColor }};">{{ t.priorityLabel }}</span>
+        </div>
+        <h1 style="margin: 0; font-size: 21px; font-weight: 800; color: var(--ink-900); letter-spacing: -0.2px;">{{ t.judul }}</h1>
+        <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--slate-500); flex-wrap: wrap;">
+          <span style="display: flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18"></path></svg>{{ t.kategori }}</span>
+          <span style="display: flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"></rect><path d="M8 21h8"></path><path d="M12 18v3"></path></svg>{{ t.aplikasi }}</span>
+          <span style="display: flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg>Dibuat {{ t.dibuat }}</span>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 340px; gap: 18px; align-items: start;">
+
+        <!-- MAIN COLUMN -->
+        <div style="display: flex; flex-direction: column; gap: 18px; min-width: 0;">
+
+          <!-- ticket info -->
+          <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 20px 24px; display: flex; flex-direction: column; gap: 14px;">
+            <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Informasi Tiket</h2>
+            <p style="margin: 0; font-size: 13px; line-height: 1.65; color: var(--ink-700);">{{ t.deskripsi }}</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; padding-top: 4px; border-top: 1px solid var(--border-soft);">
+              <div style="display: flex; flex-direction: column; gap: 3px; padding-top: 10px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Requester</span>
+                <span style="font-size: 13px; font-weight: 600; color: var(--ink-900);">{{ t.requesterName }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 3px; padding-top: 10px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Unit Kerja</span>
+                <span style="font-size: 13px; font-weight: 600; color: var(--ink-900);">{{ t.requesterUnit }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Layanan Katalog</span>
+                <span style="font-size: 13px; font-weight: 600; color: var(--ink-900);">{{ t.layanan }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Kontak</span>
+                <span style="font-size: 13px; font-weight: 600; color: var(--ink-900);">{{ t.kontak }}</span>
+              </div>
+            </div>
+            <sc-if value="{{ t.hasAtt }}">
+              <div>
+                <span style="display: block; font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px;">Lampiran</span>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                  <sc-for list="{{ t.lampiranView }}" as="f" hint-placeholder-count="1">
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 9px 12px; background: var(--canvas); border: 1px solid var(--border); border-radius: 10px; font-size: 12.5px; color: var(--ink-700);">
+                      <span style="font-weight: 600; color: var(--ink-900);">{{ f.nama }}</span>
+                      <span style="font-size: 11px; color: var(--slate-500);">{{ f.size }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+
+          <!-- forum -->
+          <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); display: flex; flex-direction: column; overflow: hidden;">
+            <h2 style="margin: 0; padding: 18px 24px 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Forum Diskusi</h2>
+            <p style="margin: 6px 24px 0; font-size: 12px; color: var(--slate-500);">Percakapan antara Requester, Approver, dan Support terekam di sini.</p>
+            <div style="display: flex; flex-direction: column; gap: 16px; padding: 16px 24px 18px;">
+              <sc-for list="{{ t.forumView }}" as="m" hint-placeholder-count="2">
+                <div style="display: flex; gap: 12px; flex-direction: {{ m.rowDir }};">
+                  <span style="width: 34px; height: 34px; flex-shrink: 0; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: {{ m.avatarColor }}; background: {{ m.avatarBg }};">{{ m.initial }}</span>
+                  <div style="max-width: 78%; min-width: 0; display: flex; flex-direction: column; gap: 5px; align-items: {{ m.align }};">
+                    <div style="display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; flex-direction: {{ m.rowDir }};">
+                      <span style="font-size: 13px; font-weight: 700; color: var(--ink-900);">{{ m.who }}</span>
+                      <span style="font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: {{ m.roleBg }}; color: {{ m.roleColor }};">{{ m.role }}</span>
+                      <span style="font-size: 11px; color: var(--slate-500);">{{ m.time }}</span>
+                    </div>
+                    <div style="font-size: 13px; line-height: 1.6; color: {{ m.textColor }}; background: {{ m.bubbleBg }}; border: 1px solid {{ m.bubbleBorder }}; padding: 10px 14px; border-radius: {{ m.bubbleRadius }}; text-align: left;">{{ m.text }}</div>
+                  </div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ forumEmpty }}">
+                <div style="font-size: 13px; color: var(--slate-500);">Belum ada diskusi pada tiket ini.</div>
+              </sc-if>
+            </div>
+            <sc-if value="{{ canChat }}" hint-placeholder-val="{{ true }}">
+              <div style="border-top: 1px solid var(--border-soft); padding: 16px 24px; display: flex; flex-direction: column; gap: 10px; background: var(--canvas);">
+                <textarea rows="3" value="{{ draft }}" onChange="{{ onDraft }}" placeholder="Tulis pertanyaan atau feedback untuk requester…" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--white); font-family: var(--font-sans); font-size: 13px; color: var(--ink-900); outline: none; resize: vertical;" style-focus="border-color: var(--blue-500);"></textarea>
+                <div style="display: flex; justify-content: flex-end;">
+                  <button type="button" onClick="{{ sendForum }}" style="display: flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 999px; border: none; background: var(--blue-500); color: var(--white); font-family: var(--font-sans); font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: var(--elev-card);" style-hover="background: var(--blue-600);">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-4 14-4-5z"></path><path d="m11 14 8-9"></path></svg>
+                    Kirim
+                  </button>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside style="display: flex; flex-direction: column; gap: 18px; position: sticky; top: 80px;">
+
+          <!-- decision panel -->
+          <sc-if value="{{ isPendingDetail }}" hint-placeholder-val="{{ true }}">
+            <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+              <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Panel Keputusan</h2>
+              <p style="margin: 0; font-size: 12px; color: var(--slate-500);">Keputusan Anda sebagai approver {{ t.currentLevelLabel }}.</p>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label style="font-size: 12px; font-weight: 700; color: var(--ink-800);">Catatan / Feedback</label>
+                <textarea rows="3" value="{{ note }}" onChange="{{ onNote }}" placeholder="Wajib diisi sebelum menyetujui, meminta perbaikan, atau menolak" style="width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--white); font-family: var(--font-sans); font-size: 13px; color: var(--ink-900); outline: none; resize: vertical;" style-focus="border-color: var(--blue-500);"></textarea>
+                <sc-if value="{{ hasNoteError }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size: 12px; font-weight: 600; color: var(--red-600);">{{ noteError }}</span>
+                </sc-if>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px;">
+                <button type="button" onClick="{{ approve }}" style="width: 100%; height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer; border: none; background: var(--blue-500); color: var(--white); box-shadow: var(--elev-card);" style-hover="background: var(--blue-600);">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z"></path><path d="M8.5 12l2.5 2.5 4.5-5"></path></svg>
+                  Setujui
+                </button>
+                <button type="button" onClick="{{ revise }}" style="width: 100%; height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: var(--white); color: var(--ink-700);" style-hover="background: var(--surface-tint);">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+                  Minta Perbaikan
+                </button>
+                <button type="button" onClick="{{ reject }}" style="width: 100%; height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid rgba(186,26,26,0.30); background: rgba(186,26,26,0.06); color: var(--red-600);" style-hover="background: rgba(186,26,26,0.12);">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path></svg>
+                  Tolak
+                </button>
+              </div>
+              <p style="margin: 4px 0 0; font-size: 11px; line-height: 1.55; color: var(--slate-500);">Keputusan tercatat di riwayat approval &amp; audit trail. Requester menerima notifikasi Email / Portal / WhatsApp.</p>
+            </div>
+          </sc-if>
+
+          <!-- decision recorded (history) -->
+          <sc-if value="{{ isHistDetail }}" hint-placeholder-val="{{ false }}">
+            <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+              <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Keputusan Tercatat</h2>
+              <div><span style="font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px; background: {{ t.dBg }}; color: {{ t.dFg }};">{{ t.dKeputusan }}</span></div>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Catatan Approver</span>
+                <span style="font-size: 13px; line-height: 1.55; color: var(--ink-700);">{{ t.dCatatan }}</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--border-soft);">
+                <span style="font-size: 12px; color: var(--slate-500);">Tahap</span>
+                <span style="font-size: 12.5px; font-weight: 600; color: var(--ink-900);">{{ t.dLevel }}</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 12px; color: var(--slate-500);">Waktu keputusan</span>
+                <span style="font-size: 12.5px; font-weight: 600; color: var(--ink-900);">{{ t.dWaktu }}</span>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- riwayat status -->
+          <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 18px 20px; display: flex; flex-direction: column;">
+            <h2 style="margin: 0 0 12px 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Riwayat Status</h2>
+            <sc-for list="{{ t.timelineView }}" as="ev" hint-placeholder-count="4">
+              <div style="display: flex; gap: 12px;">
+                <div style="display: flex; flex-direction: column; align-items: center; width: 18px; flex-shrink: 0;">
+                  <span style="width: 12px; height: 12px; border-radius: 999px; flex-shrink: 0; background: {{ ev.dotBg }}; border: 2.5px solid {{ ev.dotRing }}; margin-top: 3px;"></span>
+                  <sc-if value="{{ ev.hasLine }}" hint-placeholder-val="{{ true }}">
+                    <span style="width: 2px; flex: 1; min-height: 26px; background: {{ ev.lineBg }};"></span>
+                  </sc-if>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 1px; padding-bottom: 14px; min-width: 0;">
+                  <span style="font-size: 13px; font-weight: 700; color: {{ ev.titleColor }};">{{ ev.title }}</span>
+                  <span style="font-size: 11px; color: var(--slate-500); line-height: 1.5;">{{ ev.who }}</span>
+                  <span style="font-size: 11px; color: var(--slate-500); font-variant-numeric: tabular-nums;">{{ ev.time }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+        </aside>
+      </div>
+    </div>
+    </sc-if>
+
+  </main>
+
+  <sc-if value="{{ confirmOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 90; background: rgba(11,28,48,0.45); display: flex; align-items: center; justify-content: center; padding: 32px;" onClick="{{ cancelDecide }}">
+      <div onClick="{{ stop }}" style="width: 100%; max-width: 440px; background: var(--white); border-radius: 18px; border: 1px solid var(--border); box-shadow: var(--elev-pop); padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="width: 44px; height: 44px; border-radius: 999px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: {{ confirmModal.iconBg }}; color: {{ confirmModal.tone }};">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ confirmModal.iconPath }}"></path></svg>
+          </span>
+          <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: var(--ink-900);">{{ confirmModal.title }}</h3>
+        </div>
+        <p style="margin: 0; font-size: 13px; line-height: 1.6; color: var(--ink-700);">{{ confirmModal.body }}</p>
+        <div style="background: var(--canvas); border: 1px solid var(--border-soft); border-radius: 10px; padding: 11px 13px;">
+          <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Catatan Anda</span>
+          <p style="margin: 4px 0 0; font-size: 13px; line-height: 1.5; color: var(--ink-800);">{{ note }}</p>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" onClick="{{ cancelDecide }}" style="padding: 10px 18px; border-radius: 999px; border: 1px solid var(--border); background: var(--white); color: var(--ink-700); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: var(--surface-tint);">Tidak</button>
+          <button type="button" onClick="{{ confirmDecide }}" style="padding: 10px 20px; border-radius: 999px; border: none; background: {{ confirmModal.tone }}; color: var(--white); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: var(--elev-card);">{{ confirmModal.yes }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}">
+    <div style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--ink-900); color: var(--white); padding: 12px 22px; border-radius: 12px; box-shadow: var(--elev-pop); font-size: 13px; font-weight: 600; z-index: 100; animation: awToastIn .2s ease; display: flex; align-items: center; gap: 10px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z"></path><path d="M8.5 12l2.5 2.5 4.5-5"></path></svg>
+      {{ toast }}
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  ME = "Budi Santoso";
+
+  STATUS = {
+    "waiting-approval": { label: "Waiting for Approval", bg: "var(--surface-tint)", color: "var(--ink-700)" },
+  };
+
+  PRIORITY = {
+    critical: { label: "Critical", bg: "rgba(186,26,26,0.10)", color: "var(--red-600)", solid: "var(--red-600)" },
+    high: { label: "High", bg: "rgba(255,149,0,0.16)", color: "rgb(180,83,9)", solid: "rgb(255,149,0)" },
+    medium: { label: "Medium", bg: "var(--blue-050)", color: "var(--blue-ink)", solid: "var(--blue-500)" },
+    low: { label: "Low", bg: "var(--surface-tint)", color: "var(--slate-500)", solid: "var(--slate-500)" },
+  };
+
+  DECISION = {
+    "Disetujui": { bg: "rgba(52,199,89,0.14)", fg: "var(--green-500)" },
+    "Ditolak": { bg: "rgba(186,26,26,0.10)", fg: "var(--red-600)" },
+    "Minta Perbaikan": { bg: "var(--rose-200)", fg: "var(--clay-700)" },
+  };
+
+  STATUS_MON = {
+    "open": { label: "Open", bg: "var(--blue-050)", fg: "var(--blue-ink)" },
+    "in-progress": { label: "In Progress", bg: "var(--rose-200)", fg: "var(--clay-700)" },
+    "resolved": { label: "Resolved", bg: "rgba(52,199,89,0.14)", fg: "var(--green-500)" },
+    "closed": { label: "Closed", bg: "var(--surface-tint)", fg: "var(--slate-500)" },
+  };
+
+  SLA_WINDOW_MIN = { critical: 240, high: 480, medium: 2880, low: 7200 };
+  SLA_RESP_LABEL = { critical: "Maks 15 menit", high: "Maks 30 menit", medium: "Maks 2 jam", low: "Maks 4 jam" };
+  SLA_SELESAI_LABEL = { critical: "Maks 4 jam", high: "Maks 8 jam", medium: "Maks 2 hari kerja", low: "Maks 5 hari kerja" };
+
+  ICONS = {
+    clipboard: "M9 3h6a1 1 0 0 1 1 1v1H8V4a1 1 0 0 1 1-1Z M5 5h14v16H5z M9 12h6 M9 16h6",
+    warning: "M12 9v4 M12 17h.01 M10.29 3.86 1.82 18a1 1 0 0 0 .86 1.5h18.64a1 1 0 0 0 .86-1.5L13.71 3.86a1 1 0 0 0-1.72 0Z",
+    checkCircle: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M8.5 12l2.5 2.5 4.5-5",
+    archive: "M3 4h18v4H3z M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8 M10 12h4",
+    clock: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M12 7v5l3 3",
+    xCircle: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M15 9l-6 6 M9 9l6 6",
+  };
+
+  constructor(props) {
+    super(props);
+    const m = 60000, now = Date.now();
+    const D = (mins, t) => ({ ...t, slaDeadline: now + mins * m });
+    this.state = {
+      view: "inbox", mode: "pending", sel: null, selHist: null,
+      note: "", noteError: "", draft: "", toast: "", confirmKind: null,
+      pendingFilter: "all", categoryFilter: "all", showPendingFilter: false, historyFilter: "all", historyPeriod: "year", historyQuery: "",
+      now: Date.now(),
+      notifOpen: false, profileOpen: false,
+      notifications: this.seedNotifications(),
+      tickets: [
+        D(-22, {
+          id: "hd2136", idLabel: "#HD-2136",
+          judul: "Pembuatan Akun MAILIA — Karyawan Baru (3 orang)",
+          kategori: "Access Request", aplikasi: "MAILIA",
+          layanan: "Akun Aplikasi · Pembuatan akun baru",
+          requesterName: "Hendra Gunawan", requesterUnit: "Biro Human Capital",
+          kontak: "hendra.gunawan@adhi.co.id", dibuat: "7 Juli 2026 · 06:48", masuk: "5 jam lalu",
+          prioritas: "critical", currentLevel: 1,
+          levels: [{ role: "Manager", who: "Budi Santoso" }, { role: "Application Owner — BPO IT", who: "Biro Infrastruktur & Operasional IT" }],
+          deskripsi: "Permohonan pembuatan akun email MAILIA untuk 3 karyawan baru Biro Human Capital yang mulai bekerja tanggal 8 Juli 2026. Daftar nama, NIP, dan unit kerja terlampir pada dokumen onboarding.",
+          lampiran: ["daftar-karyawan-baru.xlsx", "sk-pengangkatan.pdf"],
+          timeline: [
+            { title: "Tiket dibuat (Draft dikirim)", who: "Hendra Gunawan", time: "7 Juli 2026 · 06:48" },
+            { title: "Masuk antrean approval — Sequential 2 level", who: "Sistem", time: "7 Juli 2026 · 06:49" },
+            { title: "Waiting for Approval — Level 1 Manager", who: "Sistem", time: "7 Juli 2026 · 06:49" },
+          ],
+          forum: [{ who: "Hendra Gunawan", role: "Requester", time: "5 jam lalu", text: "Mohon dibantu segera Pak, ketiga karyawan mulai onboarding besok pagi dan membutuhkan akses email." }],
+        }),
+        D(100, {
+          id: "hd2148", idLabel: "#HD-2148",
+          judul: "Penambahan Role SAP PS — Budget Monitoring",
+          kategori: "Access Request", aplikasi: "SAP",
+          layanan: "Perubahan Akses Aplikasi · Penambahan akses aplikasi",
+          requesterName: "Rina Wulandari", requesterUnit: "Departemen Keuangan",
+          kontak: "rina.wulandari@adhi.co.id", dibuat: "7 Juli 2026 · 07:05", masuk: "2 jam lalu",
+          prioritas: "high", currentLevel: 1,
+          levels: [{ role: "Manager", who: "Budi Santoso" }, { role: "Application Owner — BPO SAP", who: "Dept. Strategi Korporasi (Kesisteman)" }],
+          deskripsi: "Membutuhkan penambahan role SAP modul PS (Project System) untuk monitoring budget proyek Tol Solo–Yogyakarta. Role yang diminta: Z_PS_BUDGET_DISPLAY dan Z_PS_REPORT. Akses dibutuhkan untuk penyusunan laporan realisasi budget mingguan.",
+          lampiran: ["form-otorisasi-sap.pdf", "sk-penugasan-proyek.pdf"],
+          timeline: [
+            { title: "Tiket dibuat (Draft dikirim)", who: "Rina Wulandari", time: "7 Juli 2026 · 07:05" },
+            { title: "Masuk antrean approval — Sequential 2 level", who: "Sistem", time: "7 Juli 2026 · 07:06" },
+            { title: "Waiting for Approval — Level 1 Manager", who: "Sistem", time: "7 Juli 2026 · 07:06" },
+          ],
+          forum: [{ who: "Rina Wulandari", role: "Requester", time: "2 jam lalu", text: "Mohon dibantu prioritasnya ya Pak, role ini dibutuhkan untuk closing laporan budget minggu ini." }],
+        }),
+        D(27 * 60, {
+          id: "hd2145", idLabel: "#HD-2145",
+          judul: "Instalasi AutoCAD 2026 untuk Tim Desain",
+          kategori: "Service Request", aplikasi: "SILO Apps",
+          layanan: "Aplikasi & Software · Instalasi/reinstall aplikasi",
+          requesterName: "Andi Prasetyo", requesterUnit: "Biro Desain — ALC",
+          kontak: "andi.prasetyo@adhi.co.id", dibuat: "7 Juli 2026 · 05:20", masuk: "4 jam lalu",
+          prioritas: "medium", currentLevel: 1,
+          levels: [{ role: "Manager", who: "Budi Santoso" }],
+          deskripsi: "Permintaan instalasi AutoCAD 2026 pada 2 workstation tim desain (DES-011 dan DES-014) untuk kebutuhan detail engineering design proyek gedung. Lisensi menggunakan kontrak enterprise yang sudah aktif.",
+          lampiran: ["daftar-workstation.pdf"],
+          timeline: [
+            { title: "Tiket dibuat (Draft dikirim)", who: "Andi Prasetyo", time: "7 Juli 2026 · 05:20" },
+            { title: "Masuk antrean approval — 1 level", who: "Sistem", time: "7 Juli 2026 · 05:21" },
+            { title: "Waiting for Approval — Level 1 Manager", who: "Sistem", time: "7 Juli 2026 · 05:21" },
+          ],
+          forum: [],
+        }),
+        D(24 * 60, {
+          id: "hd2139", idLabel: "#HD-2139",
+          judul: "Rekap Data PO Semester 1 — 2026",
+          kategori: "Service Request", aplikasi: "SAP",
+          layanan: "Data & Dokumen · Permintaan laporan/rekap data",
+          requesterName: "Dimas Nugroho", requesterUnit: "Departemen SCM",
+          kontak: "dimas.nugroho@adhi.co.id", dibuat: "6 Juli 2026 · 14:32", masuk: "Kemarin",
+          prioritas: "medium", currentLevel: 1,
+          levels: [{ role: "Manager", who: "Budi Santoso" }, { role: "IT Support — Biro Infrastruktur", who: "Tim IT" }],
+          deskripsi: "Permintaan rekap data Purchase Order (PO) SAP MM periode Januari–Juni 2026 untuk seluruh proyek Departemen SCM, format Excel, sebagai bahan evaluasi kinerja pengadaan semester 1.",
+          lampiran: ["format-rekap-po.xlsx"],
+          timeline: [
+            { title: "Tiket dibuat (Draft dikirim)", who: "Dimas Nugroho", time: "6 Juli 2026 · 14:32" },
+            { title: "Masuk antrean approval — Sequential 2 level", who: "Sistem", time: "6 Juli 2026 · 14:33" },
+            { title: "Waiting for Approval — Level 1 Manager", who: "Sistem", time: "6 Juli 2026 · 14:33" },
+          ],
+          forum: [],
+        }),
+        D(4 * 24 * 60, {
+          id: "hd2142", idLabel: "#HD-2142",
+          judul: "Aktivasi VPN FortiClient — Site Office",
+          kategori: "Access Request", aplikasi: "VPN",
+          layanan: "VPN · Aktivasi VPN FortiClient",
+          requesterName: "Sari Dewi", requesterUnit: "Proyek Bendungan Bener",
+          kontak: "sari.dewi@adhi.co.id", dibuat: "6 Juli 2026 · 09:15", masuk: "Kemarin",
+          prioritas: "low", currentLevel: 1,
+          levels: [{ role: "Manager", who: "Budi Santoso" }],
+          deskripsi: "Permohonan aktivasi VPN FortiClient untuk akses aplikasi internal (SAP dan ADELE) dari site office Proyek Bendungan Bener. Laptop sudah terdaftar sebagai aset perusahaan.",
+          lampiran: ["form-vpn.pdf"],
+          timeline: [
+            { title: "Tiket dibuat (Draft dikirim)", who: "Sari Dewi", time: "6 Juli 2026 · 09:15" },
+            { title: "Masuk antrean approval — 1 level", who: "Sistem", time: "6 Juli 2026 · 09:16" },
+            { title: "Waiting for Approval — Level 1 Manager", who: "Sistem", time: "6 Juli 2026 · 09:16" },
+          ],
+          forum: [],
+        }),
+      ],
+      history: [
+        { idLabel: "#HD-2131", judul: "Reset Password SAP — User Locked", layananShort: "SAP · Access Request", app: "SAP", handlerType: "IT", status: "closed", keputusan: "Disetujui", catatan: "OK, segera diproses.", levelLabel: "Level 1", waktu: "Kemarin · 15:40", daysAgo: 1 },
+        { idLabel: "#HD-2127", judul: "Permintaan Laptop Baru — Staf Magang", layananShort: "Perangkat · Service Request", app: "Perangkat", handlerType: "IT", status: "closed", keputusan: "Ditolak", catatan: "Anggaran perangkat Q3 belum dibuka. Ajukan ulang setelah 1 Agustus 2026.", levelLabel: "Level 1", waktu: "Kemarin · 10:12", daysAgo: 1 },
+        { idLabel: "#HD-2119", judul: "Akses Folder Bersama Keuangan", layananShort: "CLOUDIA · Access Request", app: "CLOUDIA", handlerType: "BPO", status: "open", keputusan: "Minta Perbaikan", catatan: "Lampirkan persetujuan kepala departemen terlebih dahulu.", levelLabel: "Level 1", waktu: "3 Juli 2026", daysAgo: 4 },
+        { idLabel: "#HD-2114", judul: "Penambahan Akses ELISA — Verifikator Vendor", layananShort: "ELISA · Access Request", app: "ELISA", handlerType: "BPO", status: "resolved", keputusan: "Disetujui", catatan: "Sesuai penugasan SK 44/2026.", levelLabel: "Level 1", waktu: "2 Juli 2026", daysAgo: 5 },
+        { idLabel: "#HD-2098", judul: "Instalasi Software AutoCAD — Tim Estimasi", layananShort: "SILO Apps · Service Request", app: "SILO Apps", handlerType: "IT", status: "in-progress", keputusan: "Disetujui", catatan: "Sesuai kontrak lisensi enterprise yang aktif.", levelLabel: "Level 1", waktu: "28 Juni 2026", daysAgo: 9 },
+        { idLabel: "#HD-2085", judul: "Penambahan Role SAP FICO — Staf Baru", layananShort: "SAP · Access Request", app: "SAP", handlerType: "BPO", status: "closed", keputusan: "Ditolak", catatan: "Role yang diminta melebihi kewenangan jabatan saat ini.", levelLabel: "Level 1", waktu: "15 Juni 2026", daysAgo: 22 },
+        { idLabel: "#HD-2071", judul: "Aktivasi VPN FortiClient — Tim Proyek", layananShort: "VPN · Access Request", app: "VPN", handlerType: "IT", status: "closed", keputusan: "Disetujui", catatan: "Sesuai penugasan proyek aktif.", levelLabel: "Level 1", waktu: "2 Juni 2026", daysAgo: 35 },
+        { idLabel: "#HD-2060", judul: "Akses Database Pelaporan Keuangan", layananShort: "ARINA · Access Request", app: "ARINA", handlerType: "BPO", status: "open", keputusan: "Minta Perbaikan", catatan: "Lampirkan persetujuan atasan langsung terlebih dahulu.", levelLabel: "Level 1", waktu: "20 Mei 2026", daysAgo: 48 },
+        { idLabel: "#HD-2030", judul: "Pengajuan Laptop Baru — Staf ALC", layananShort: "Perangkat · Service Request", app: "Perangkat", handlerType: "IT", status: "closed", keputusan: "Disetujui", catatan: "Anggaran Q1 tersedia, disetujui.", levelLabel: "Level 1", waktu: "12 Maret 2026", daysAgo: 117 },
+      ],
+      archive: {
+        "#HD-2131": {
+          idLabel: "#HD-2131", judul: "Reset Password SAP — User Locked", kategori: "Access Request", aplikasi: "SAP",
+          layanan: "Akun Aplikasi · Reset Password", requesterName: "Fajar Ramadhan", requesterUnit: "Departemen Pemasaran",
+          kontak: "fajar.ramadhan@adhi.co.id", dibuat: "6 Juli 2026 · 13:02", prioritas: "high", currentLevel: 1,
+          levels: [{ role: "Manager", who: "Budi Santoso" }],
+          deskripsi: "Akun SAP terkunci setelah beberapa kali salah memasukkan password. Membutuhkan reset password agar dapat kembali memproses transaksi SD hari ini.",
+          lampiran: ["screenshot-user-locked.png"],
+          timeline: [
+            { title: "Tiket dibuat (Draft dikirim)", who: "Fajar Ramadhan", time: "6 Juli 2026 · 13:02" },
+            { title: "Masuk antrean approval — 1 level", who: "Sistem", time: "6 Juli 2026 · 13:03" },
+            { title: "Keputusan Level 1 — Disetujui", who: "Budi Santoso (Manager)", time: "6 Juli 2026 · 15:40", decisionDot: "var(--green-500)" },
+            { title: "Resolved — password direset", who: "IT Support", time: "6 Juli 2026 · 16:05", decisionDot: "var(--green-500)" },
+          ],
+          forum: [{ who: "Fajar Ramadhan", role: "Requester", time: "Kemarin", text: "Terima kasih Pak, sudah bisa login kembali." }],
+          decision: { keputusan: "Disetujui", catatan: "OK, segera diproses.", waktu: "Kemarin · 15:40", levelLabel: "Level 1" },
+        },
+        "#HD-2127": {
+          idLabel: "#HD-2127", judul: "Permintaan Laptop Baru — Staf Magang", kategori: "Service Request", aplikasi: "Perangkat",
+          layanan: "Pengajuan Perangkat Baru (Laptop)", requesterName: "Yoga Pratama", requesterUnit: "Biro Umum",
+          kontak: "yoga.pratama@adhi.co.id", dibuat: "5 Juli 2026 · 16:20", prioritas: "medium", currentLevel: 1,
+          levels: [{ role: "Manager", who: "Budi Santoso" }, { role: "Application Owner", who: "Biro Infrastruktur & Operasional IT" }],
+          deskripsi: "Permintaan 1 unit laptop untuk staf magang Biro Umum periode Juli–Desember 2026, untuk kebutuhan administrasi dokumen dan input data.",
+          lampiran: ["form-permintaan-perangkat.pdf"],
+          timeline: [
+            { title: "Tiket dibuat (Draft dikirim)", who: "Yoga Pratama", time: "5 Juli 2026 · 16:20" },
+            { title: "Masuk antrean approval — Sequential 2 level", who: "Sistem", time: "5 Juli 2026 · 16:21" },
+            { title: "Keputusan Level 1 — Ditolak", who: "Budi Santoso (Manager)", time: "Kemarin · 10:12", decisionDot: "var(--red-600)" },
+          ],
+          forum: [
+            { who: "Yoga Pratama", role: "Requester", time: "5 Juli 2026", text: "Apakah memungkinkan memakai unit cadangan bila pengadaan baru belum bisa Pak?" },
+            { who: "Budi Santoso", role: "Approver", time: "Kemarin", text: "Anggaran perangkat Q3 belum dibuka. Silakan koordinasi dengan Biro Umum untuk unit pinjaman sementara.", isMe: true },
+          ],
+          decision: { keputusan: "Ditolak", catatan: "Anggaran perangkat Q3 belum dibuka. Ajukan ulang setelah 1 Agustus 2026.", waktu: "Kemarin · 10:12", levelLabel: "Level 1" },
+        },
+        "#HD-2119": {
+          idLabel: "#HD-2119", judul: "Akses Folder Bersama Keuangan", kategori: "Access Request", aplikasi: "CLOUDIA",
+          layanan: "Perubahan Akses Aplikasi · Penambahan akses aplikasi", requesterName: "Maya Kartika", requesterUnit: "Departemen Keuangan",
+          kontak: "maya.kartika@adhi.co.id", dibuat: "3 Juli 2026 · 08:41", prioritas: "low", currentLevel: 1,
+          levels: [{ role: "Manager", who: "Budi Santoso" }, { role: "Application Owner — BPO IT", who: "Biro Infrastruktur & Operasional IT" }],
+          deskripsi: "Permohonan akses baca folder bersama Departemen Keuangan di CLOUDIA untuk kebutuhan rekonsiliasi laporan bulanan.",
+          lampiran: [],
+          timeline: [
+            { title: "Tiket dibuat (Draft dikirim)", who: "Maya Kartika", time: "3 Juli 2026 · 08:41" },
+            { title: "Masuk antrean approval — Sequential 2 level", who: "Sistem", time: "3 Juli 2026 · 08:42" },
+            { title: "Keputusan Level 1 — Minta Perbaikan", who: "Budi Santoso (Manager)", time: "3 Juli 2026 · 11:30", decisionDot: "var(--clay-600)" },
+          ],
+          forum: [
+            { who: "Budi Santoso", role: "Approver", time: "3 Juli 2026", text: "Mohon lampirkan persetujuan kepala departemen sebelum saya proses ya.", isMe: true },
+            { who: "Maya Kartika", role: "Requester", time: "3 Juli 2026", text: "Baik Pak, akan saya lengkapi hari ini." },
+          ],
+          decision: { keputusan: "Minta Perbaikan", catatan: "Lampirkan persetujuan kepala departemen terlebih dahulu.", waktu: "3 Juli 2026", levelLabel: "Level 1" },
+        },
+        "#HD-2114": {
+          idLabel: "#HD-2114", judul: "Penambahan Akses ELISA — Verifikator Vendor", kategori: "Access Request", aplikasi: "ELISA",
+          layanan: "Perubahan Akses Aplikasi · Penambahan akses aplikasi", requesterName: "Rudi Hartono", requesterUnit: "Departemen SCM",
+          kontak: "rudi.hartono@adhi.co.id", dibuat: "2 Juli 2026 · 09:10", prioritas: "medium", currentLevel: 2,
+          levels: [{ role: "Manager", who: "Budi Santoso" }, { role: "Application Owner — BPO ELISA", who: "Departemen SCM" }],
+          deskripsi: "Penambahan role verifikator vendor pada ELISA sesuai penugasan SK 44/2026 untuk mendukung proses verifikasi vendor baru.",
+          lampiran: ["sk-44-2026.pdf"],
+          timeline: [
+            { title: "Tiket dibuat (Draft dikirim)", who: "Rudi Hartono", time: "2 Juli 2026 · 09:10" },
+            { title: "Masuk antrean approval — Sequential 2 level", who: "Sistem", time: "2 Juli 2026 · 09:11" },
+            { title: "Keputusan Level 1 — Disetujui", who: "Budi Santoso (Manager)", time: "2 Juli 2026 · 10:05", decisionDot: "var(--green-500)" },
+            { title: "Keputusan Level 2 — Disetujui (BPO ELISA)", who: "Departemen SCM", time: "2 Juli 2026 · 14:22", decisionDot: "var(--green-500)" },
+            { title: "Completed — akses diprovisikan", who: "IT Support", time: "3 Juli 2026 · 09:00", decisionDot: "var(--green-500)" },
+          ],
+          forum: [],
+          decision: { keputusan: "Disetujui", catatan: "Sesuai penugasan SK 44/2026.", waktu: "2 Juli 2026", levelLabel: "Level 1" },
+        },
+        "#HD-2098": {
+          idLabel: "#HD-2098", judul: "Instalasi Software AutoCAD — Tim Estimasi", kategori: "Service Request", aplikasi: "SILO Apps",
+          layanan: "Aplikasi & Software · Instalasi/reinstall aplikasi", requesterName: "Wahyu Setiawan", requesterUnit: "Biro Estimasi",
+          kontak: "wahyu.setiawan@adhi.co.id", dibuat: "27 Juni 2026 · 10:00", prioritas: "medium", currentLevel: 1,
+          levels: [{ role: "Manager", who: "Budi Santoso" }],
+          deskripsi: "Permintaan instalasi AutoCAD pada 3 unit workstation Tim Estimasi untuk kebutuhan penyusunan gambar kerja proyek baru.",
+          lampiran: ["daftar-workstation-estimasi.pdf"],
+          timeline: [
+            { title: "Tiket dibuat (Draft dikirim)", who: "Wahyu Setiawan", time: "27 Juni 2026 · 10:00" },
+            { title: "Masuk antrean approval — 1 level", who: "Sistem", time: "27 Juni 2026 · 10:01" },
+            { title: "Keputusan Level 1 — Disetujui", who: "Budi Santoso (Manager)", time: "28 Juni 2026", decisionDot: "var(--green-500)" },
+          ],
+          forum: [],
+          decision: { keputusan: "Disetujui", catatan: "Sesuai kontrak lisensi enterprise yang aktif.", waktu: "28 Juni 2026", levelLabel: "Level 1" },
+        },
+        "#HD-2085": {
+          idLabel: "#HD-2085", judul: "Penambahan Role SAP FICO — Staf Baru", kategori: "Access Request", aplikasi: "SAP",
+          layanan: "Perubahan Akses Aplikasi · Penambahan akses aplikasi", requesterName: "Lestari Handayani", requesterUnit: "Departemen Keuangan",
+          kontak: "lestari.handayani@adhi.co.id", dibuat: "14 Juni 2026 · 09:30", prioritas: "medium", currentLevel: 1,
+          levels: [{ role: "Manager", who: "Budi Santoso" }, { role: "Application Owner — BPO IT", who: "Biro Infrastruktur & Operasional IT" }],
+          deskripsi: "Permintaan role SAP FICO untuk staf baru guna memproses jurnal dan rekonsiliasi akun.",
+          lampiran: ["form-otorisasi-sap.pdf"],
+          timeline: [
+            { title: "Tiket dibuat (Draft dikirim)", who: "Lestari Handayani", time: "14 Juni 2026 · 09:30" },
+            { title: "Masuk antrean approval — Sequential 2 level", who: "Sistem", time: "14 Juni 2026 · 09:31" },
+            { title: "Keputusan Level 1 — Ditolak", who: "Budi Santoso (Manager)", time: "15 Juni 2026", decisionDot: "var(--red-600)" },
+          ],
+          forum: [],
+          decision: { keputusan: "Ditolak", catatan: "Role yang diminta melebihi kewenangan jabatan saat ini.", waktu: "15 Juni 2026", levelLabel: "Level 1" },
+        },
+        "#HD-2071": {
+          idLabel: "#HD-2071", judul: "Aktivasi VPN FortiClient — Tim Proyek", kategori: "Access Request", aplikasi: "VPN",
+          layanan: "VPN · Aktivasi VPN FortiClient", requesterName: "Doni Kurniawan", requesterUnit: "Proyek Tol Cisumdawu",
+          kontak: "doni.kurniawan@adhi.co.id", dibuat: "1 Juni 2026 · 08:15", prioritas: "low", currentLevel: 1,
+          levels: [{ role: "Manager", who: "Budi Santoso" }],
+          deskripsi: "Permohonan aktivasi VPN FortiClient untuk akses aplikasi internal dari site proyek.",
+          lampiran: ["form-vpn.pdf"],
+          timeline: [
+            { title: "Tiket dibuat (Draft dikirim)", who: "Doni Kurniawan", time: "1 Juni 2026 · 08:15" },
+            { title: "Masuk antrean approval — 1 level", who: "Sistem", time: "1 Juni 2026 · 08:16" },
+            { title: "Keputusan Level 1 — Disetujui", who: "Budi Santoso (Manager)", time: "2 Juni 2026", decisionDot: "var(--green-500)" },
+          ],
+          forum: [],
+          decision: { keputusan: "Disetujui", catatan: "Sesuai penugasan proyek aktif.", waktu: "2 Juni 2026", levelLabel: "Level 1" },
+        },
+        "#HD-2060": {
+          idLabel: "#HD-2060", judul: "Akses Database Pelaporan Keuangan", kategori: "Access Request", aplikasi: "ARINA",
+          layanan: "Perubahan Akses Aplikasi · Penambahan akses aplikasi", requesterName: "Ika Puspitasari", requesterUnit: "Departemen Keuangan",
+          kontak: "ika.puspitasari@adhi.co.id", dibuat: "19 Mei 2026 · 13:00", prioritas: "medium", currentLevel: 1,
+          levels: [{ role: "Manager", who: "Budi Santoso" }, { role: "Application Owner — BPO IT", who: "Biro Infrastruktur & Operasional IT" }],
+          deskripsi: "Permohonan akses database pelaporan keuangan untuk kebutuhan rekonsiliasi bulanan.",
+          lampiran: [],
+          timeline: [
+            { title: "Tiket dibuat (Draft dikirim)", who: "Ika Puspitasari", time: "19 Mei 2026 · 13:00" },
+            { title: "Masuk antrean approval — Sequential 2 level", who: "Sistem", time: "19 Mei 2026 · 13:01" },
+            { title: "Keputusan Level 1 — Minta Perbaikan", who: "Budi Santoso (Manager)", time: "20 Mei 2026", decisionDot: "var(--clay-600)" },
+          ],
+          forum: [],
+          decision: { keputusan: "Minta Perbaikan", catatan: "Lampirkan persetujuan atasan langsung terlebih dahulu.", waktu: "20 Mei 2026", levelLabel: "Level 1" },
+        },
+        "#HD-2030": {
+          idLabel: "#HD-2030", judul: "Pengajuan Laptop Baru — Staf ALC", kategori: "Service Request", aplikasi: "Perangkat",
+          layanan: "Pengajuan Perangkat Baru (Laptop)", requesterName: "Galih Pratama", requesterUnit: "ALC · BIM",
+          kontak: "galih.pratama@adhi.co.id", dibuat: "11 Maret 2026 · 09:00", prioritas: "medium", currentLevel: 1,
+          levels: [{ role: "Manager", who: "Budi Santoso" }, { role: "Application Owner", who: "Biro Infrastruktur & Operasional IT" }],
+          deskripsi: "Permintaan laptop baru untuk staf ALC yang menangani pemodelan BIM proyek gedung.",
+          lampiran: ["form-permintaan-perangkat.pdf"],
+          timeline: [
+            { title: "Tiket dibuat (Draft dikirim)", who: "Galih Pratama", time: "11 Maret 2026 · 09:00" },
+            { title: "Masuk antrean approval — Sequential 2 level", who: "Sistem", time: "11 Maret 2026 · 09:01" },
+            { title: "Keputusan Level 1 — Disetujui", who: "Budi Santoso (Manager)", time: "12 Maret 2026", decisionDot: "var(--green-500)" },
+          ],
+          forum: [],
+          decision: { keputusan: "Disetujui", catatan: "Anggaran Q1 tersedia, disetujui.", waktu: "12 Maret 2026", levelLabel: "Level 1" },
+        },
+      },
+    };
+  }
+
+  componentDidMount() {
+    this._timer = setInterval(() => this.setState({ now: Date.now() }), 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this._timer);
+    clearTimeout(this._toastTimer);
+  }
+
+  seedNotifications() {
+    return [
+      { id: "n1", icon: "warning", bg: "rgba(186,26,26,0.10)", color: "var(--red-600)", title: "SLA Breach ·", body: "#HD-2136 (MAILIA akun baru) sudah melewati target penyelesaian.", time: "Baru saja", unread: true, target: "hd2136" },
+      { id: "n2", icon: "clipboard", bg: "var(--blue-050)", color: "var(--blue-ink)", title: "Menunggu keputusan ·", body: "#HD-2148 (Role SAP PS) menunggu persetujuan Level 1 Anda.", time: "2 jam lalu", unread: true, target: "hd2148" },
+      { id: "n3", icon: "checkCircle", bg: "rgba(52,199,89,0.14)", color: "var(--green-500)", title: "Keputusan tercatat ·", body: "#HD-2114 telah selesai diprovisikan oleh IT Support.", time: "Kemarin", unread: false, target: null },
+      { id: "n4", icon: "archive", bg: "var(--surface-tint)", color: "var(--slate-500)", title: "Riwayat diperbarui ·", body: "#HD-2127 ditolak dan tercatat di Riwayat Approval.", time: "Kemarin", unread: false, target: null },
+    ];
+  }
+
+  computeSla(t, now) {
+    const windowMin = this.SLA_WINDOW_MIN[t.prioritas] || 480;
+    const remain = t.slaDeadline - now;
+    const elapsedPct = Math.max(0, Math.min(100, ((windowMin * 60000 - remain) / (windowMin * 60000)) * 100));
+    if (remain <= 0) return { state: "breach", color: "var(--red-600)", stateBg: "rgba(186,26,26,0.10)", stateFg: "var(--red-600)", stateLabel: "SLA Breach", text: "Terlewat " + this.fmtDur(remain), barPct: 100, fillPct: 100 };
+    const warn = remain < 30 * 60000;
+    return {
+      state: warn ? "warning" : "ontrack",
+      color: warn ? "var(--clay-600)" : "var(--green-500)",
+      stateBg: warn ? "var(--rose-200)" : "rgba(52,199,89,0.14)",
+      stateFg: warn ? "var(--clay-700)" : "var(--green-500)",
+      stateLabel: warn ? "SLA Warning" : "On Track",
+      text: this.fmtDur(remain) + " lagi",
+      barPct: elapsedPct,
+      fillPct: Math.max(6, Math.min(100, 100 - elapsedPct)),
+    };
+  }
+
+  fileSizeGuess(name) {
+    const ext = (name.split(".").pop() || "").toLowerCase();
+    const map = { pdf: "156 KB", xlsx: "48 KB", png: "310 KB", jpg: "220 KB", txt: "12 KB", docx: "84 KB" };
+    return map[ext] || "64 KB";
+  }
+
+  fmtDur(ms) {
+    ms = Math.abs(ms);
+    const d = Math.floor(ms / 86400000);
+    const h = Math.floor((ms % 86400000) / 3600000);
+    const mn = Math.floor((ms % 3600000) / 60000);
+    if (d > 0) return d + "h " + h + "j";
+    if (h > 0) return h + "j " + mn + "m";
+    return mn + "m";
+  }
+
+  onNav = (view) => this.setState({ view, toast: "" });
+  goInbox = () => this.setState({ view: "inbox", toast: "" });
+  goRiwayat = () => this.setState({ view: "riwayat", toast: "" });
+  back = () => this.setState({ view: this.state.mode === "hist" ? "riwayat" : "inbox" });
+  onNote = (e) => this.setState({ note: e.target.value, noteError: "" });
+  onDraft = (e) => this.setState({ draft: e.target.value });
+
+  togglePendingFilter = () => this.setState((s) => ({ showPendingFilter: !s.showPendingFilter }));
+  setPendingFilter = (key) => this.setState({ pendingFilter: key, showPendingFilter: false });
+  setCategoryFilter = (key) => this.setState({ categoryFilter: key });
+  setHistoryFilter = (key) => this.setState({ historyFilter: key });
+  setHistoryPeriod = (key) => this.setState({ historyPeriod: key });
+  openHistory = (idLabel) => this.setState({ view: "detail", mode: "hist", selHist: idLabel, note: "", noteError: "", draft: "", toast: "" });
+  openPending = (id) => this.setState({ view: "detail", mode: "pending", sel: id, note: "", noteError: "", draft: "", toast: "", notifOpen: false });
+
+  statPendingClick = () => this.setState({ view: "inbox", pendingFilter: "all", showPendingFilter: false });
+  statSlaClick = () => this.setState({ view: "inbox", pendingFilter: "sla-issue", showPendingFilter: true });
+  statApprovedClick = () => this.setState({ view: "riwayat", historyFilter: "approved" });
+  statRejectedClick = () => this.setState({ view: "riwayat", historyFilter: "rejected" });
+
+  toggleNotif() { this.setState((s) => ({ notifOpen: !s.notifOpen, profileOpen: false })); }
+  toggleProfile() { this.setState((s) => ({ profileOpen: !s.profileOpen, notifOpen: false })); }
+  closeMenus() { this.setState({ notifOpen: false, profileOpen: false }); }
+  markAllRead() { this.setState((s) => ({ notifications: s.notifications.map((n) => ({ ...n, unread: false })) })); }
+
+  showToast(text) {
+    clearTimeout(this._toastTimer);
+    this.setState({ toast: text });
+    this._toastTimer = setTimeout(() => this.setState({ toast: "" }), 3600);
+  }
+
+  sendForum = () => {
+    const S = this.state;
+    const text = S.draft.trim();
+    if (!text) return;
+    const tickets = S.tickets.map((t) => t.id === S.sel ? { ...t, forum: t.forum.concat([{ who: "Budi Santoso", role: "Approver", time: "Baru saja", text, isMe: true }]) } : t);
+    this.setState({ tickets, draft: "" });
+    this.showToast("Tanggapan terkirim ke forum diskusi");
+  };
+
+  approve = () => this.requestDecide("approve");
+  revise = () => this.requestDecide("revise");
+  reject = () => this.requestDecide("reject");
+
+  requestDecide(kind) {
+    const note = this.state.note.trim();
+    if (!note) { this.setState({ noteError: "Catatan / Feedback wajib diisi terlebih dahulu." }); return; }
+    this.setState({ confirmKind: kind });
+  }
+  cancelDecide = () => this.setState({ confirmKind: null });
+  confirmDecide = () => { const k = this.state.confirmKind; this.setState({ confirmKind: null }); this.decide(k); };
+  onHistoryQuery = (e) => this.setState({ historyQuery: e.target.value });
+
+  decide(kind) {
+    const S = this.state;
+    const t = S.tickets.find((x) => x.id === S.sel);
+    if (!t) return;
+    const note = S.note.trim();
+    if ((kind === "reject" || kind === "revise") && !note) {
+      this.setState({ noteError: "Catatan wajib diisi untuk keputusan ini." });
+      return;
+    }
+    const kMap = { approve: "Disetujui", revise: "Minta Perbaikan", reject: "Ditolak" };
+    const kLabel = kMap[kind];
+    let toast;
+    if (kind === "approve") toast = t.levels.length > 1 ? "Tiket " + t.idLabel + " disetujui — diteruskan ke Level 2 (" + t.levels[1].role + ")" : "Tiket " + t.idLabel + " disetujui — diteruskan ke Support";
+    else if (kind === "revise") toast = "Permintaan perbaikan " + t.idLabel + " dikirim ke requester";
+    else toast = "Tiket " + t.idLabel + " ditolak — requester menerima notifikasi";
+
+    const monStatus = { approve: "in-progress", revise: "open", reject: "closed" }[kind];
+    const nextType = t.levels.some((l) => /bpo/i.test(l.role)) ? "BPO" : "IT";
+    const entry = { idLabel: t.idLabel, judul: t.judul, layananShort: t.aplikasi + " · " + t.kategori, app: t.aplikasi, handlerType: nextType, status: monStatus, keputusan: kLabel, catatan: note || "—", levelLabel: "Level " + t.currentLevel, waktu: "Baru saja", daysAgo: 0 };
+    const dotColor = kind === "approve" ? "var(--green-500)" : kind === "reject" ? "var(--red-600)" : "var(--clay-600)";
+    const archived = Object.assign({}, t, {
+      decision: { keputusan: kLabel, catatan: note || "—", waktu: "Baru saja", levelLabel: "Level " + t.currentLevel },
+      timeline: t.timeline.concat([{ title: "Keputusan Level " + t.currentLevel + " — " + kLabel, who: "Budi Santoso (Manager)", time: "Baru saja", decisionDot: dotColor }]),
+      forum: note ? t.forum.concat([{ who: "Budi Santoso", role: "Approver", time: "Baru saja", text: note, isMe: true }]) : t.forum,
+    });
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => this.setState({ toast: "" }), 3600);
+    this.setState({
+      tickets: S.tickets.filter((x) => x.id !== t.id),
+      history: [entry].concat(S.history),
+      archive: Object.assign({}, S.archive, { [t.idLabel]: archived }),
+      view: "inbox", mode: "pending", note: "", noteError: "", draft: "",
+      toast,
+    });
+  }
+
+  categoryFilters = [
+    { key: "all", label: "Semua" },
+    { key: "Incident", label: "Incident" },
+    { key: "Service Request", label: "Service" },
+    { key: "Access Request", label: "Role Access" },
+  ];
+
+  priorityFilters = [
+    { key: "all", label: "Semua" },
+    { key: "critical", label: "Critical" },
+    { key: "high", label: "High" },
+    { key: "medium", label: "Medium" },
+    { key: "low", label: "Low" },
+  ];
+  historyFilters = [
+    { key: "all", label: "Semua" },
+    { key: "open", label: "Open", match: "open" },
+    { key: "in-progress", label: "In Progress", match: "in-progress" },
+    { key: "resolved", label: "Resolved", match: "resolved" },
+    { key: "closed", label: "Closed", match: "closed" },
+    { key: "rejected", label: "Rejected", keputusan: "Ditolak" },
+  ];
+
+  renderVals() {
+    const S = this.state;
+    const now = S.now;
+
+    const pending = S.tickets.map((t) => {
+      const sla = this.computeSla(t, now);
+      const pr = this.PRIORITY[t.prioritas];
+      return {
+        ...t, sla,
+        priorityLabel: pr.label, prioBg: pr.bg, prioColor: pr.color,
+        levelLabel: "Level " + t.currentLevel + " dari " + t.levels.length,
+        typeLabel: t.levels.length > 1 ? "Sequential" : "Single level",
+        pic: (t.levels[t.currentLevel - 1] && t.levels[t.currentLevel - 1].who) || "Budi Santoso",
+        slaFill: (sla.fillPct || 0) + "%",
+        open: () => this.openPending(t.id),
+      };
+    });
+
+    let pendingView = pending;
+    if (S.categoryFilter !== "all") pendingView = pendingView.filter((p) => p.kategori === S.categoryFilter);
+    if (S.pendingFilter === "sla-issue") pendingView = pendingView.filter((p) => p.sla.state !== "ontrack");
+    else if (S.pendingFilter !== "all") pendingView = pendingView.filter((p) => p.prioritas === S.pendingFilter);
+
+    const categoryChips = this.categoryFilters.map((f) => ({
+      label: f.label, onClick: () => this.setCategoryFilter(f.key),
+      bg: S.categoryFilter === f.key ? "var(--blue-500)" : "var(--surface-tint)",
+      fg: S.categoryFilter === f.key ? "var(--white)" : "var(--ink-700)",
+    }));
+
+    const filterChips = this.priorityFilters.map((f) => ({
+      label: f.label, onClick: () => this.setPendingFilter(f.key),
+      bg: S.pendingFilter === f.key ? "var(--blue-500)" : "var(--surface-tint)",
+      fg: S.pendingFilter === f.key ? "var(--white)" : "var(--ink-700)",
+    }));
+    const activeFilterDef = this.priorityFilters.find((f) => f.key === S.pendingFilter);
+    const filterButtonLabel = S.pendingFilter === "all" ? "Filter" : "Filter: " + activeFilterDef.label;
+
+    const warnCount = pending.filter((p) => p.sla.state !== "ontrack").length;
+    const oldestWaitMs = pending.reduce((mx, p) => Math.max(mx, now - (p.slaDeadline - (this.SLA_WINDOW_MIN[p.prioritas] || 480) * 60000)), 0);
+    const oldestWaitLabel = pending.length ? this.fmtDur(oldestWaitMs) : "0m";
+
+    // KPI cards
+    const approvedMonth = 26 + S.history.filter((h) => h.keputusan === "Disetujui").length;
+    const rejectedMonth = 2 + S.history.filter((h) => h.keputusan === "Ditolak").length;
+    const kpis = [
+      { icon: "clipboard", tone: "blue", label: "Menunggu Persetujuan", value: pending.length, onClick: this.statPendingClick },
+      { icon: "clock", tone: "amber", label: "Menunggu Terlama", value: oldestWaitLabel, onClick: this.statPendingClick },
+      { icon: "checkCircle", tone: "green", label: "Disetujui Bulan Ini", value: approvedMonth, onClick: this.statApprovedClick },
+      { icon: "archive", tone: "neutral", label: "Ditolak Bulan Ini", value: rejectedMonth, onClick: this.statRejectedClick },
+    ].map((k) => {
+      const tone = { blue: { bg: "var(--blue-050)", color: "var(--blue-500)" }, red: { bg: "rgba(186,26,26,0.10)", color: "var(--red-600)" }, green: { bg: "rgba(52,199,89,0.14)", color: "var(--green-500)" }, amber: { bg: "var(--rose-200)", color: "var(--clay-700)" }, neutral: { bg: "var(--surface-tint)", color: "var(--slate-500)" } }[k.tone];
+      return { ...k, iconPath: this.ICONS[k.icon], iconBg: tone.bg, iconColor: tone.color };
+    });
+
+    // priority distribution
+    const priorityRows = [
+      { key: "critical", label: "Critical", pct: 12 },
+      { key: "high", label: "High", pct: 38 },
+      { key: "medium", label: "Medium", pct: 35 },
+      { key: "low", label: "Low", pct: 15 },
+    ];
+    const priorityDist = priorityRows.map((r) => ({ ...r, color: this.PRIORITY[r.key].solid }));
+    const topPriority = priorityRows.reduce((a, b) => (b.pct > a.pct ? b : a));
+    const priorityInsight = topPriority.label + " mendominasi antrean bulan ini (" + topPriority.pct + "%) — prioritaskan tiket kategori ini saat meninjau inbox.";
+
+    // trend chart
+    const weeks = ["Minggu 1", "Minggu 2", "Minggu 3", "Minggu 4", "Minggu 5", "Minggu 6"];
+    const approvedSeries = [14, 18, 22, 19, 25, 29];
+    const rejectedSeries = [4, 3, 6, 5, 3, 4];
+    const chartMax = 32, padX = 10, padTop = 24, padBottom = 8, innerW = 540, innerH = 168;
+    const toXY = (v, i, n) => ({ x: +(padX + (i * innerW) / (n - 1)).toFixed(1), y: +(padTop + innerH - (v / chartMax) * innerH).toFixed(1) });
+    const approvedXY = approvedSeries.map((v, i) => toXY(v, i, approvedSeries.length));
+    const rejectedXY = rejectedSeries.map((v, i) => toXY(v, i, rejectedSeries.length));
+    const approvedPoints = approvedXY.map((p) => p.x + "," + p.y).join(" ");
+    const rejectedPoints = rejectedXY.map((p) => p.x + "," + p.y).join(" ");
+    const approvedDots = approvedXY;
+    const weekLabels = weeks.map((label) => ({ label }));
+    const growth = Math.round(((approvedSeries[5] - approvedSeries[0]) / approvedSeries[0]) * 100);
+    const trendInsight = "Jumlah tiket disetujui naik " + growth + "% sejak Minggu 1, sementara tolak/revisi stabil di kisaran " + Math.min.apply(null, rejectedSeries) + "–" + Math.max.apply(null, rejectedSeries) + " tiket/minggu.";
+
+    const pendingSub = pending.length > 0
+      ? pending.length + " tiket menunggu persetujuan Anda — " + warnCount + " di antaranya mendekati atau melewati batas SLA."
+      : "Tidak ada tiket yang menunggu persetujuan Anda saat ini.";
+
+    // history / riwayat
+    const HISTORY_PERIOD_MAX = { week: 7, month: 31, year: 366 };
+    const historyPeriodMax = HISTORY_PERIOD_MAX[S.historyPeriod] || HISTORY_PERIOD_MAX.year;
+    const historyInPeriod = S.history.filter((h) => h.daysAgo <= historyPeriodMax);
+
+    const historyQuery = S.historyQuery.trim().toLowerCase();
+    const historyView = historyInPeriod.filter((h) => {
+      const def = this.historyFilters.find((f) => f.key === S.historyFilter);
+      const matchStatus = def.keputusan ? h.keputusan === def.keputusan : (!def.match || h.status === def.match);
+      const matchQuery = !historyQuery || (h.idLabel + " " + h.judul + " " + h.layananShort).toLowerCase().includes(historyQuery);
+      return matchStatus && matchQuery;
+    }).map((h) => {
+      const st = this.STATUS_MON[h.status] || this.STATUS_MON.open;
+      const rejected = h.keputusan === "Ditolak";
+      const dec = this.DECISION[h.keputusan] || { bg: "var(--surface-tint)", fg: "var(--ink-700)" };
+      return { ...h, statusLabel: st.label, sBg: st.bg, sFg: st.fg,
+        kLabel: h.keputusan, kBg: dec.bg, kFg: dec.fg,
+        nextHandler: rejected ? "Kirim ke Requester" : "Support " + h.handlerType + " - " + h.app,
+        nextBg: rejected ? "rgba(186,26,26,0.10)" : (h.handlerType === "BPO" ? "var(--rose-200)" : "var(--blue-050)"),
+        nextFg: rejected ? "var(--red-600)" : (h.handlerType === "BPO" ? "var(--clay-700)" : "var(--blue-ink)"),
+        open: () => this.openHistory(h.idLabel) };
+    });
+    const historyChips = this.historyFilters.map((f) => ({
+      label: f.label, onClick: () => this.setHistoryFilter(f.key),
+      bg: S.historyFilter === f.key ? "var(--blue-500)" : "var(--surface-tint)",
+      fg: S.historyFilter === f.key ? "var(--white)" : "var(--ink-700)",
+    }));
+    const historyPeriodDefs = [["week", "Minggu"], ["month", "Bulan"], ["year", "Tahun"]];
+    const historyPeriodSegments = historyPeriodDefs.map(([key, label]) => {
+      const active = S.historyPeriod === key;
+      return {
+        key, label, onClick: () => this.setHistoryPeriod(key),
+        bg: active ? "var(--blue-500)" : "transparent",
+        color: active ? "var(--white)" : "var(--ink-700)",
+        weight: active ? 700 : 600,
+      };
+    });
+    const cntStatus = (s) => historyInPeriod.filter((h) => h.status === s).length;
+    const historyKpis = [
+      { icon: "archive", tone: "blue", label: "Total Tiket", value: historyInPeriod.length, filterKey: "all" },
+      { icon: "clipboard", tone: "sky", label: "Open", value: cntStatus("open"), filterKey: "open" },
+      { icon: "clock", tone: "amber", label: "In Progress", value: cntStatus("in-progress"), filterKey: "in-progress" },
+      { icon: "checkCircle", tone: "green", label: "Resolved", value: cntStatus("resolved"), filterKey: "resolved" },
+      { icon: "archive", tone: "neutral", label: "Closed", value: cntStatus("closed"), filterKey: "closed" },
+    ].map((k) => {
+      const tone = {
+        blue: { bg: "var(--blue-050)", color: "var(--blue-500)" },
+        sky: { bg: "var(--blue-050-cool)", color: "var(--blue-ink)" },
+        amber: { bg: "var(--rose-200)", color: "var(--clay-700)" },
+        green: { bg: "rgba(52,199,89,0.14)", color: "var(--green-500)" },
+        neutral: { bg: "var(--surface-tint)", color: "var(--slate-500)" },
+      }[k.tone];
+      const active = S.historyFilter === k.filterKey;
+      return { ...k, iconPath: this.ICONS[k.icon], iconBg: tone.bg, iconColor: tone.color,
+        onClick: () => this.setHistoryFilter(k.filterKey),
+        cardBorder: active ? "var(--blue-500)" : "var(--border)",
+        cardShadow: active ? "0 0 0 2px var(--blue-050)" : "var(--elev-card)" };
+    });
+    const historyPeriodLabel = { week: "7 hari terakhir", month: "30 hari terakhir", year: "setahun terakhir" }[S.historyPeriod];
+    const historySub = historyInPeriod.length + " tiket dipantau dalam " + historyPeriodLabel + " — status penanganan diperbarui otomatis dari Support IT / BPO.";
+
+    // detail (pending or history)
+    const isHistMode = S.mode === "hist";
+    const rawSel = isHistMode ? (S.archive[S.selHist] || Object.values(S.archive)[0]) : (S.tickets.find((x) => x.id === S.sel) || S.tickets[0]);
+    let t = null;
+    if (rawSel) {
+      const pr = this.PRIORITY[rawSel.prioritas];
+      const decision = rawSel.decision;
+      const sla = isHistMode
+        ? { state: "done", color: "var(--slate-500)", stateBg: "var(--surface-tint)", stateFg: "var(--slate-500)", stateLabel: "Selesai", text: "—", barPct: 100 }
+        : this.computeSla(rawSel, now);
+      const statusLabel = decision ? decision.keputusan : "Waiting for Approval";
+      const statusStyle = decision ? this.DECISION[decision.keputusan] : { bg: "var(--surface-tint)", fg: "var(--ink-700)" };
+      const lastIdx = rawSel.timeline.length - 1;
+      const reqMsg = (rawSel.forum || []).find((m) => (m.role || "").toLowerCase() === "requester");
+      const reqNote = rawSel.catatanRequester || (reqMsg ? reqMsg.text : "");
+      t = {
+        ...rawSel,
+        hasReqNote: !!reqNote,
+        reqNote,
+        reqNoteBy: (rawSel.requesterName || "Requester") + " · Requester",
+        reqNoteTime: (reqMsg && reqMsg.time) || rawSel.masuk || rawSel.dibuat || "",
+        reqInitials: (rawSel.requesterName || "R").split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase(),
+        priorityLabel: pr.label, prioBg: pr.bg, prioColor: pr.color,
+        statusLabel, statusBg: statusStyle.bg, statusFg: statusStyle.fg,
+        slaColor: sla.color, slaText: sla.text, slaBarPct: sla.barPct,
+        slaStateLabel: sla.stateLabel, slaStateBg: sla.stateBg, slaStateFg: sla.stateFg,
+        slaRespons: this.SLA_RESP_LABEL[rawSel.prioritas], slaSelesai: this.SLA_SELESAI_LABEL[rawSel.prioritas],
+        currentLevelLabel: "Level " + rawSel.currentLevel + " dari " + rawSel.levels.length + " (Manager)",
+        typeLabel: rawSel.levels.length > 1 ? "Sequential · " + rawSel.levels.length + " level" : "Single level",
+        hasAtt: (rawSel.lampiran || []).length > 0,
+        lampiranView: (rawSel.lampiran || []).map((n) => ({ nama: n, size: this.fileSizeGuess(n) })),
+        dKeputusan: decision ? decision.keputusan : "", dBg: decision ? this.DECISION[decision.keputusan].bg : "", dFg: decision ? this.DECISION[decision.keputusan].fg : "",
+        dCatatan: decision ? decision.catatan : "", dLevel: decision ? decision.levelLabel : "", dWaktu: decision ? decision.waktu : "",
+        timelineView: rawSel.timeline.map((ev, i) => {
+          const isLast = i === lastIdx;
+          const isCurrent = isLast && !decision;
+          let bg, ring, titleColor;
+          if (ev.decisionDot === "var(--red-600)") { bg = "var(--red-600)"; ring = "rgba(186,26,26,0.15)"; titleColor = "var(--ink-900)"; }
+          else if (ev.decisionDot === "var(--green-500)") { bg = "var(--green-500)"; ring = "rgba(52,199,89,0.20)"; titleColor = "var(--ink-900)"; }
+          else if (isCurrent) { bg = "var(--blue-500)"; ring = "rgba(0,122,255,0.18)"; titleColor = "var(--blue-ink)"; }
+          else { bg = "var(--green-500)"; ring = "rgba(52,199,89,0.20)"; titleColor = "var(--ink-900)"; }
+          return {
+            ...ev,
+            dotBg: bg, dotRing: ring, titleColor,
+            lineBg: isLast ? "transparent" : "var(--border-soft)",
+            hasLine: !isLast,
+          };
+        }),
+        forumView: rawSel.forum.map((m) => ({
+          ...m,
+          initial: (m.who || "?").trim()[0].toUpperCase(),
+          avatarBg: m.isMe ? "var(--blue-050-alt)" : "var(--surface-tint)",
+          avatarColor: m.isMe ? "var(--blue-ink)" : "var(--ink-700)",
+          roleBg: m.isMe ? "rgba(52,199,89,0.14)" : "var(--blue-050)",
+          roleColor: m.isMe ? "var(--green-500)" : "var(--blue-ink)",
+          bubbleBg: m.isMe ? "var(--blue-500)" : "var(--canvas)",
+          bubbleBorder: m.isMe ? "var(--blue-500)" : "var(--border-soft)",
+          textColor: m.isMe ? "var(--white)" : "var(--ink-700)",
+          rowDir: m.isMe ? "row-reverse" : "row",
+          align: m.isMe ? "flex-end" : "flex-start",
+          bubbleRadius: m.isMe ? "12px 4px 12px 12px" : "4px 12px 12px 12px",
+        })),
+        levelsView: rawSel.levels.map((lv, i) => {
+          const n = i + 1;
+          let state;
+          if (decision) {
+            if (n < rawSel.currentLevel) state = "done";
+            else if (n === rawSel.currentLevel) state = decision.keputusan === "Disetujui" ? "done" : decision.keputusan === "Ditolak" ? "rejected" : "revise";
+            else state = decision.keputusan === "Disetujui" ? "todo" : "skipped";
+          } else {
+            state = n < rawSel.currentLevel ? "done" : n === rawSel.currentLevel ? "current" : "todo";
+          }
+          const style = {
+            done: { mark: "✓", circleBg: "rgba(52,199,89,0.14)", circleFg: "var(--green-500)", statusLabel: "Disetujui", statusColor: "var(--green-500)" },
+            current: { mark: String(n), circleBg: "var(--blue-500)", circleFg: "var(--white)", statusLabel: "Menunggu keputusan Anda", statusColor: "var(--blue-500)" },
+            todo: { mark: String(n), circleBg: "var(--surface-tint)", circleFg: "var(--slate-500)", statusLabel: "Menunggu tahap sebelumnya", statusColor: "var(--slate-500)" },
+            rejected: { mark: "✕", circleBg: "rgba(186,26,26,0.10)", circleFg: "var(--red-600)", statusLabel: "Ditolak", statusColor: "var(--red-600)" },
+            revise: { mark: "!", circleBg: "var(--rose-200)", circleFg: "var(--clay-700)", statusLabel: "Diminta Perbaikan", statusColor: "var(--clay-700)" },
+            skipped: { mark: "–", circleBg: "var(--surface-tint)", circleFg: "var(--slate-500)", statusLabel: "Tidak diproses", statusColor: "var(--slate-500)" },
+          }[state];
+          return { role: "Level " + n + " — " + lv.role, who: lv.who, ...style, hasLine: i < rawSel.levels.length - 1 };
+        }),
+      };
+    }
+
+    const selId = t ? t.idLabel : "tiket ini";
+    const confirmDefs = {
+      approve: { title: "Setujui permohonan ini?", body: "Tiket " + selId + " akan disetujui dan diteruskan ke tahap berikutnya (Level 2 / Support).", yes: "Ya, Setujui", tone: "var(--blue-500)", iconBg: "var(--blue-050)", iconPath: this.ICONS.checkCircle },
+      revise: { title: "Minta perbaikan?", body: "Tiket " + selId + " akan dikembalikan ke requester untuk diperbaiki sesuai catatan Anda.", yes: "Ya, Minta Perbaikan", tone: "var(--clay-700)", iconBg: "var(--rose-200)", iconPath: this.ICONS.warning },
+      reject: { title: "Tolak permohonan ini?", body: "Tiket " + selId + " akan ditolak dan ditutup. Requester akan menerima notifikasi.", yes: "Ya, Tolak", tone: "var(--red-600)", iconBg: "rgba(186,26,26,0.10)", iconPath: this.ICONS.xCircle },
+    };
+    const confirmModal = confirmDefs[S.confirmKind] || confirmDefs.approve;
+
+    return {
+      goInbox: this.goInbox, goRiwayat: this.goRiwayat,
+      navInboxBg: S.view === "inbox" ? "var(--blue-050)" : "transparent", navInboxColor: S.view === "inbox" ? "var(--blue-ink)" : "var(--ink-700)", navInboxWeight: S.view === "inbox" ? 600 : 500,
+      navRiwayatBg: S.view === "riwayat" ? "var(--blue-050)" : "transparent", navRiwayatColor: S.view === "riwayat" ? "var(--blue-ink)" : "var(--ink-700)", navRiwayatWeight: S.view === "riwayat" ? 600 : 500,
+      isInbox: S.view === "inbox", isRiwayat: S.view === "riwayat", isDetail: S.view === "detail" && !!t,
+      isPendingDetail: S.view === "detail" && !!t && S.mode === "pending",
+      isHistDetail: S.view === "detail" && !!t && S.mode === "hist",
+      canChat: S.mode !== "hist",
+      backLabel: S.mode === "hist" ? "Riwayat Approval" : "Approval Inbox",
+      pendingCount: pending.length, pendingSub,
+      kpis,
+      priorityDist, priorityInsight,
+      approvedPoints, rejectedPoints, approvedDots, weekLabels, trendInsight,
+      pendingView, hasPendingView: pendingView.length > 0,
+      isEmpty: pending.length === 0, isFilterEmpty: pending.length > 0 && pendingView.length === 0,
+      showPendingFilter: S.showPendingFilter, togglePendingFilter: this.togglePendingFilter, filterChips, categoryChips, filterButtonLabel,
+      resetPendingFilter: () => this.setPendingFilter("all"), activeFilterLabel: activeFilterDef.label,
+      history: historyView, historyChips, historySub, historyPeriodSegments, historyKpis, historyEmpty: historyView.length === 0,
+      historyQuery: S.historyQuery, onHistoryQuery: this.onHistoryQuery,
+      confirmOpen: !!S.confirmKind, confirmModal, cancelDecide: this.cancelDecide, confirmDecide: this.confirmDecide,
+      t, back: this.back,
+      note: S.note, onNote: this.onNote, noteError: S.noteError, hasNoteError: !!S.noteError,
+      draft: S.draft, onDraft: this.onDraft, sendForum: this.sendForum, forumEmpty: (t ? t.forumView.length === 0 : true),
+      approve: this.approve, revise: this.revise, reject: this.reject,
+      toast: S.toast,
+      userName: this.ME, initials: "BS",
+      notifOpen: S.notifOpen, profileOpen: S.profileOpen, anyMenuOpen: S.notifOpen || S.profileOpen,
+      toggleNotif: () => this.toggleNotif(), toggleProfile: () => this.toggleProfile(), closeMenus: () => this.closeMenus(),
+      notifBtnBg: S.notifOpen ? "var(--surface-tint)" : "transparent", profileBtnBg: S.profileOpen ? "var(--surface-tint)" : "transparent",
+      stop: (e) => e.stopPropagation(), markAllRead: () => this.markAllRead(),
+      hasUnread: S.notifications.some((n) => n.unread),
+      notifications: S.notifications.map((n) => ({
+        ...n, iconBg: n.bg, iconColor: n.color, iconPath: this.ICONS[n.icon],
+        rowBg: n.unread ? "var(--blue-050-cool)" : "var(--white)",
+        onOpen: () => { this.setState({ notifications: S.notifications.map((x) => x.id === n.id ? { ...x, unread: false } : x) }); if (n.target) this.openPending(n.target); },
+      })),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

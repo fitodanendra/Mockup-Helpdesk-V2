@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../shared/support.js"></script>
+<script src="../shared/nav-widget.js" defer></script>
+</head>
+<body>
+<template id="__bundler_thumbnail" data-bg-color="#F1F1F9">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#F1F1F9"/>
+    <rect x="0" y="0" width="1200" height="120" fill="#ffffff"/>
+    <circle cx="90" cy="60" r="26" fill="#419AFF"/>
+    <rect x="140" y="46" width="180" height="14" rx="7" fill="#0b1c30"/>
+    <rect x="140" y="68" width="120" height="10" rx="5" fill="#8a92a6"/>
+    <g>
+      <rect x="80" y="200" width="240" height="150" rx="24" fill="#ffffff"/>
+      <rect x="340" y="200" width="240" height="150" rx="24" fill="#ffffff"/>
+      <rect x="600" y="200" width="240" height="150" rx="24" fill="#ffffff"/>
+      <rect x="860" y="200" width="260" height="150" rx="24" fill="#ffffff"/>
+      <rect x="110" y="290" width="80" height="40" rx="8" fill="#419AFF"/>
+      <rect x="370" y="290" width="60" height="40" rx="8" fill="#0b1c30"/>
+      <rect x="630" y="290" width="40" height="40" rx="8" fill="#34C759"/>
+      <rect x="890" y="290" width="110" height="40" rx="8" fill="#0b1c30"/>
+    </g>
+    <rect x="80" y="400" width="620" height="320" rx="24" fill="#ffffff"/>
+    <rect x="720" y="400" width="400" height="320" rx="24" fill="#ffffff"/>
+    <circle cx="920" cy="560" r="90" fill="none" stroke="#34C759" stroke-width="34"/>
+    <circle cx="920" cy="560" r="90" fill="none" stroke="#EF4444" stroke-width="34" stroke-dasharray="90 500" transform="rotate(-90 920 560)"/>
+  </svg>
+</template>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/fonts.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/colors.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/typography.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/spacing.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/legacy-tokens.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/styles.css">
+  <script src="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/_ds_bundle.js"></script>
+  <script src="../shared/helpdesk-catalog.js"></script>
+  <script src="../shared/kelola-role.js"></script>
+  <style>
+    html, body { margin: 0; padding: 0; background: var(--canvas); font-family: var(--font-sans); }
+    * { box-sizing: border-box; }
+    a { color: var(--blue-500); text-decoration: none; }
+    a:hover { color: var(--blue-ink); }
+  </style>
+</helmet>
+
+<div data-screen-label="Requester Dashboard" style="display: flex; flex-direction: column; min-height: 100vh; background: var(--canvas); font-family: var(--font-sans); color: var(--ink-900);">
+
+  <!-- ============ TOP BAR ============ -->
+  <header style="height: 62px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 24px; padding: 0 28px; position: sticky; top: 0; z-index: 5;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 32px; height: 32px; border-radius: 10px; background: var(--blue-500); display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 800; font-size: 14px;">A</div>
+      <div style="display: flex; flex-direction: column;">
+        <span style="font-size: 14px; font-weight: 700; color: var(--ink-900); line-height: 1.1;">Adhi Helpdesk</span>
+        <span style="font-size: 10px; color: var(--slate-500);">Enterprise ITSM</span>
+      </div>
+    </div>
+
+    <nav style="display: flex; align-items: center; gap: 4px;">
+      <a href="#" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px; background: var(--blue-050); color: var(--blue-ink); font-size: 13px; font-weight: 600;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="14" y="12" width="7" height="9" rx="1.5"></rect><rect x="3" y="16" width="7" height="5" rx="1.5"></rect></svg>
+        Dashboards
+      </a>
+      <a href="my-tickets.html" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px; color: var(--ink-700); font-size: 13px; font-weight: 500;" style-hover="background: var(--surface-tint); color: var(--ink-900);">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z"></path><path d="M14 5v14"></path></svg>
+        My Tickets
+      </a>
+    </nav>
+
+    <div style="flex: 1;"></div>
+
+    <div style="width: 300px; display: flex; align-items: center; gap: 8px; background: var(--surface-tint); border-radius: 10px; padding: 8px 12px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: var(--slate-500);"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <span style="font-size: 13px; color: var(--slate-500);">Search tickets or services…</span>
+    </div>
+
+    <div style="position: relative;">
+      <button onClick="{{ toggleNotif }}" style="position: relative; width: 36px; height: 36px; border-radius: 10px; border: none; display: flex; align-items: center; justify-content: center; color: var(--ink-700); cursor: pointer; background: {{ notifBtnBg }};" style-hover="background: var(--surface-tint);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z"></path><path d="M10 21h4"></path></svg>
+        <span style="position: absolute; top: 4px; right: 4px; min-width: 15px; height: 15px; border-radius: 999px; background: var(--red-600); color: var(--white); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 3px;">3</span>
+      </button>
+      <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; top: 48px; right: 0; width: 366px; background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-pop); z-index: 50; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border-soft);">
+            <span style="font-size: 14px; font-weight: 700; color: var(--ink-900);">Notifications</span>
+            <a href="#" style="font-size: 11px; font-weight: 600;">Mark all as read</a>
+          </div>
+          <div style="max-height: 348px; overflow-y: auto;">
+            <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="4">
+              <a href="ticket-detail.html" style="display: flex; gap: 11px; padding: 12px 16px; border-bottom: 1px solid var(--border-soft); background: {{ n.rowBg }}; text-decoration: none;" style-hover="background: var(--blue-050-cool);">
+                <span style="width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: {{ n.iconBg }}; color: {{ n.iconColor }};"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.iconPath }}"></path></svg></span>
+                <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+                  <span style="font-size: 12.5px; color: var(--ink-800); line-height: 1.45;">{{ n.text }}</span>
+                  <span style="font-size: 11px; color: var(--slate-500);">{{ n.time }}</span>
+                </span>
+                <sc-if value="{{ n.unread }}" hint-placeholder-val="{{ true }}"><span style="width: 7px; height: 7px; border-radius: 999px; background: var(--blue-500); flex-shrink: 0; margin-top: 5px;"></span></sc-if>
+              </a>
+            </sc-for>
+          </div>
+          <a href="#" style="padding: 12px 16px; text-align: center; font-size: 12px; font-weight: 700; border-top: 1px solid var(--border-soft);">View all notifications</a>
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="position: relative;">
+      <button onClick="{{ toggleProfile }}" style="display: flex; align-items: center; gap: 10px; border: none; background: {{ profileBtnBg }}; border-radius: 10px; padding: 4px 6px; cursor: pointer;" style-hover="background: var(--surface-tint);">
+        <div style="width: 34px; height: 34px; border-radius: 999px; background: var(--blue-050-alt); color: var(--blue-ink); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;">{{ initials }}</div>
+        <div style="display: flex; flex-direction: column; text-align: left;">
+          <span style="font-size: 13px; font-weight: 600; color: var(--ink-900); line-height: 1.2;">{{ userName }}</span>
+          <span style="font-size: 11px; color: var(--slate-500);">Requester · IT &amp; Operations Bureau</span>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 2px;"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+      <sc-if value="{{ profileOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; top: 54px; right: 0; width: 250px; background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-pop); z-index: 50; overflow: hidden; display: flex; flex-direction: column; padding: 6px;">
+          <div style="display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-bottom: 1px solid var(--border-soft); margin-bottom: 6px;">
+            <div style="width: 40px; height: 40px; border-radius: 999px; background: var(--blue-050-alt); color: var(--blue-ink); font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center;">{{ initials }}</div>
+            <div style="display: flex; flex-direction: column; min-width: 0;">
+              <span style="font-size: 13px; font-weight: 700; color: var(--ink-900);">{{ userName }}</span>
+              <span style="font-size: 11px; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">andi.pratama@adhi.co.id</span>
+            </div>
+          </div>
+          <sc-for list="{{ profileMenu }}" as="m" hint-placeholder-count="4">
+            <a href="{{ m.href }}" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: 9px; color: var(--ink-700); font-size: 13px; font-weight: 500; text-decoration: none;" style-hover="background: var(--surface-tint); color: var(--ink-900);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ m.d }}"></path></svg>
+              {{ m.label }}
+            </a>
+          </sc-for>
+          <div style="border-top: 1px solid var(--border-soft); margin-top: 6px; padding-top: 6px;">
+            <a href="#" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: 9px; color: var(--red-600); font-size: 13px; font-weight: 600; text-decoration: none;" style-hover="background: rgba(186,26,26,0.06); color: var(--red-700);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3 M10 17l5-5-5-5 M15 12H3"></path></svg>
+              Log out
+            </a>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ anyMenuOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeMenus }}" style="position: fixed; inset: 0; z-index: 40;"></div>
+    </sc-if>
+  </header>
+
+  <!-- ============ MAIN ============ -->
+  <main style="padding: 28px; display: flex; flex-direction: column; gap: 24px; max-width: 1280px; width: 100%; margin: 0 auto;">
+
+    <!-- Greeting -->
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+      <div>
+        <h1 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 800; color: var(--ink-900); letter-spacing: -0.2px;">Good morning, {{ firstName }} 👋</h1>
+        <p style="margin: 0; font-size: 13px; color: var(--slate-500);">Your ticket summary and SLA status as of today, July 7, 2026.</p>
+      </div>
+      <button onClick="{{ openModal }}" style="display: flex; align-items: center; gap: 8px; background: var(--blue-500); color: var(--white); border: none; border-radius: 12px; padding: 11px 18px; font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: var(--elev-card);" style-hover="background: var(--blue-600);" style-active="background: var(--blue-ink);">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+        New Ticket
+      </button>
+    </div>
+
+    <!-- ============ STATUS CARDS ============ -->
+    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;">
+
+      <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: var(--elev-card); display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 12px; font-weight: 600; color: var(--slate-500);">Active Tickets</span>
+          <span style="width: 28px; height: 28px; border-radius: 8px; background: var(--blue-050); color: var(--blue-500); display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg></span>
+        </div>
+        <div style="font-size: 32px; font-weight: 800; color: var(--ink-900); line-height: 1;">8</div>
+        <sc-if value="{{ showDeltas }}" hint-placeholder-val="{{ true }}"><div style="font-size: 11px; color: var(--slate-500);">3 In Progress · 2 Assigned · 3 Open</div></sc-if>
+      </div>
+
+      <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: var(--elev-card); display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 12px; font-weight: 600; color: var(--slate-500);">Awaiting Approval</span>
+          <span style="width: 28px; height: 28px; border-radius: 8px; background: var(--surface-tint); color: var(--ink-700); display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-5"></path><circle cx="12" cy="12" r="9"></circle></svg></span>
+        </div>
+        <div style="font-size: 32px; font-weight: 800; color: var(--ink-900); line-height: 1;">2</div>
+        <sc-if value="{{ showDeltas }}" hint-placeholder-val="{{ true }}"><div style="font-size: 11px; color: var(--slate-500);">1 at Manager · 1 at App Owner</div></sc-if>
+      </div>
+
+      <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: var(--elev-card); display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 12px; font-weight: 600; color: var(--slate-500);">Needs My Response</span>
+          <span style="width: 28px; height: 28px; border-radius: 8px; background: rgba(124, 58, 237, 0.12); color: rgb(109, 40, 217); display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.5 0-3-.4-4.2-1.1L3 20l1.1-5.3A8.5 8.5 0 1 1 21 11.5Z"></path></svg></span>
+        </div>
+        <div style="font-size: 32px; font-weight: 800; color: var(--ink-900); line-height: 1;">1</div>
+        <sc-if value="{{ showDeltas }}" hint-placeholder-val="{{ true }}"><div style="font-size: 11px; color: rgb(109, 40, 217); font-weight: 600;">Waiting for Response</div></sc-if>
+      </div>
+
+      <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: var(--elev-card); display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 12px; font-weight: 600; color: var(--slate-500);">Resolved</span>
+          <span style="width: 28px; height: 28px; border-radius: 8px; background: rgba(52, 199, 89, 0.14); color: var(--green-500); display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg></span>
+        </div>
+        <div style="font-size: 32px; font-weight: 800; color: var(--ink-900); line-height: 1;">3</div>
+        <sc-if value="{{ showDeltas }}" hint-placeholder-val="{{ true }}"><div style="font-size: 11px; color: var(--slate-500);">Awaiting your confirmation</div></sc-if>
+      </div>
+
+      <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: var(--elev-card); display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 12px; font-weight: 600; color: var(--slate-500);">Closed</span>
+          <span style="width: 28px; height: 28px; border-radius: 8px; background: var(--surface-tint); color: var(--slate-500); display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg></span>
+        </div>
+        <div style="font-size: 32px; font-weight: 800; color: var(--ink-900); line-height: 1;">42</div>
+        <sc-if value="{{ showDeltas }}" hint-placeholder-val="{{ true }}"><div style="font-size: 11px; color: var(--slate-500);">Last 6 months</div></sc-if>
+      </div>
+    </div>
+
+    <!-- ============ CHARTS ============ -->
+    <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px;">
+
+      <!-- Created vs Resolved -->
+      <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-shadow: var(--elev-card); display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+          <div>
+            <h2 style="margin: 0 0 2px 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Tickets Created vs Resolved</h2>
+            <span style="font-size: 12px; color: var(--slate-500);">Monthly · February – July 2026</span>
+          </div>
+          <div style="display: flex; gap: 14px; font-size: 11px; color: var(--slate-500); font-weight: 500;">
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 9px; height: 9px; border-radius: 3px; background: var(--blue-500);"></span>Created</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 9px; height: 9px; border-radius: 3px; background: var(--green-500);"></span>Resolved</span>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; align-items: end; height: 150px; border-bottom: 1px solid var(--border-soft); padding-bottom: 0;">
+          <div style="display: flex; gap: 5px; align-items: flex-end; justify-content: center; height: 100%;"><div title="Created: 12" style="width: 16px; height: 70px; border-radius: 5px 5px 0 0; background: var(--blue-500);"></div><div title="Resolved: 10" style="width: 16px; height: 58px; border-radius: 5px 5px 0 0; background: var(--green-500); opacity: 0.85;"></div></div>
+          <div style="display: flex; gap: 5px; align-items: flex-end; justify-content: center; height: 100%;"><div title="Created: 18" style="width: 16px; height: 105px; border-radius: 5px 5px 0 0; background: var(--blue-500);"></div><div title="Resolved: 16" style="width: 16px; height: 93px; border-radius: 5px 5px 0 0; background: var(--green-500); opacity: 0.85;"></div></div>
+          <div style="display: flex; gap: 5px; align-items: flex-end; justify-content: center; height: 100%;"><div title="Created: 15" style="width: 16px; height: 87px; border-radius: 5px 5px 0 0; background: var(--blue-500);"></div><div title="Resolved: 14" style="width: 16px; height: 82px; border-radius: 5px 5px 0 0; background: var(--green-500); opacity: 0.85;"></div></div>
+          <div style="display: flex; gap: 5px; align-items: flex-end; justify-content: center; height: 100%;"><div title="Created: 22" style="width: 16px; height: 128px; border-radius: 5px 5px 0 0; background: var(--blue-500);"></div><div title="Resolved: 19" style="width: 16px; height: 111px; border-radius: 5px 5px 0 0; background: var(--green-500); opacity: 0.85;"></div></div>
+          <div style="display: flex; gap: 5px; align-items: flex-end; justify-content: center; height: 100%;"><div title="Created: 19" style="width: 16px; height: 111px; border-radius: 5px 5px 0 0; background: var(--blue-500);"></div><div title="Resolved: 18" style="width: 16px; height: 105px; border-radius: 5px 5px 0 0; background: var(--green-500); opacity: 0.85;"></div></div>
+          <div style="display: flex; gap: 5px; align-items: flex-end; justify-content: center; height: 100%;"><div title="Created: 24" style="width: 16px; height: 140px; border-radius: 5px 5px 0 0; background: var(--blue-500);"></div><div title="Resolved: 20" style="width: 16px; height: 117px; border-radius: 5px 5px 0 0; background: var(--green-500); opacity: 0.85;"></div></div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: -8px;">
+          <span style="text-align: center; font-size: 11px; color: var(--slate-500);">Feb</span>
+          <span style="text-align: center; font-size: 11px; color: var(--slate-500);">Mar</span>
+          <span style="text-align: center; font-size: 11px; color: var(--slate-500);">Apr</span>
+          <span style="text-align: center; font-size: 11px; color: var(--slate-500);">May</span>
+          <span style="text-align: center; font-size: 11px; color: var(--slate-500);">Jun</span>
+          <span style="text-align: center; font-size: 11px; color: var(--slate-500);">Jul</span>
+        </div>
+      </div>
+
+      <!-- SLA distribution -->
+      <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-shadow: var(--elev-card); display: flex; flex-direction: column; gap: 16px;">
+        <div>
+          <h2 style="margin: 0 0 2px 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">SLA Distribution</h2>
+          <span style="font-size: 12px; color: var(--slate-500);">Your active tickets right now</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px; flex: 1;">
+          <div style="position: relative; width: 128px; height: 128px; flex-shrink: 0;">
+            <svg width="128" height="128" viewBox="0 0 128 128" style="transform: rotate(-90deg);">
+              <circle cx="64" cy="64" r="52" fill="none" stroke="var(--border-soft)" stroke-width="14"></circle>
+              <circle cx="64" cy="64" r="52" fill="none" stroke="var(--green-500)" stroke-width="14" stroke-dasharray="204 326.7" stroke-dashoffset="0" stroke-linecap="butt"></circle>
+              <circle cx="64" cy="64" r="52" fill="none" stroke="var(--clay-600)" stroke-width="14" stroke-dasharray="81.7 326.7" stroke-dashoffset="-204" stroke-linecap="butt"></circle>
+              <circle cx="64" cy="64" r="52" fill="none" stroke="var(--red-600)" stroke-width="14" stroke-dasharray="41 326.7" stroke-dashoffset="-285.7" stroke-linecap="butt"></circle>
+            </svg>
+            <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <span style="font-size: 24px; font-weight: 800; color: var(--ink-900); line-height: 1;">8</span>
+              <span style="font-size: 10px; color: var(--slate-500);">active tickets</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 12px; flex: 1;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 9px; height: 9px; border-radius: 3px; background: var(--green-500); flex-shrink: 0;"></span>
+              <span style="font-size: 12px; color: var(--ink-700); flex: 1;">On Track</span>
+              <span style="font-size: 13px; font-weight: 700; color: var(--ink-900);">5</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 9px; height: 9px; border-radius: 3px; background: var(--clay-600); flex-shrink: 0;"></span>
+              <span style="font-size: 12px; color: var(--ink-700); flex: 1;">SLA Warning</span>
+              <span style="font-size: 13px; font-weight: 700; color: var(--ink-900);">2</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 9px; height: 9px; border-radius: 3px; background: var(--red-600); flex-shrink: 0;"></span>
+              <span style="font-size: 12px; color: var(--ink-700); flex: 1;">SLA Breach</span>
+              <span style="font-size: 13px; font-weight: 700; color: var(--ink-900);">1</span>
+            </div>
+            <div style="border-top: 1px solid var(--border-soft); padding-top: 10px; font-size: 11px; color: var(--slate-500); line-height: 1.5;">62% of your active tickets are still within SLA targets.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SLA TABLE ============ -->
+    <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); overflow: hidden;">
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 22px 14px 22px;">
+        <div>
+          <h2 style="margin: 0 0 2px 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Tickets Approaching SLA Limit</h2>
+          <span style="font-size: 12px; color: var(--slate-500);">Sorted by least time remaining</span>
+        </div>
+        <a href="my-tickets.html" style="font-size: 12px; font-weight: 600;">View all tickets →</a>
+      </div>
+      <div style="overflow-x: auto;">
+        <div style="min-width: 760px; display: grid; grid-template-columns: minmax(108px, auto) minmax(160px, 1.8fr) minmax(80px, auto) minmax(70px, auto) minmax(130px, auto) minmax(110px, 150px); gap: 12px; padding: 8px 22px; background: var(--canvas); border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">
+          <span>Ticket No.</span><span>SUBJECT</span><span style="text-align: left;">Category</span><span style="text-align: left;">Priority</span><span style="text-align: left;">Status</span><span>SLA Remaining</span>
+        </div>
+        <sc-for list="{{ slaRows }}" as="row" hint-placeholder-count="5">
+          <a href="ticket-detail.html" style="text-decoration: none; color: inherit; min-width: 760px; display: grid; grid-template-columns: minmax(108px, auto) minmax(160px, 1.8fr) minmax(80px, auto) minmax(70px, auto) minmax(130px, auto) minmax(110px, 150px); gap: 12px; padding: 13px 22px; border-bottom: 1px solid var(--border-soft); align-items: center; background: {{ row.rowBg }}; cursor: pointer;" style-hover="background: var(--blue-050-cool);">
+            <span style="font-size: 12px; font-weight: 700; color: var(--blue-500); font-variant-numeric: tabular-nums;">{{ row.id }}</span>
+            <div style="min-width: 0;">
+              <div style="font-size: 13px; font-weight: 600; color: var(--ink-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.title }}</div>
+              <div style="font-size: 11px; color: var(--slate-500);">{{ row.app }}</div>
+            </div>
+            <span style="font-size: 12px; color: var(--ink-700);">{{ row.category }}</span>
+            <span style="justify-self: start; white-space: nowrap; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ row.prioBg }}; color: {{ row.prioColor }};">{{ row.priority }}</span>
+            <span style="justify-self: start; white-space: nowrap; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ row.statusBg }}; color: {{ row.statusColor }};">{{ row.status }}</span>
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+              <span style="font-size: 12px; font-weight: 700; color: {{ row.slaColor }}; font-variant-numeric: tabular-nums;">{{ row.slaLeft }}</span>
+              <div style="height: 4px; border-radius: 999px; background: var(--border-soft); overflow: hidden;"><div style="height: 100%; border-radius: 999px; background: {{ row.slaColor }}; width: {{ row.slaPct }};"></div></div>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ============ NEW TICKET MODAL ============ -->
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="New Ticket Modal" style="position: fixed; inset: 0; z-index: 50; background: rgba(11, 28, 48, 0.45); display: flex; align-items: center; justify-content: center; padding: 32px;" onClick="{{ closeModal }}">
+      <div onClick="{{ stopClick }}" style="width: 100%; max-width: 760px; max-height: calc(100vh - 64px); overflow-y: auto; background: var(--white); border-radius: 20px; border: 1px solid var(--border); box-shadow: var(--elev-pop); display: flex; flex-direction: column;">
+
+        <!-- Modal header -->
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 16px 24px; background: var(--blue-050); border-bottom: 1px solid var(--blue-050-alt); border-radius: 20px 20px 0 0; position: sticky; top: 0; z-index: 2;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"></path><path d="M14 3v5h5"></path><path d="m10.5 12.5 2 2 3.5-4"></path></svg>
+            <span style="font-size: 16px; font-weight: 700; color: var(--ink-900);">Ticket Information</span>
+          </div>
+          <button onClick="{{ closeModal }}" style="width: 30px; height: 30px; border: none; background: transparent; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--slate-500);" style-hover="background: var(--blue-050-alt); color: var(--ink-900);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12"></path><path d="M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <!-- Modal body -->
+        <div onClick="{{ closeDropdowns }}" style="padding: 24px; display: flex; flex-direction: column; gap: 18px;">
+
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Application</label>
+            <div style="position: relative;">
+              <button type="button" onClick="{{ toggleApp }}" style="width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-tint); font-family: var(--font-sans); font-size: 13px; color: {{ appLabelColor }}; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left;" style-focus="border-color: var(--blue-500);">
+                <span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ appLabel }}</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; transform: {{ appChevron }}; transition: transform 0.15s ease;"><path d="m6 9 6 6 6-6"></path></svg>
+              </button>
+              <sc-if value="{{ appOpen }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ stopClick }}" style="position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 40; max-height: 260px; overflow-y: auto; background: var(--white); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--elev-pop); padding: 6px;">
+                  <sc-for list="{{ appItems }}" as="it" hint-placeholder-count="8">
+                    <button type="button" onClick="{{ it.onClick }}" style="width: 100%; text-align: left; padding: 9px 12px; border: none; border-radius: 8px; background: {{ it.selBg }}; color: {{ it.selColor }}; font-family: var(--font-sans); font-size: 13px; font-weight: {{ it.selWeight }}; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px;" style-hover="background: var(--surface-tint);">
+                      <span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ it.label }}</span>
+                      <sc-if value="{{ it.selected }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6 9 17l-5-5"></path></svg></sc-if>
+                    </button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Sub Category</label>
+            <div style="position: relative;">
+              <button type="button" onClick="{{ toggleSubCat }}" style="width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-tint); font-family: var(--font-sans); font-size: 13px; color: {{ subCatLabelColor }}; cursor: {{ subCatTriggerCursor }}; opacity: {{ subCatTriggerOpacity }}; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left;" style-focus="border-color: var(--blue-500);">
+                <span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ subCatLabel }}</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; transform: {{ subCatChevron }}; transition: transform 0.15s ease;"><path d="m6 9 6 6 6-6"></path></svg>
+              </button>
+              <sc-if value="{{ subCatOpen }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ stopClick }}" style="position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 40; max-height: 260px; overflow-y: auto; background: var(--white); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--elev-pop); padding: 6px;">
+                  <sc-for list="{{ subCatItems }}" as="it" hint-placeholder-count="4">
+                    <button type="button" onClick="{{ it.onClick }}" style="width: 100%; text-align: left; padding: 9px 12px; border: none; border-radius: 8px; background: {{ it.selBg }}; color: {{ it.selColor }}; font-family: var(--font-sans); font-size: 13px; font-weight: {{ it.selWeight }}; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px;" style-hover="background: var(--surface-tint);">
+                      <span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ it.label }}</span>
+                      <sc-if value="{{ it.selected }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6 9 17l-5-5"></path></svg></sc-if>
+                    </button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Subject</label>
+              <sc-if value="{{ isOther }}" hint-placeholder-val="{{ false }}">
+                <input value="{{ subject }}" onChange="{{ onSubjectText }}" placeholder="Tulis subjek singkat masalah Anda" style="width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--white); font-family: var(--font-sans); font-size: 13px; color: var(--ink-900); outline: none;" style-focus="border-color: var(--blue-500);">
+                <sc-if value="{{ subjectError }}" hint-placeholder-val="{{ false }}"><span style="font-size: 11.5px; font-weight: 600; color: var(--red-600);">{{ subjectError }}</span></sc-if>
+              </sc-if>
+              <sc-if value="{{ notOther }}" hint-placeholder-val="{{ true }}">
+              <div style="position: relative;">
+                <button type="button" onClick="{{ toggleSubject }}" style="width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-tint); font-family: var(--font-sans); font-size: 13px; color: {{ subjectLabelColor }}; cursor: {{ subjectTriggerCursor }}; opacity: {{ subjectTriggerOpacity }}; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left;" style-focus="border-color: var(--blue-500);">
+                  <span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ subjectLabel }}</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; transform: {{ subjectChevron }}; transition: transform 0.15s ease;"><path d="m6 9 6 6 6-6"></path></svg>
+                </button>
+                <sc-if value="{{ subjectOpen }}" hint-placeholder-val="{{ false }}">
+                  <div onClick="{{ stopClick }}" style="position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 40; max-height: 260px; overflow-y: auto; background: var(--white); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--elev-pop); padding: 6px;">
+                    <sc-for list="{{ subjectItems }}" as="it" hint-placeholder-count="5">
+                      <button type="button" onClick="{{ it.onClick }}" style="width: 100%; text-align: left; padding: 9px 12px; border: none; border-radius: 8px; background: {{ it.selBg }}; color: {{ it.selColor }}; font-family: var(--font-sans); font-size: 13px; font-weight: {{ it.selWeight }}; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px;" style-hover="background: var(--surface-tint);">
+                        <span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ it.label }}</span>
+                        <sc-if value="{{ it.selected }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6 9 17l-5-5"></path></svg></sc-if>
+                      </button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+              </sc-if>
+              <sc-if value="{{ subjectError }}" hint-placeholder-val="{{ false }}"><span style="font-size: 11.5px; font-weight: 600; color: var(--red-600);">{{ subjectError }}</span></sc-if>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Issue Category</label>
+              <sc-if value="{{ isOther }}" hint-placeholder-val="{{ false }}">
+              <div style="position: relative;">
+                <button type="button" onClick="{{ toggleOtherCat }}" style="width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-tint); font-family: var(--font-sans); font-size: 13px; color: {{ otherCatLabelColor }}; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left;" style-focus="border-color: var(--blue-500);">
+                  <span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ otherCatLabel }}</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; transform: {{ otherCatChevron }}; transition: transform 0.15s ease;"><path d="m6 9 6 6 6-6"></path></svg>
+                </button>
+                <sc-if value="{{ otherCatOpen }}" hint-placeholder-val="{{ false }}">
+                  <div onClick="{{ stopClick }}" style="position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 40; background: var(--white); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--elev-pop); padding: 6px;">
+                    <sc-for list="{{ otherCatItems }}" as="it" hint-placeholder-count="3">
+                      <button type="button" onClick="{{ it.onClick }}" style="width: 100%; text-align: left; padding: 9px 12px; border: none; border-radius: 8px; background: {{ it.selBg }}; color: {{ it.selColor }}; font-family: var(--font-sans); font-size: 13px; font-weight: {{ it.selWeight }}; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px;" style-hover="background: var(--surface-tint);">
+                        <span style="flex: 1; min-width: 0;">{{ it.label }}</span>
+                        <sc-if value="{{ it.selected }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6 9 17l-5-5"></path></svg></sc-if>
+                      </button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+              </sc-if>
+              <sc-if value="{{ notOther }}" hint-placeholder-val="{{ true }}">
+              <div style="width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--canvas); font-family: var(--font-sans); font-size: 13px; color: {{ issueCategoryColor }}; display: flex; align-items: center; gap: 8px; min-height: 20px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z"></path><path d="M12 8v.01"></path><path d="M11 12h1v4h1"></path></svg>
+                {{ categoryPlaceholder }}
+              </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <sc-if value="{{ needsApproval }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 9px; padding: 14px 15px; background: var(--surface-header); border: 1px solid var(--blue-050-alt); border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 26px; height: 26px; border-radius: 999px; flex-shrink: 0; background: var(--blue-050-alt); color: var(--blue-ink); display: flex; align-items: center; justify-content: center;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"></path><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z"></path></svg>
+              </span>
+              <span style="font-size: 12px; font-weight: 700; color: var(--ink-800);">Memerlukan Approval</span>
+            </div>
+            <label style="font-size: 12px; font-weight: 600; color: var(--ink-700);">Minta approval kepada <span style="color: var(--slate-500); font-weight: 500;">:</span></label>
+            <div style="position: relative;">
+              <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid {{ approverInputBorder }}; border-radius: 10px; background: var(--white);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+                <input value="{{ approverQuery }}" onChange="{{ onApproverInput }}" onClick="{{ openApprover }}" placeholder="Cari nama approver" style="flex: 1; border: none; outline: none; background: transparent; font-family: var(--font-sans); font-size: 13px; color: var(--ink-900);">
+                <sc-if value="{{ approverValidated }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-500)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6 9 17l-5-5"></path></svg></sc-if>
+              </div>
+              <sc-if value="{{ approverOpen }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ stopClick }}" style="position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 45; max-height: 240px; overflow-y: auto; background: var(--white); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--elev-pop); padding: 6px;">
+                  <sc-for list="{{ approverItems }}" as="p" hint-placeholder-count="4">
+                    <button type="button" onClick="{{ p.onClick }}" style="width: 100%; text-align: left; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; cursor: pointer; display: flex; align-items: center; gap: 10px;" style-hover="background: var(--surface-tint);">
+                      <span style="width: 30px; height: 30px; border-radius: 999px; flex-shrink: 0; background: var(--blue-050-alt); color: var(--blue-ink); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">{{ p.initials }}</span>
+                      <span style="display: flex; flex-direction: column; min-width: 0;">
+                        <span style="font-size: 13px; font-weight: 700; color: var(--ink-900);">{{ p.name }}</span>
+                        <span style="font-size: 11px; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ p.role }} · {{ p.unit }}</span>
+                      </span>
+                    </button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+            <span style="font-size: 11.5px; font-weight: 600; color: {{ approverStatusColor }};">{{ approverStatusText }}</span>
+          </div>
+          </sc-if>
+
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Detailed Description</label>
+            <textarea rows="4" placeholder="Describe the issue you are facing in detail…" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--white); font-family: var(--font-sans); font-size: 13px; color: var(--ink-900); outline: none; resize: vertical; min-height: 96px;" style-focus="border-color: var(--blue-500);"></textarea>
+          </div>
+
+          <!-- Priority -->
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Priority</label>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; background: var(--canvas); border: 1px solid var(--border-soft); border-radius: 14px; padding: 10px;">
+              <sc-for list="{{ priorities }}" as="p" hint-placeholder-count="4">
+                <button onClick="{{ p.select }}" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 12px 8px; border-radius: 12px; border: 1px solid {{ p.border }}; background: {{ p.bg }}; color: {{ p.color }}; font-family: var(--font-sans); font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: {{ p.shadow }};">
+                  <span style="font-size: 15px; font-weight: 800; line-height: 1;">{{ p.glyph }}</span>
+                  {{ p.label }}
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <!-- Attachment -->
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Attachment (Optional)</label>
+            <div style="border: 2px dashed var(--blue-400); border-radius: 14px; background: var(--blue-050-alt); padding: 28px 16px; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;" style-hover="background: var(--blue-050);">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--ink-700)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16.2A4.5 4.5 0 0 1 6.5 8a6 6 0 0 1 11.4 1.6A4 4 0 0 1 17.5 17H7"></path><path d="M12 12v6"></path><path d="m9 14.5 3-2.5 3 2.5"></path></svg>
+              <span style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Click to upload or drag files here</span>
+              <span style="font-size: 11px; color: var(--slate-500);">PNG, JPG, PDF (Max. 5MB)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal footer -->
+        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 24px; border-top: 1px solid var(--border-soft);">
+          <button onClick="{{ closeModal }}" style="padding: 10px 22px; border-radius: 999px; border: 1px solid var(--border); background: var(--white); color: var(--blue-500); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: var(--surface-tint);">Cancel</button>
+          <button onClick="{{ closeModal }}" style="display: flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 999px; border: 1px solid var(--border); background: var(--white); color: var(--ink-700); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: var(--surface-tint);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h11l5 5v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"></path><path d="M8 4v5h7"></path><path d="M8 15h8"></path></svg>
+            Save as Draft
+          </button>
+          <button onClick="{{ submitTicket }}" style="display: flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 999px; border: none; background: var(--blue-500); color: var(--white); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: var(--elev-card);" style-hover="background: var(--blue-600);" style-active="background: var(--blue-ink);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-4 14-4-5z"></path><path d="m11 14 8-9"></path></svg>
+            Submit Ticket
+          </button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;userName&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Andi Pratama&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Profile&quot; },
+  &quot;showDeltas&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Status Cards&quot; },
+  &quot;tableRows&quot;: { &quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 5, &quot;min&quot;: 3, &quot;max&quot;: 6, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;SLA Table&quot; }
+}">
+class Component extends DCLogic {
+  state = { modalOpen: false, priority: "Low", notifOpen: false, profileOpen: false, application: "", subCategory: "", subject: "", appOpen: false, subCatOpen: false, subjectOpen: false, otherCategory: "", otherCatOpen: false, approverQuery: "", approverSel: null, approverOpen: false, subjectError: "" };
+
+  // Direktori IPA (Identity Provider Adhi) — sumber tunggal data approver.
+  // Nama yang diketik requester divalidasi terhadap daftar ini.
+  IPA_DIRECTORY = [
+    { name: "Slamet Riyadi", role: "Manager IT & Operations", unit: "Biro Infrastruktur Operasional IT" },
+    { name: "Dewi Lestari", role: "Manager Strategi Korporasi", unit: "Departemen Strategi Korporasi" },
+    { name: "Bambang Sutrisno", role: "Kepala Departemen SCM", unit: "Supply Chain Management" },
+    { name: "Ratna Kusuma", role: "Manager Keuangan", unit: "Departemen Keuangan" },
+    { name: "Agus Salim", role: "Application Owner SAP", unit: "Biro Infrastruktur Operasional IT" },
+    { name: "Hendra Wijaya", role: "Manager Proyek", unit: "Divisi Operasi 2" },
+    { name: "Sri Mulyani", role: "Kepala Biro SDM", unit: "Human Capital" },
+    { name: "Yusuf Maulana", role: "Supervisor IT Support", unit: "Biro Infrastruktur Operasional IT" },
+  ];
+
+  // Catalog loaded from helpdesk-catalog.js (generated from the Excel master list)
+  catalog() { return (typeof window !== "undefined" && window.HELPDESK_CATALOG) || { applications: [], incidents: [], services: [], access: [] }; }
+
+  // All selectable applications = master list ∪ apps referenced by incident rows
+  appList() {
+    const c = this.catalog();
+    const names = c.applications.map((a) => a.name);
+    const extra = [...new Set(c.incidents.map((x) => x.app))].filter((n) => n && !names.includes(n));
+    return [...names, ...extra].sort((a, b) => a.localeCompare(b));
+  }
+
+  bpoOf(app) {
+    const c = this.catalog();
+    const found = c.applications.find((a) => a.name === app);
+    return found ? found.bpo : (app === "SAP" ? "Tim SAP (SCM)" : "Tim IT");
+  }
+
+  // Build subject rows for a chosen application, tagged with category + approval
+  subjectsFor(app) {
+    if (!app) return [];
+    const c = this.catalog();
+    const isSAP = app === "SAP";
+    const out = [];
+    c.incidents.filter((x) => x.app === app).forEach((x) => out.push({
+      label: x.subject, category: "Incident", group: x.module || "Insiden", approval: x.approval, bpo: x.bpo,
+    }));
+    c.services.filter((x) => isSAP ? x.group === "SAP" : x.group === "SILO APPS").forEach((x) => out.push({
+      label: x.subject, category: "Service Request", group: x.category || "Service", approval: x.approval, bpo: x.bpo,
+    }));
+    c.access.filter((x) => isSAP ? x.app === "SAP" : x.app === "SILO (OTHER APPS)").forEach((x) => out.push({
+      label: x.subject + " — " + (x.section === "AKUN APLIKASI" ? "Akun" : "Akses"), rawLabel: x.subject,
+      category: "Access Request", group: x.section === "AKUN APLIKASI" ? "Akun Aplikasi" : "Perubahan Akses", approval: x.approval, bpo: x.bpo,
+    }));
+    return out;
+  }
+
+  renderVals() {
+    const modalOpen = this.state.modalOpen;
+    const openModal = () => this.setState({ modalOpen: true });
+    const closeModal = () => this.setState({ modalOpen: false, subjectError: "" });
+    const submitTicket = () => {
+      if (!this.state.subject.trim()) { this.setState({ subjectError: "Subject wajib diisi." }); return; }
+      this.setState({ modalOpen: false, subjectError: "" });
+    };
+    const subjectError = this.state.subjectError;
+    const stopClick = (e) => e.stopPropagation();
+
+    // ---- New-ticket form: application + subject-driven category & approval ----
+    const applicationOptions = this.appList();
+    const application = this.state.application;
+    const appOpen = this.state.appOpen;
+    const toggleApp = (e) => { e.stopPropagation(); this.setState({ appOpen: !this.state.appOpen, subjectOpen: false }); };
+    const appItems = applicationOptions.map((opt) => ({
+      label: opt, selected: opt === application,
+      selBg: opt === application ? "var(--blue-050-alt)" : "transparent",
+      selColor: opt === application ? "var(--blue-ink)" : "var(--ink-800)",
+      selWeight: opt === application ? 700 : 500,
+      onClick: (e) => { e.stopPropagation(); this.setState({ application: opt, subCategory: "", subject: "", appOpen: false }); },
+    }));
+    const appLabel = application || "Select an application";
+    const appLabelColor = application ? "var(--ink-900)" : "var(--slate-500)";
+    const appChevron = appOpen ? "rotate(180deg)" : "rotate(0deg)";
+
+    // Sub category (module/group/section) — driven by application, drives subjects
+    const allRows = this.subjectsFor(application);
+    const subCatOptions = application ? [...new Set(allRows.map((s) => s.group)), "Other"] : [];
+    const subCategory = this.state.subCategory;
+    const subCatOpen = this.state.subCatOpen;
+    const subCatDisabled = !application;
+    const toggleSubCat = (e) => { e.stopPropagation(); if (subCatDisabled) return; this.setState({ subCatOpen: !this.state.subCatOpen, appOpen: false, subjectOpen: false }); };
+    const subCatItems = subCatOptions.map((opt) => ({
+      label: opt, selected: opt === subCategory,
+      selBg: opt === subCategory ? "var(--blue-050-alt)" : "transparent",
+      selColor: opt === subCategory ? "var(--blue-ink)" : "var(--ink-800)",
+      selWeight: opt === subCategory ? 700 : 500,
+      onClick: (e) => { e.stopPropagation(); this.setState({ subCategory: opt, subject: "", subCatOpen: false }); },
+    }));
+    const subCatLabel = subCategory || (application ? "Select a sub category" : "Pilih aplikasi dahulu");
+    const subCatLabelColor = subCategory ? "var(--ink-900)" : "var(--slate-500)";
+    const subCatChevron = subCatOpen ? "rotate(180deg)" : "rotate(0deg)";
+    const subCatTriggerCursor = subCatDisabled ? "not-allowed" : "pointer";
+    const subCatTriggerOpacity = subCatDisabled ? "0.55" : "1";
+
+    const subjectRows = subCategory ? allRows.filter((s) => s.group === subCategory) : [];
+    const subjectOptions = subjectRows.map((s) => s.label);
+    const subject = this.state.subject;
+    const subjectOpen = this.state.subjectOpen;
+    const subjectDisabled = !subCategory;
+    const toggleSubject = (e) => { e.stopPropagation(); if (subjectDisabled) return; this.setState({ subjectOpen: !this.state.subjectOpen, appOpen: false, subCatOpen: false }); };
+    const subjectItems = subjectOptions.map((opt) => ({
+      label: opt, selected: opt === subject,
+      selBg: opt === subject ? "var(--blue-050-alt)" : "transparent",
+      selColor: opt === subject ? "var(--blue-ink)" : "var(--ink-800)",
+      selWeight: opt === subject ? 700 : 500,
+      onClick: (e) => { e.stopPropagation(); this.setState({ subject: opt, subjectOpen: false }); },
+    }));
+    const subjectMeta = subjectRows.find((s) => s.label === subject) || null;
+    const subjectLabel = subject || (subCategory ? "Select a subject" : "Pilih sub kategori dahulu");
+    const subjectLabelColor = subject ? "var(--ink-900)" : "var(--slate-500)";
+    const subjectChevron = subjectOpen ? "rotate(180deg)" : "rotate(0deg)";
+    const subjectTriggerCursor = subjectDisabled ? "not-allowed" : "pointer";
+    const subjectTriggerOpacity = subjectDisabled ? "0.55" : "1";
+    const closeDropdowns = () => { if (this.state.appOpen || this.state.subCatOpen || this.state.subjectOpen || this.state.otherCatOpen || this.state.approverOpen) this.setState({ appOpen: false, subCatOpen: false, subjectOpen: false, otherCatOpen: false, approverOpen: false }); };
+
+    const isOther = subCategory === "Other";
+    const notOther = !isOther;
+
+    // Subject free-text (Other mode)
+    const onSubjectText = (e) => this.setState({ subject: e.target.value });
+
+    // Issue Category — auto from subject, or user-selectable in Other mode
+    const otherCategory = this.state.otherCategory;
+    const otherCatOpen = this.state.otherCatOpen;
+    const toggleOtherCat = (e) => { e.stopPropagation(); this.setState({ otherCatOpen: !this.state.otherCatOpen, appOpen: false, subCatOpen: false, subjectOpen: false, approverOpen: false }); };
+    const otherCatItems = ["Incident", "Service Request", "Access Request"].map((opt) => ({
+      label: opt, selected: opt === otherCategory,
+      selBg: opt === otherCategory ? "var(--blue-050-alt)" : "transparent",
+      selColor: opt === otherCategory ? "var(--blue-ink)" : "var(--ink-800)",
+      selWeight: opt === otherCategory ? 700 : 500,
+      onClick: (e) => { e.stopPropagation(); this.setState({ otherCategory: opt, otherCatOpen: false }); },
+    }));
+    const otherCatLabel = otherCategory || "Select a category";
+    const otherCatLabelColor = otherCategory ? "var(--ink-900)" : "var(--slate-500)";
+    const otherCatChevron = otherCatOpen ? "rotate(180deg)" : "rotate(0deg)";
+
+    const issueCategory = isOther ? otherCategory : (subjectMeta ? subjectMeta.category : "");
+    const categoryPlaceholder = isOther ? (otherCategory || "Pilih kategori masalah") : (subjectMeta ? subjectMeta.category : (application ? "Otomatis dari subjek" : "Pilih aplikasi dahulu"));
+    const issueCategoryColor = issueCategory ? "var(--ink-900)" : "var(--slate-500)";
+
+    const needsApproval = isOther
+      ? (otherCategory === "Access Request" || otherCategory === "Service Request")
+      : !!(subjectMeta && subjectMeta.approval);
+
+    // Approver search — diketik requester, divalidasi terhadap direktori IPA
+    const approverQuery = this.state.approverQuery;
+    const approverSel = this.state.approverSel;
+    const approverOpen = this.state.approverOpen;
+    const openApprover = (e) => { e.stopPropagation(); this.setState({ approverOpen: true, appOpen: false, subCatOpen: false, subjectOpen: false, otherCatOpen: false }); };
+    const onApproverInput = (e) => this.setState({ approverQuery: e.target.value, approverSel: null, approverOpen: true });
+    const aq = approverQuery.trim().toLowerCase();
+    const approverMatches = aq ? this.IPA_DIRECTORY.filter((p) => (p.name + " " + p.role + " " + p.unit).toLowerCase().includes(aq)).slice(0, 6) : this.IPA_DIRECTORY.slice(0, 6);
+    const approverItems = approverMatches.map((p) => ({
+      name: p.name, role: p.role, unit: p.unit, initials: p.name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase(),
+      onClick: (e) => { e.stopPropagation(); this.setState({ approverSel: p, approverQuery: p.name, approverOpen: false }); },
+    }));
+    const approverValidated = !!approverSel;
+    const approverNotFound = approverQuery.trim().length >= 2 && !approverSel && approverMatches.length === 0;
+    const approverStatusText = approverValidated
+      ? ("Tervalidasi di IPA · " + approverSel.role + " — " + approverSel.unit)
+      : (approverNotFound ? "Nama tidak ditemukan di direktori IPA" : "Ketik nama manager dituju baru dipilih");
+    const approverStatusColor = approverValidated ? "var(--green-500)" : (approverNotFound ? "var(--red-600)" : "var(--slate-500)");
+    const approverInputBorder = approverValidated ? "var(--green-500)" : (approverNotFound ? "var(--red-600)" : "var(--border)");
+
+    const prioMeta = [
+      { label: "Low", glyph: "≡" },
+      { label: "Medium", glyph: "=" },
+      { label: "High", glyph: "!" },
+      { label: "Critical", glyph: "⚠" }
+    ];
+    const prioAccent = {
+      Low: "var(--blue-500)", Medium: "var(--ink-700)",
+      High: "var(--red-600)", Critical: "var(--red-700)"
+    };
+    const priorities = prioMeta.map(m => {
+      const active = this.state.priority === m.label;
+      return {
+        ...m,
+        bg: active ? "var(--blue-500)" : "var(--white)",
+        color: active ? "var(--white)" : prioAccent[m.label],
+        border: active ? "var(--blue-500)" : "var(--border)",
+        shadow: active ? "var(--elev-card)" : "none",
+        select: () => this.setState({ priority: m.label })
+      };
+    });
+    const userName = this.props.userName ?? "Andi Pratama";
+    const firstName = userName.split(" ")[0];
+    const initials = userName.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase();
+
+    // ---- Header menus (notifications + profile) ----
+    const notifOpen = this.state.notifOpen;
+    const profileOpen = this.state.profileOpen;
+    const toggleNotif = () => this.setState(s => ({ notifOpen: !s.notifOpen, profileOpen: false }));
+    const toggleProfile = () => this.setState(s => ({ profileOpen: !s.profileOpen, notifOpen: false }));
+    const closeMenus = () => this.setState({ notifOpen: false, profileOpen: false });
+    const anyMenuOpen = notifOpen || profileOpen;
+    const notifBtnBg = notifOpen ? "var(--surface-tint)" : "transparent";
+    const profileBtnBg = profileOpen ? "var(--surface-tint)" : "transparent";
+    const notiIcon = {
+      message:  { bg: "var(--rose-200)",      color: "var(--clay-700)",  d: "M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.5 0-3-.4-4.2-1.1L3 20l1.1-5.3A8.5 8.5 0 1 1 21 11.5Z" },
+      sla:      { bg: "rgba(186,26,26,0.10)", color: "var(--red-600)",   d: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M12 7v5l3 3" },
+      approval: { bg: "var(--blue-050)",      color: "var(--blue-ink)",  d: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M8.5 12l2.5 2.5 4.5-5" },
+      resolved: { bg: "rgba(52,199,89,0.14)", color: "var(--green-500)", d: "M20 6 9 17l-5-5" },
+      draft:    { bg: "var(--surface-tint)",  color: "var(--slate-500)", d: "M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z M14 3v5h5" }
+    };
+    const notifications = [
+      { type: "message",  text: "App Owner Dedi Firmansyah asked a question on AR-2026-0093.", time: "5 minutes ago", unread: true },
+      { type: "sla",      text: "SLA warning: INC-2026-0418 breaches in 46 minutes.", time: "1 hour ago", unread: true },
+      { type: "approval", text: "Manager Rina Kusuma approved AR-2026-0091 (Level 1).", time: "3 hours ago", unread: true },
+      { type: "resolved", text: "INC-2026-0388 was resolved — confirm to close it.", time: "Yesterday", unread: false },
+      { type: "draft",    text: "Draft SR-2026-0201 was saved. Continue when ready.", time: "Jul 2", unread: false }
+    ].map(n => ({ ...n, iconBg: notiIcon[n.type].bg, iconColor: notiIcon[n.type].color, iconPath: notiIcon[n.type].d, rowBg: n.unread ? "var(--blue-050-cool)" : "var(--white)" }));
+    const profileMenu = [
+      { label: "My Profile", href: "#", d: "M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5" },
+      { label: "My Tickets", href: "my-tickets.html", d: "M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z M14 5v14" },
+      { label: "Notification Preferences", href: "#", d: "M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z M10 21h4" },
+      { label: "Help & Support", href: "#", d: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3 M12 17h.01" }
+    ];
+    const showDeltas = this.props.showDeltas ?? true;
+    const rowCount = this.props.tableRows ?? 5;
+
+    const green = "var(--green-500)", clay = "var(--clay-600)", red = "var(--red-600)";
+    const prio = {
+      Critical: { bg: "rgba(186,26,26,0.10)", color: "var(--red-600)" },
+      High:     { bg: "rgba(255, 149, 0, 0.16)", color: "rgb(180, 83, 9)" },
+      Medium:   { bg: "var(--blue-050)",      color: "var(--blue-ink)" },
+      Low:      { bg: "var(--surface-tint)",  color: "var(--slate-500)" }
+    };
+    const st = {
+      "In Progress":          { bg: "var(--blue-050)",     color: "var(--blue-ink)" },
+      "Assigned":             { bg: "var(--blue-050-alt)", color: "var(--blue-ink)" },
+      "Open":                 { bg: "var(--surface-tint)", color: "var(--ink-700)" },
+      "Waiting for Response": { bg: "rgba(124, 58, 237, 0.12)", color: "rgb(109, 40, 217)" }
+    };
+
+    const rows = [
+      { id: "INC-2026-0412", title: "VPN keeps disconnecting when accessing SAP", app: "NETWORK · VPN", category: "Incident", priority: "Critical", status: "In Progress", slaLeft: "Breach +32 min", slaPct: "100%", slaColor: red, rowBg: "rgba(186,26,26,0.03)" },
+      { id: "INC-2026-0418", title: "Cannot send email — mailbox full", app: "MAILIA", category: "Incident", priority: "High", status: "In Progress", slaLeft: "46 min left", slaPct: "12%", slaColor: clay, rowBg: "transparent" },
+      { id: "SR-2026-0209", title: "Data recap request for Q2 project report", app: "SILO Apps · Data", category: "Service Request", priority: "Medium", status: "Assigned", slaLeft: "3 hrs left", slaPct: "18%", slaColor: clay, rowBg: "transparent" },
+      { id: "AR-2026-0093", title: "Additional SAP role for MM module", app: "SAP · Access", category: "Access Request", priority: "Medium", status: "Waiting for Response", slaLeft: "5 hrs left", slaPct: "26%", slaColor: clay, rowBg: "transparent" },
+      { id: "INC-2026-0421", title: "Network printer on 7th floor offline", app: "DEVICES · Printer", category: "Incident", priority: "Low", status: "Open", slaLeft: "1 day 2 hrs left", slaPct: "55%", slaColor: green, rowBg: "transparent" },
+      { id: "SR-2026-0214", title: "FortiClient installation on new laptop", app: "SILO Apps · VPN", category: "Service Request", priority: "Low", status: "Open", slaLeft: "2 days left", slaPct: "68%", slaColor: green, rowBg: "transparent" }
+    ].map(r => ({
+      ...r,
+      prioBg: prio[r.priority].bg, prioColor: prio[r.priority].color,
+      statusBg: st[r.status].bg, statusColor: st[r.status].color
+    }));
+
+    return { userName, firstName, initials, showDeltas, slaRows: rows.slice(0, rowCount), modalOpen, openModal, closeModal, stopClick, priorities, notifOpen, profileOpen, toggleNotif, toggleProfile, closeMenus, anyMenuOpen, notifBtnBg, profileBtnBg, notifications, profileMenu,
+      applicationOptions, application, appOpen, toggleApp, appItems, appLabel, appLabelColor, appChevron,
+      subCatOptions, subCategory, subCatOpen, subCatDisabled, toggleSubCat, subCatItems, subCatLabel, subCatLabelColor, subCatChevron, subCatTriggerCursor, subCatTriggerOpacity,
+      subjectOptions, subject, subjectOpen, subjectDisabled, toggleSubject, subjectItems, subjectLabel, subjectLabelColor, subjectChevron, subjectTriggerCursor, subjectTriggerOpacity, closeDropdowns, submitTicket, subjectError,
+      issueCategory, categoryPlaceholder, needsApproval, issueCategoryColor,
+      isOther, notOther, onSubjectText,
+      otherCategory, otherCatOpen, toggleOtherCat, otherCatItems, otherCatLabel, otherCatLabelColor, otherCatChevron,
+      approverQuery, approverOpen, openApprover, onApproverInput, approverItems, approverValidated, approverStatusText, approverStatusColor, approverInputBorder };
+  }
+}
+</script>
+</body>
+</html>

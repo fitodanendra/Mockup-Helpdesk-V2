@@ -1,0 +1,33 @@
+/* ============================================================
+   Helpdesk v2.0 — Base element defaults
+   ============================================================ */
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Links pick up the brand blue by default so editor-added links
+   never render browser-default blue. */
+a {
+  color: var(--color-link);
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+a:hover {
+  opacity: 0.7;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}

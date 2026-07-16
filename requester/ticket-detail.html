@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../shared/support.js"></script>
+<script src="../shared/nav-widget.js" defer></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/fonts.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/colors.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/typography.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/tokens/spacing.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/legacy-tokens.css">
+  <link rel="stylesheet" href="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/styles.css">
+  <script src="../_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/_ds_bundle.js"></script>
+  <script src="../shared/kelola-role.js"></script>
+  <style>
+    html, body { margin: 0; padding: 0; background: var(--canvas); font-family: var(--font-sans); }
+    * { box-sizing: border-box; }
+    a { color: var(--blue-500); text-decoration: none; }
+    a:hover { color: var(--blue-ink); }
+  </style>
+</helmet>
+
+<div data-screen-label="Ticket Detail" style="display: flex; flex-direction: column; min-height: 100vh; background: var(--canvas); font-family: var(--font-sans); color: var(--ink-900);">
+
+  <!-- ============ TOP BAR ============ -->
+  <header style="height: 62px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 24px; padding: 0 28px; position: sticky; top: 0; z-index: 5;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 32px; height: 32px; border-radius: 10px; background: var(--blue-500); display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 800; font-size: 14px;">A</div>
+      <div style="display: flex; flex-direction: column;">
+        <span style="font-size: 14px; font-weight: 700; color: var(--ink-900); line-height: 1.1;">Adhi Helpdesk</span>
+        <span style="font-size: 10px; color: var(--slate-500);">Enterprise ITSM</span>
+      </div>
+    </div>
+
+    <nav style="display: flex; align-items: center; gap: 4px;">
+      <a href="dashboard.html" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px; color: var(--ink-700); font-size: 13px; font-weight: 500;" style-hover="background: var(--surface-tint); color: var(--ink-900);">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="14" y="12" width="7" height="9" rx="1.5"></rect><rect x="3" y="16" width="7" height="5" rx="1.5"></rect></svg>
+        Dashboards
+      </a>
+      <a href="my-tickets.html" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px; background: var(--blue-050); color: var(--blue-ink); font-size: 13px; font-weight: 600;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z"></path><path d="M14 5v14"></path></svg>
+        My Tickets
+      </a>
+    </nav>
+
+    <div style="flex: 1;"></div>
+
+    <div style="width: 300px; display: flex; align-items: center; gap: 8px; background: var(--surface-tint); border-radius: 10px; padding: 8px 12px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: var(--slate-500);"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <span style="font-size: 13px; color: var(--slate-500);">Search tickets or services…</span>
+    </div>
+
+    <div style="position: relative;">
+      <button onClick="{{ toggleNotif }}" style="position: relative; width: 36px; height: 36px; border-radius: 10px; border: none; display: flex; align-items: center; justify-content: center; color: var(--ink-700); cursor: pointer; background: {{ notifBtnBg }};" style-hover="background: var(--surface-tint);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z"></path><path d="M10 21h4"></path></svg>
+        <span style="position: absolute; top: 4px; right: 4px; min-width: 15px; height: 15px; border-radius: 999px; background: var(--red-600); color: var(--white); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 3px;">3</span>
+      </button>
+      <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; top: 48px; right: 0; width: 366px; background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-pop); z-index: 50; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border-soft);">
+            <span style="font-size: 14px; font-weight: 700; color: var(--ink-900);">Notifications</span>
+            <a href="#" style="font-size: 11px; font-weight: 600;">Mark all as read</a>
+          </div>
+          <div style="max-height: 348px; overflow-y: auto;">
+            <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="4">
+              <a href="ticket-detail.html" style="display: flex; gap: 11px; padding: 12px 16px; border-bottom: 1px solid var(--border-soft); background: {{ n.rowBg }}; text-decoration: none;" style-hover="background: var(--blue-050-cool);">
+                <span style="width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: {{ n.iconBg }}; color: {{ n.iconColor }};"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.iconPath }}"></path></svg></span>
+                <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+                  <span style="font-size: 12.5px; color: var(--ink-800); line-height: 1.45;">{{ n.text }}</span>
+                  <span style="font-size: 11px; color: var(--slate-500);">{{ n.time }}</span>
+                </span>
+                <sc-if value="{{ n.unread }}" hint-placeholder-val="{{ true }}"><span style="width: 7px; height: 7px; border-radius: 999px; background: var(--blue-500); flex-shrink: 0; margin-top: 5px;"></span></sc-if>
+              </a>
+            </sc-for>
+          </div>
+          <a href="#" style="padding: 12px 16px; text-align: center; font-size: 12px; font-weight: 700; border-top: 1px solid var(--border-soft);">View all notifications</a>
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="position: relative;">
+      <button onClick="{{ toggleProfile }}" style="display: flex; align-items: center; gap: 10px; border: none; background: {{ profileBtnBg }}; border-radius: 10px; padding: 4px 6px; cursor: pointer;" style-hover="background: var(--surface-tint);">
+        <div style="width: 34px; height: 34px; border-radius: 999px; background: var(--blue-050-alt); color: var(--blue-ink); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;">{{ initials }}</div>
+        <div style="display: flex; flex-direction: column; text-align: left;">
+          <span style="font-size: 13px; font-weight: 600; color: var(--ink-900); line-height: 1.2;">{{ userName }}</span>
+          <span style="font-size: 11px; color: var(--slate-500);">Requester · IT &amp; Operations Bureau</span>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 2px;"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+      <sc-if value="{{ profileOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; top: 54px; right: 0; width: 250px; background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-pop); z-index: 50; overflow: hidden; display: flex; flex-direction: column; padding: 6px;">
+          <div style="display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-bottom: 1px solid var(--border-soft); margin-bottom: 6px;">
+            <div style="width: 40px; height: 40px; border-radius: 999px; background: var(--blue-050-alt); color: var(--blue-ink); font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center;">{{ initials }}</div>
+            <div style="display: flex; flex-direction: column; min-width: 0;">
+              <span style="font-size: 13px; font-weight: 700; color: var(--ink-900);">{{ userName }}</span>
+              <span style="font-size: 11px; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">andi.pratama@adhi.co.id</span>
+            </div>
+          </div>
+          <sc-for list="{{ profileMenu }}" as="m" hint-placeholder-count="4">
+            <a href="{{ m.href }}" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: 9px; color: var(--ink-700); font-size: 13px; font-weight: 500; text-decoration: none;" style-hover="background: var(--surface-tint); color: var(--ink-900);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ m.d }}"></path></svg>
+              {{ m.label }}
+            </a>
+          </sc-for>
+          <div style="border-top: 1px solid var(--border-soft); margin-top: 6px; padding-top: 6px;">
+            <a href="#" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: 9px; color: var(--red-600); font-size: 13px; font-weight: 600; text-decoration: none;" style-hover="background: rgba(186,26,26,0.06); color: var(--red-700);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3 M10 17l5-5-5-5 M15 12H3"></path></svg>
+              Log out
+            </a>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ anyMenuOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeMenus }}" style="position: fixed; inset: 0; z-index: 40;"></div>
+    </sc-if>
+  </header>
+
+  <!-- ============ MAIN ============ -->
+  <main style="padding: 24px 28px 40px; display: flex; flex-direction: column; gap: 18px; max-width: 1280px; width: 100%; margin: 0 auto;">
+
+    <!-- Breadcrumb -->
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--slate-500);">
+      <a href="my-tickets.html" style="font-weight: 600;">My Tickets</a>
+      <span>/</span>
+      <span style="font-weight: 600; color: var(--ink-700);">AR-2026-0093</span>
+    </div>
+
+    <!-- ============ NOTE FROM SUPPORT ============ -->
+    <div style="background: rgba(52,199,89,0.07); border: 1px solid rgba(52,199,89,0.28); border-radius: 14px; padding: 16px 20px; display: flex; gap: 14px; align-items: flex-start;">
+      <span style="width: 36px; height: 36px; border-radius: 999px; flex-shrink: 0; background: rgba(52,199,89,0.16); color: var(--green-500); display: flex; align-items: center; justify-content: center;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0v4a3 3 0 0 1-1 2h14a3 3 0 0 1-1-2Z"></path><path d="M2 14a10 10 0 0 1 20 0"></path></svg>
+      </span>
+      <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span style="font-size: 13px; font-weight: 800; color: var(--ink-900);">Catatan dari Tim Support</span>
+          <span style="font-size: 11px; color: var(--slate-500);">{{ supportNote.by }} · {{ supportNote.time }}</span>
+        </div>
+        <p style="margin: 0; font-size: 13px; line-height: 1.6; color: var(--ink-700);">{{ supportNote.text }}</p>
+      </div>
+    </div>
+
+    <!-- ============ TICKET HEADER ============ -->
+    <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 20px 24px; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div style="display: flex; flex-direction: column; gap: 8px; min-width: 0;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span style="font-size: 13px; font-weight: 800; color: var(--blue-500); font-variant-numeric: tabular-nums;">AR-2026-0093</span>
+            <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ statusBadge.bg }}; color: {{ statusBadge.color }};">{{ statusBadge.label }}</span>
+            <span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: var(--blue-050); color: var(--blue-ink);">Medium</span>
+          </div>
+          <h1 style="margin: 0; font-size: 21px; font-weight: 800; color: var(--ink-900); letter-spacing: -0.2px;">Additional SAP role for MM module</h1>
+          <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--slate-500); flex-wrap: wrap;">
+            <span style="display: flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18"></path></svg>Access Request</span>
+            <span style="display: flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"></rect><path d="M8 21h8"></path><path d="M12 18v3"></path></svg>SAP · Access Change</span>
+            <span style="display: flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg>Created Jul 5, 2026 · 09:14</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; flex-shrink: 0;">
+          <sc-if value="{{ canEdit }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ openEdit }}" style="display: flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--white); color: var(--ink-700); font-family: var(--font-sans); font-size: 12px; font-weight: 700; cursor: pointer;" style-hover="background: var(--surface-tint);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 3.5 20.5 8.5 8.5 20.5H3.5V15.5Z"></path></svg>
+            Edit Ticket
+          </button>
+          </sc-if>
+          <button onClick="{{ openConfirm }}" disabled="{{ confirmDisabled }}" style="display: flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 10px; border: none; background: {{ confirmBtnBg }}; color: {{ confirmBtnColor }}; font-family: var(--font-sans); font-size: 12px; font-weight: 700; cursor: {{ confirmCursor }}; box-shadow: var(--elev-card);" style-hover="opacity: 0.9;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+            {{ confirmBtnLabel }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ BODY GRID ============ -->
+    <div style="display: grid; grid-template-columns: 1fr 340px; gap: 18px; align-items: start;">
+
+      <!-- LEFT column -->
+      <div style="display: flex; flex-direction: column; gap: 18px; min-width: 0;">
+
+        <!-- Ticket information -->
+        <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 20px 24px; display: flex; flex-direction: column; gap: 14px;">
+          <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Ticket Information</h2>
+          <p style="margin: 0; font-size: 13px; color: var(--ink-700); line-height: 1.65;">I need an additional SAP role for the Materials Management (MM) module to process purchase requisitions for the Cisumdawu Toll Road project. My current role only covers display access (ME53N). I need create/change access (ME51N, ME52N) starting this week, as the previous PIC has moved to another project.</p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; padding-top: 4px; border-top: 1px solid var(--border-soft);">
+            <div style="display: flex; flex-direction: column; gap: 3px; padding-top: 10px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Requested Role</span>
+              <span style="font-size: 13px; font-weight: 600; color: var(--ink-900);">Z_MM_PURCHASING_CREATE</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 3px; padding-top: 10px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Business Justification</span>
+              <span style="font-size: 13px; font-weight: 600; color: var(--ink-900);">PIC replacement — Cisumdawu project</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 3px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Approval Route</span>
+              <span style="font-size: 13px; font-weight: 600; color: var(--ink-900);">Manager → Application Owner (SEQUENCE)</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 3px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">Attachment</span>
+              <a href="#" style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.4 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                role-matrix-approval.pdf
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Discussion forum -->
+        <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); display: flex; flex-direction: column; overflow: hidden;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 24px 0;">
+            <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Discussion</h2>
+            <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: rgba(124, 58, 237, 0.12); color: rgb(109, 40, 217);">1 question awaiting your reply</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 16px; padding: 18px 24px;">
+            <sc-for list="{{ messages }}" as="msg" hint-placeholder-count="3">
+              <div style="display: flex; gap: 12px; flex-direction: {{ msg.rowDir }};">
+                <div style="width: 34px; height: 34px; border-radius: 999px; background: {{ msg.avatarBg }}; color: {{ msg.avatarColor }}; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">{{ msg.initials }}</div>
+                <div style="max-width: 78%; min-width: 0; display: flex; flex-direction: column; gap: 5px; align-items: {{ msg.colAlign }};">
+                  <div style="display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; flex-direction: {{ msg.rowDir }};">
+                    <span style="font-size: 13px; font-weight: 700; color: var(--ink-900);">{{ msg.name }}</span>
+                    <span style="font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: {{ msg.roleBg }}; color: {{ msg.roleColor }};">{{ msg.roleLabel }}</span>
+                    <span style="font-size: 11px; color: var(--slate-500);">{{ msg.time }}</span>
+                  </div>
+                  <div style="font-size: 13px; color: {{ msg.textColor }}; line-height: 1.6; background: {{ msg.bubbleBg }}; border: 1px solid {{ msg.bubbleBorder }}; border-radius: {{ msg.bubbleRadius }}; padding: 10px 14px; text-align: left;">{{ msg.text }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- Reply box -->
+          <div style="border-top: 1px solid var(--border-soft); padding: 16px 24px; display: flex; flex-direction: column; gap: 10px; background: var(--canvas);">
+            <textarea rows="3" placeholder="Write your reply… (this ticket is waiting for your response)" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--white); font-family: var(--font-sans); font-size: 13px; color: var(--ink-900); outline: none; resize: vertical;" style-focus="border-color: var(--blue-500);"></textarea>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <button style="display: flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--white); color: var(--ink-700); font-family: var(--font-sans); font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: var(--surface-tint);">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.4 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                Attach
+              </button>
+              <button style="display: flex; align-items: center; gap: 7px; padding: 9px 18px; border-radius: 999px; border: none; background: var(--blue-500); color: var(--white); font-family: var(--font-sans); font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: var(--elev-card);" style-hover="background: var(--blue-600);">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-4 14-4-5z"></path><path d="m11 14 8-9"></path></svg>
+                Send Reply
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT column -->
+      <div style="display: flex; flex-direction: column; gap: 18px;">
+
+        <!-- SLA panel -->
+        <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 18px 20px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">SLA</h2>
+            <span style="font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--rose-200); color: var(--clay-700);">Warning</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between;">
+              <span style="font-size: 12px; color: var(--slate-500);">Resolution target</span>
+              <span style="font-size: 13px; font-weight: 700; color: var(--clay-700); font-variant-numeric: tabular-nums;">5h 12m left</span>
+            </div>
+            <div style="height: 6px; border-radius: 999px; background: var(--border-soft); overflow: hidden;">
+              <div style="height: 100%; width: 74%; border-radius: 999px; background: var(--clay-600);"></div>
+            </div>
+            <span style="font-size: 11px; color: var(--slate-500);">Due Jul 7, 2026 · 17:00</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--border-soft); padding-top: 12px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px;">
+              <span style="color: var(--slate-500);">Response target</span>
+              <span style="display: flex; align-items: center; gap: 5px; font-weight: 700; color: var(--green-500);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+                Met · 38m
+              </span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px;">
+              <span style="color: var(--slate-500);">Priority · SLA class</span>
+              <span style="font-weight: 600; color: var(--ink-700);">Medium · 8 business hrs</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- People -->
+        <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+          <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">People</h2>
+          <sc-for list="{{ people }}" as="person" hint-placeholder-count="3">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 32px; height: 32px; border-radius: 999px; background: {{ person.bg }}; color: {{ person.color }}; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">{{ person.initials }}</div>
+              <div style="display: flex; flex-direction: column; min-width: 0;">
+                <span style="font-size: 13px; font-weight: 600; color: var(--ink-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ person.name }}</span>
+                <span style="font-size: 11px; font-weight: 600; color: var(--ink-700); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ person.role }}</span>
+                <sc-if value="{{ person.hasSub }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size: 11px; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ person.sub }}</span>
+                </sc-if>
+                <span style="font-size: 11px; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ person.email }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- Status timeline -->
+        <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); padding: 18px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <h2 style="margin: 0 0 10px 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Status Timeline</h2>
+          <sc-for list="{{ timeline }}" as="step" hint-placeholder-count="6">
+            <div style="display: flex; gap: 12px;">
+              <div style="display: flex; flex-direction: column; align-items: center; width: 18px; flex-shrink: 0;">
+                <span style="width: 12px; height: 12px; border-radius: 999px; background: {{ step.dotBg }}; border: 2.5px solid {{ step.dotBorder }}; flex-shrink: 0; margin-top: 3px;"></span>
+                <sc-if value="{{ step.hasLine }}" hint-placeholder-val="{{ true }}">
+                  <span style="width: 2px; flex: 1; min-height: 26px; background: {{ step.lineBg }};"></span>
+                </sc-if>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 1px; padding-bottom: 14px; min-width: 0;">
+                <span style="font-size: 13px; font-weight: 700; color: {{ step.titleColor }};">{{ step.label }}</span>
+                <span style="font-size: 11px; color: var(--slate-500); line-height: 1.5;">{{ step.detail }}</span>
+                <span style="font-size: 11px; color: var(--slate-500); font-variant-numeric: tabular-nums;">{{ step.time }}</span>
+              </div>
+            </div>
+          </sc-for>
+          <div style="border-top: 1px solid var(--border-soft); padding-top: 12px; font-size: 11px; color: var(--slate-500); line-height: 1.6;">If you don't confirm after resolution, this ticket will close automatically in 3 days.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ============ EDIT TICKET MODAL ============ -->
+  <sc-if value="{{ editOpen }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Edit Ticket Modal" style="position: fixed; inset: 0; z-index: 50; background: rgba(11, 28, 48, 0.45); display: flex; align-items: center; justify-content: center; padding: 32px;" onClick="{{ closeEdit }}">
+      <div onClick="{{ stopClick }}" style="width: 100%; max-width: 760px; max-height: calc(100vh - 64px); overflow-y: auto; background: var(--white); border-radius: 20px; border: 1px solid var(--border); box-shadow: var(--elev-pop); display: flex; flex-direction: column;">
+
+        <!-- Modal header -->
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 16px 24px; background: var(--blue-050); border-bottom: 1px solid var(--blue-050-alt); border-radius: 20px 20px 0 0; position: sticky; top: 0; z-index: 2;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 3.5 20.5 8.5 8.5 20.5H3.5V15.5Z"></path></svg>
+            <div style="display: flex; flex-direction: column;">
+              <span style="font-size: 16px; font-weight: 700; color: var(--ink-900);">Edit Ticket</span>
+              <span style="font-size: 11px; color: var(--slate-500); font-weight: 600;">AR-2026-0093</span>
+            </div>
+          </div>
+          <button onClick="{{ closeEdit }}" style="width: 30px; height: 30px; border: none; background: transparent; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--slate-500);" style-hover="background: var(--blue-050-alt); color: var(--ink-900);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12"></path><path d="M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <!-- Modal body -->
+        <div style="padding: 24px; display: flex; flex-direction: column; gap: 18px;">
+
+          <div style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--blue-050-cool); border: 1px solid var(--blue-050-alt); border-radius: 10px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--navy-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z"></path><path d="M12 8v5"></path><path d="M12 16h.01"></path></svg>
+            <span style="font-size: 12px; color: var(--navy-700); line-height: 1.5;">This ticket is already in the approval flow. Changes to Application/Service or Category may restart approval.</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Subject</label>
+            <input type="text" value="Additional SAP role for MM module" style="width: 100%; padding: 11px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--white); font-family: var(--font-sans); font-size: 13px; color: var(--ink-900); outline: none;" style-focus="border-color: var(--blue-500);">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Application or Service</label>
+              <select style="width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-tint); font-family: var(--font-sans); font-size: 13px; color: var(--ink-700); outline: none; cursor: pointer;" style-focus="border-color: var(--blue-500);">
+                <option>SAP</option>
+                <option>MAILIA</option>
+                <option>ELISA</option>
+                <option>CLOUDIA</option>
+                <option>ARISE</option>
+                <option>NETWORK (Internet / WiFi / VPN)</option>
+                <option>Devices (Printer, Laptop)</option>
+                <option>SILO Apps (Other)</option>
+              </select>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Issue Category</label>
+              <select defaultValue="Access Request" style="width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-tint); font-family: var(--font-sans); font-size: 13px; color: var(--ink-700); outline: none; cursor: pointer;" style-focus="border-color: var(--blue-500);">
+                <option>Incident</option>
+                <option>Access Request</option>
+                <option>Service Request</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Detailed Description</label>
+            <textarea rows="4" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--white); font-family: var(--font-sans); font-size: 13px; color: var(--ink-900); outline: none; resize: vertical; min-height: 96px;" style-focus="border-color: var(--blue-500);">I need an additional SAP role for the Materials Management (MM) module to process purchase requisitions for the Cisumdawu Toll Road project. My current role only covers display access (ME53N). I need create/change access (ME51N, ME52N) starting this week, as the previous PIC has moved to another project.</textarea>
+          </div>
+
+          <!-- Priority -->
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Priority</label>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; background: var(--canvas); border: 1px solid var(--border-soft); border-radius: 14px; padding: 10px;">
+              <sc-for list="{{ editPriorities }}" as="p" hint-placeholder-count="4">
+                <button onClick="{{ p.select }}" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 12px 8px; border-radius: 12px; border: 1px solid {{ p.border }}; background: {{ p.bg }}; color: {{ p.color }}; font-family: var(--font-sans); font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: {{ p.shadow }};">
+                  <span style="font-size: 15px; font-weight: 800; line-height: 1;">{{ p.glyph }}</span>
+                  {{ p.label }}
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <!-- Attachment -->
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Attachment</label>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--canvas);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="m21.4 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+              <span style="flex: 1; font-size: 13px; font-weight: 600; color: var(--ink-900);">role-matrix-approval.pdf</span>
+              <button style="border: none; background: transparent; color: var(--slate-500); cursor: pointer; padding: 4px;" style-hover="color: var(--red-600);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+            </div>
+            <div style="border: 2px dashed var(--blue-400); border-radius: 14px; background: var(--blue-050-alt); padding: 20px 16px; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;" style-hover="background: var(--blue-050);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ink-700)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16.2A4.5 4.5 0 0 1 6.5 8a6 6 0 0 1 11.4 1.6A4 4 0 0 1 17.5 17H7"></path><path d="M12 12v6"></path><path d="m9 14.5 3-2.5 3 2.5"></path></svg>
+              <span style="font-size: 12px; font-weight: 700; color: var(--ink-800);">Add another file</span>
+              <span style="font-size: 11px; color: var(--slate-500);">PNG, JPG, PDF (Max. 5MB)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal footer -->
+        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 24px; border-top: 1px solid var(--border-soft);">
+          <button onClick="{{ closeEdit }}" style="padding: 10px 22px; border-radius: 999px; border: 1px solid var(--border); background: var(--white); color: var(--blue-500); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: var(--surface-tint);">Cancel</button>
+          <button onClick="{{ closeEdit }}" style="display: flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 999px; border: none; background: var(--blue-500); color: var(--white); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: var(--elev-card);" style-hover="background: var(--blue-600);" style-active="background: var(--blue-ink);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ============ ENTRY POPUP: ticket resolved by support ============ -->
+  <sc-if value="{{ entryOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 60; background: rgba(11, 28, 48, 0.45); display: flex; align-items: center; justify-content: center; padding: 32px;" onClick="{{ closeEntry }}">
+      <div onClick="{{ stopClick }}" style="width: 100%; max-width: 440px; background: var(--white); border-radius: 20px; border: 1px solid var(--border); box-shadow: var(--elev-pop); display: flex; flex-direction: column; overflow: hidden;">
+        <div style="padding: 26px 26px 22px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;">
+          <span style="width: 58px; height: 58px; border-radius: 999px; background: rgba(52,199,89,0.14); color: var(--green-500); display: flex; align-items: center; justify-content: center;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z"></path><path d="m8.5 12 2.5 2.5 4.5-5"></path></svg>
+          </span>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <h3 style="margin: 0; font-size: 18px; font-weight: 800; color: var(--ink-900);">Tiket Anda Telah Diselesaikan</h3>
+            <p style="margin: 0; font-size: 13px; line-height: 1.6; color: var(--ink-700);">{{ picResolveMsg }}</p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; padding: 16px 26px 22px;">
+          <button onClick="{{ closeEntry }}" style="flex: 1; padding: 11px; border-radius: 999px; border: 1px solid var(--border); background: var(--white); color: var(--ink-700); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: var(--surface-tint);">Nanti Saja</button>
+          <button onClick="{{ openConfirm }}" style="flex: 1.4; padding: 11px; border-radius: 999px; border: none; background: var(--green-500); color: var(--white); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: var(--elev-card);" style-hover="opacity: 0.9;">Konfirmasi Sekarang</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ============ CONFIRM & CLOSE MODAL (Yes / No) ============ -->
+  <sc-if value="{{ confirmOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 65; background: rgba(11, 28, 48, 0.45); display: flex; align-items: center; justify-content: center; padding: 32px;" onClick="{{ closeConfirm }}">
+      <div onClick="{{ stopClick }}" style="width: 100%; max-width: 480px; background: var(--white); border-radius: 20px; border: 1px solid var(--border); box-shadow: var(--elev-pop); display: flex; flex-direction: column; overflow: hidden;">
+
+        <!-- header -->
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 16px 22px; border-bottom: 1px solid var(--border-soft);">
+          <div style="display: flex; flex-direction: column;">
+            <span style="font-size: 16px; font-weight: 800; color: var(--ink-900);">Konfirmasi Penyelesaian</span>
+            <span style="font-size: 11px; color: var(--slate-500); font-weight: 600;">AR-2026-0093 · Additional SAP role for MM module</span>
+          </div>
+          <button onClick="{{ closeConfirm }}" style="width: 30px; height: 30px; border: none; background: transparent; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--slate-500);" style-hover="background: var(--surface-tint); color: var(--ink-900);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12"></path><path d="M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <!-- STEP: choose Yes / No -->
+        <sc-if value="{{ confirmStepChoose }}" hint-placeholder-val="{{ true }}">
+          <div style="padding: 24px 22px; display: flex; flex-direction: column; gap: 18px;">
+            <p style="margin: 0; font-size: 14px; line-height: 1.6; color: var(--ink-800); text-align: center; font-weight: 600;">Apakah masalah Anda sudah teratasi?</p>
+            <div style="display: flex; gap: 12px;">
+              <button onClick="{{ chooseNo }}" style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 18px 12px; border-radius: 14px; border: 1px solid var(--border); background: var(--white); cursor: pointer; font-family: var(--font-sans);" style-hover="border-color: var(--red-600); background: rgba(186,26,26,0.04);">
+                <span style="width: 40px; height: 40px; border-radius: 999px; background: rgba(186,26,26,0.10); color: var(--red-600); display: flex; align-items: center; justify-content: center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12"></path><path d="M18 6 6 18"></path></svg></span>
+                <span style="font-size: 14px; font-weight: 800; color: var(--ink-900);">Belum</span>
+                <span style="font-size: 11px; color: var(--slate-500); text-align: center; line-height: 1.4;">Masih ada kendala</span>
+              </button>
+              <button onClick="{{ chooseYes }}" style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 18px 12px; border-radius: 14px; border: 1px solid var(--border); background: var(--white); cursor: pointer; font-family: var(--font-sans);" style-hover="border-color: var(--green-500); background: rgba(52,199,89,0.06);">
+                <span style="width: 40px; height: 40px; border-radius: 999px; background: rgba(52,199,89,0.14); color: var(--green-500); display: flex; align-items: center; justify-content: center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg></span>
+                <span style="font-size: 14px; font-weight: 800; color: var(--ink-900);">Ya, Sudah</span>
+                <span style="font-size: 11px; color: var(--slate-500); text-align: center; line-height: 1.4;">Beri penilaian &amp; tutup</span>
+              </button>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- STEP: Yes → rating + note -->
+        <sc-if value="{{ confirmStepYes }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 22px; display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 10px; align-items: center; padding: 6px 0;">
+              <span style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Bagaimana penilaian Anda atas layanan ini?</span>
+              <div style="display: flex; gap: 8px;">
+                <sc-for list="{{ ratingStars }}" as="s" hint-placeholder-count="5">
+                  <button onClick="{{ s.onClick }}" style="border: none; background: transparent; cursor: pointer; padding: 2px; line-height: 0;">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="{{ s.fill }}" stroke="{{ s.stroke }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 18.9l-5.8 3.05 1.1-6.45-4.7-4.6 6.5-.95z"></path></svg>
+                  </button>
+                </sc-for>
+              </div>
+              <span style="font-size: 12px; font-weight: 700; color: var(--clay-700);">{{ ratingLabel }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Catatan untuk Tim Support <span style="font-weight: 500; color: var(--slate-500);">(opsional)</span></label>
+              <textarea rows="3" value="{{ ratingNote }}" onChange="{{ onRatingNote }}" placeholder="Ceritakan pengalaman Anda — apa yang sudah baik atau bisa ditingkatkan…" style="width: 100%; padding: 11px 13px; border: 1px solid var(--border); border-radius: 12px; background: var(--white); font-family: var(--font-sans); font-size: 13px; color: var(--ink-900); outline: none; resize: vertical;" style-focus="border-color: var(--green-500);"></textarea>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 22px; border-top: 1px solid var(--border-soft);">
+            <button onClick="{{ backToChoose }}" style="padding: 10px 18px; border-radius: 999px; border: 1px solid var(--border); background: var(--white); color: var(--ink-700); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: var(--surface-tint);">Kembali</button>
+            <button onClick="{{ submitClose }}" disabled="{{ submitCloseDisabled }}" style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 999px; border: none; background: {{ submitCloseBg }}; color: var(--white); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: {{ submitCloseCursor }}; box-shadow: var(--elev-card);" style-hover="opacity: 0.92;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+              Kirim &amp; Tutup Tiket
+            </button>
+          </div>
+        </sc-if>
+
+        <!-- STEP: No → note to support -->
+        <sc-if value="{{ confirmStepNo }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 22px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: flex-start; gap: 10px; padding: 11px 14px; background: rgba(186,26,26,0.05); border: 1px solid rgba(186,26,26,0.15); border-radius: 12px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.29 3.86 1.82 18a1 1 0 0 0 .86 1.5h18.64a1 1 0 0 0 .86-1.5L13.71 3.86a1 1 0 0 0-1.72 0Z"></path></svg>
+              <span style="font-size: 12.5px; color: var(--ink-700); line-height: 1.55;">Tiket akan dibuka kembali dan dikirim ke Tim Support untuk penanganan lanjutan. Jelaskan kendala yang masih Anda alami.</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <label style="font-size: 13px; font-weight: 700; color: var(--ink-800);">Catatan untuk Tim Support <span style="font-weight: 500; color: var(--red-600);">*</span></label>
+              <textarea rows="4" value="{{ reopenNote }}" onChange="{{ onReopenNote }}" placeholder="Contoh: Akses ME51N sudah bisa, tetapi ME52N masih menampilkan error otorisasi saat menyimpan…" style="width: 100%; padding: 11px 13px; border: 1px solid var(--border); border-radius: 12px; background: var(--white); font-family: var(--font-sans); font-size: 13px; color: var(--ink-900); outline: none; resize: vertical;" style-focus="border-color: var(--red-600);"></textarea>
+              <sc-if value="{{ reopenError }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size: 12px; font-weight: 600; color: var(--red-600);">{{ reopenError }}</span>
+              </sc-if>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 22px; border-top: 1px solid var(--border-soft);">
+            <button onClick="{{ backToChoose }}" style="padding: 10px 18px; border-radius: 999px; border: 1px solid var(--border); background: var(--white); color: var(--ink-700); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: var(--surface-tint);">Kembali</button>
+            <button onClick="{{ submitReopen }}" style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 999px; border: none; background: var(--blue-500); color: var(--white); font-family: var(--font-sans); font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: var(--elev-card);" style-hover="background: var(--blue-600);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-4 14-4-5z"></path><path d="m11 14 8-9"></path></svg>
+              Kirim ke Support
+            </button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ============ TOAST ============ -->
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); z-index: 80; display: flex; align-items: center; gap: 10px; background: var(--ink-900); color: var(--white); padding: 13px 20px; border-radius: 999px; box-shadow: var(--elev-pop); font-size: 13px; font-weight: 600; max-width: 90vw;">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--green-500)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z"></path><path d="m8.5 12 2.5 2.5 4.5-5"></path></svg>
+      {{ toast }}
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;userName&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Andi Pratama&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Profile&quot; }
+}">
+class Component extends DCLogic {
+  state = {
+    notifOpen: false, profileOpen: false, editOpen: false, editPriority: "Medium",
+    ticketStatus: "resolved",   // resolved → closed (confirmed) | reopened (needs more work)
+    entryOpen: false,           // "ticket resolved" popup shown on open
+    confirmOpen: false,
+    confirmStep: "choose",      // choose | yes | no
+    rating: 0,
+    ratingNote: "",
+    reopenNote: "",
+    reopenError: "",
+    toast: "",
+  };
+
+  componentDidMount() {
+    // When Support has resolved the ticket, greet the requester with the
+    // resolution popup the first time they open it.
+    if (this.state.ticketStatus === "resolved") {
+      this._t = setTimeout(() => this.setState({ entryOpen: true }), 450);
+    }
+  }
+  componentWillUnmount() { clearTimeout(this._t); clearTimeout(this._toastT); }
+
+  showToast(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this._toastT);
+    this._toastT = setTimeout(() => this.setState({ toast: "" }), 3600);
+  }
+
+  openConfirm() { this.setState({ confirmOpen: true, confirmStep: "choose", entryOpen: false, rating: 0, ratingNote: "", reopenNote: "", reopenError: "" }); }
+  closeConfirm() { this.setState({ confirmOpen: false }); }
+
+  submitClose() {
+    this.setState({ confirmOpen: false, ticketStatus: "closed" });
+    const stars = this.state.rating || 0;
+    this.showToast("Terima kasih! Penilaian " + stars + "★ dikirim ke Tim Support. Tiket ditutup.");
+  }
+  submitReopen() {
+    if (!this.state.reopenNote.trim()) { this.setState({ reopenError: "Mohon tuliskan kendala yang masih terjadi." }); return; }
+    this.setState({ confirmOpen: false, ticketStatus: "reopened" });
+    this.showToast("Catatan dikirim ke Tim Support — tiket dibuka kembali untuk penanganan lanjutan.");
+  }
+
+  renderVals() {
+    // ---- Support / PIC from Kelola Role (single source of truth) ----
+    const K = window.KelolaRole;
+    const ticketApp = "SAP"; // this ticket's Application field → route support by it
+    const pic = K ? K.findSupport(ticketApp, "IT")
+      : { name: "Rizky Pratama", role: "Support IT - SAP", position: "IT Application Support", email: "rizky.pratama@adhi.co.id", unit: "Dept. Strategi Korporasi", initials: "RP" };
+
+    const userName = this.props.userName ?? "Andi Pratama";
+    const initials = userName.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase();
+
+    // ---- Header menus (notifications + profile) ----
+    const notifOpen = this.state.notifOpen;
+    const profileOpen = this.state.profileOpen;
+    const toggleNotif = () => this.setState(s => ({ notifOpen: !s.notifOpen, profileOpen: false }));
+    const toggleProfile = () => this.setState(s => ({ profileOpen: !s.profileOpen, notifOpen: false }));
+    const closeMenus = () => this.setState({ notifOpen: false, profileOpen: false });
+    const anyMenuOpen = notifOpen || profileOpen;
+    const notifBtnBg = notifOpen ? "var(--surface-tint)" : "transparent";
+    const profileBtnBg = profileOpen ? "var(--surface-tint)" : "transparent";
+    const notiIcon = {
+      message:  { bg: "var(--rose-200)",      color: "var(--clay-700)",  d: "M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.5 0-3-.4-4.2-1.1L3 20l1.1-5.3A8.5 8.5 0 1 1 21 11.5Z" },
+      sla:      { bg: "rgba(186,26,26,0.10)", color: "var(--red-600)",   d: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M12 7v5l3 3" },
+      approval: { bg: "var(--blue-050)",      color: "var(--blue-ink)",  d: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M8.5 12l2.5 2.5 4.5-5" },
+      resolved: { bg: "rgba(52,199,89,0.14)", color: "var(--green-500)", d: "M20 6 9 17l-5-5" },
+      draft:    { bg: "var(--surface-tint)",  color: "var(--slate-500)", d: "M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z M14 3v5h5" }
+    };
+    const notifications = [
+      { type: "resolved", text: pic.name + " (" + pic.role + ") telah menyelesaikan tiket AR-2026-0093. Mohon konfirmasi untuk menutup tiket.", time: "5 minutes ago", unread: true },
+      { type: "message",  text: "App Owner Dedi Firmansyah menyetujui akses Level 2 pada AR-2026-0093.", time: "1 hour ago", unread: true },
+      { type: "approval", text: "Manager Rina Kusuma approved AR-2026-0091 (Level 1).", time: "3 hours ago", unread: true },
+      { type: "sla",      text: "SLA warning: INC-2026-0418 breaches in 46 minutes.", time: "Yesterday", unread: false },
+      { type: "draft",    text: "Draft SR-2026-0201 was saved. Continue when ready.", time: "Jul 2", unread: false }
+    ].map(n => ({ ...n, iconBg: notiIcon[n.type].bg, iconColor: notiIcon[n.type].color, iconPath: notiIcon[n.type].d, rowBg: n.unread ? "var(--blue-050-cool)" : "var(--white)" }));
+    // ---- Edit Ticket modal ----
+    const editOpen = this.state.editOpen;
+    const canEdit = ["open", "waiting-response", "in-progress", "draft"].includes(this.state.ticketStatus);
+    const openEdit = () => { if (canEdit) this.setState({ editOpen: true }); };
+    const closeEdit = () => this.setState({ editOpen: false });
+    const stopClick = (e) => e.stopPropagation();
+
+    const prioMeta = [
+      { label: "Low", glyph: "≡" },
+      { label: "Medium", glyph: "=" },
+      { label: "High", glyph: "!" },
+      { label: "Critical", glyph: "⚠" }
+    ];
+    const prioAccent = {
+      Low: "var(--blue-500)", Medium: "var(--ink-700)",
+      High: "var(--red-600)", Critical: "var(--red-700)"
+    };
+    const editPriorities = prioMeta.map(m => {
+      const active = this.state.editPriority === m.label;
+      return {
+        ...m,
+        bg: active ? "var(--blue-500)" : "var(--white)",
+        color: active ? "var(--white)" : prioAccent[m.label],
+        border: active ? "var(--blue-500)" : "var(--border)",
+        shadow: active ? "var(--elev-card)" : "none",
+        select: () => this.setState({ editPriority: m.label })
+      };
+    });
+
+    const profileMenu = [
+      { label: "My Profile", href: "#", d: "M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5" },
+      { label: "My Tickets", href: "my-tickets.html", d: "M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z M14 5v14" },
+      { label: "Notification Preferences", href: "#", d: "M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z M10 21h4" },
+      { label: "Help & Support", href: "#", d: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3 M12 17h.01" }
+    ];
+
+    const roleStyles = {
+      "Requester":   { bg: "var(--blue-050)",      color: "var(--blue-ink)" },
+      "Manager":     { bg: "var(--blue-050-cool)", color: "var(--navy-700)" },
+      "App Owner":   { bg: "var(--rose-200)",      color: "var(--clay-700)" },
+      "IT Support":  { bg: "rgba(52,199,89,0.14)", color: "var(--green-500)" }
+    };
+    const avatarStyles = {
+      "Requester":  { bg: "var(--blue-050-alt)",   color: "var(--blue-ink)" },
+      "Manager":    { bg: "var(--blue-050-cool)",  color: "var(--navy-700)" },
+      "App Owner":  { bg: "var(--rose-200)",       color: "var(--clay-700)" },
+      "IT Support": { bg: "rgba(52,199,89,0.14)",  color: "var(--green-500)" }
+    };
+
+    const rawMessages = [
+      { name: "Andi Pratama", role: "Requester", time: "Jul 5 · 09:14", text: "Submitted the ticket. Role matrix approval document from the project manager is attached." },
+      { name: "Rina Kusuma", role: "Manager", time: "Jul 5 · 11:02", text: "Approved at Level 1. Justification is valid — Andi is the replacement PIC for purchasing on the Cisumdawu project." },
+      { name: "Dedi Firmansyah", role: "App Owner", time: "Jul 6 · 08:40", text: "Before I approve Level 2: does the request include release access (ME54N), or only create/change (ME51N, ME52N)? Release authority usually stays with the section head." },
+      { name: "Andi Pratama", role: "Requester", time: "Jul 6 · 09:15", text: "Only create/change access. Release stays with Pak Surya as section head." },
+      { name: pic.name, role: "IT Support", roleLabel: pic.role, time: "Jul 6 · 14:20", text: "Noted, standing by for BPO approval. One more question for the requester: please confirm your SAP user ID so provisioning targets the right account." }
+    ].map(m => {
+      const mine = m.role === "Requester";
+      return {
+        ...m,
+        roleLabel: m.roleLabel || m.role,
+        initials: m.name.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase(),
+        roleBg: roleStyles[m.role].bg, roleColor: roleStyles[m.role].color,
+        avatarBg: avatarStyles[m.role].bg, avatarColor: avatarStyles[m.role].color,
+        bubbleBg: mine ? "var(--blue-500)" : "var(--canvas)",
+        bubbleBorder: mine ? "var(--blue-500)" : "var(--border-soft)",
+        textColor: mine ? "var(--white)" : "var(--ink-700)",
+        rowDir: mine ? "row-reverse" : "row",
+        colAlign: mine ? "flex-end" : "flex-start",
+        bubbleRadius: mine ? "12px 4px 12px 12px" : "4px 12px 12px 12px"
+      };
+    });
+
+    const people = [
+      { name: "Andi Pratama", role: "Requester", sub: "Staff Purchasing", email: "andi.pratama@adhi.co.id" },
+      { name: "Rina Kusuma", role: "Approver · Manager (L1)", email: "rina.kusuma@adhi.co.id" },
+      { name: "Dedi Firmansyah", role: "Approver · App Owner (L2)", email: "dedi.firmansyah@adhi.co.id" },
+      { name: pic.name, role: pic.role, sub: pic.position, email: pic.email }
+    ].map(p => {
+      const key = p.role.includes("Manager") ? "Manager" : p.role.includes("App Owner") ? "App Owner" : (p.role.indexOf("Support") >= 0 ? "IT Support" : "Requester");
+      return { ...p, initials: p.name.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase(), bg: avatarStyles[key].bg, color: avatarStyles[key].color, hasSub: !!p.sub };
+    });
+
+    const done = { dotBg: "var(--green-500)", dotBorder: "rgba(52,199,89,0.25)", lineBg: "var(--green-500)", titleColor: "var(--ink-900)" };
+    const current = { dotBg: "rgb(124, 58, 237)", dotBorder: "rgba(124, 58, 237, 0.20)", lineBg: "var(--border-soft)", titleColor: "rgb(109, 40, 217)" };
+    const future = { dotBg: "var(--white)", dotBorder: "var(--border)", lineBg: "var(--border-soft)", titleColor: "var(--slate-500)" };
+
+    const rawTimeline = [
+      { label: "Open", detail: "Ticket submitted by Andi Pratama", time: "Jul 5 · 09:14", ...done },
+      { label: "Manager Approval — Approved", detail: "Rina Kusuma (Level 1)", time: "Jul 5 · 11:02", ...done },
+      { label: "App Owner Approval — Approved", detail: "Dedi Firmansyah (Level 2)", time: "Jul 6 · 09:30", ...done },
+      { label: "IT Support · Provisioning", detail: "Role Z_MM_PURCHASING_CREATE di-assign oleh " + pic.name + " · " + pic.role, time: "Jul 6 · 15:05", ...done },
+      { label: "Resolved by IT Support", detail: pic.name + " · " + pic.role + " — menunggu konfirmasi penyelesaian dari Anda", time: "Jul 6 · 16:20", ...current },
+      { label: "Closed", detail: "Menunggu konfirmasi Anda", time: "—", ...future, hasLine: false },
+    ];
+    if (this.state.ticketStatus === "closed") {
+      rawTimeline[4] = { label: "Resolved by IT Support", detail: "Role provisioning selesai", time: "Jul 6 · 16:20", ...done };
+      rawTimeline[5] = { label: "Closed", detail: "Dikonfirmasi selesai oleh Anda" + (this.state.rating ? " · " + this.state.rating + "★" : ""), time: "Baru saja", ...done, hasLine: false };
+    } else if (this.state.ticketStatus === "reopened") {
+      rawTimeline[4] = { label: "Resolved by IT Support", detail: "Ditinjau oleh requester", time: "Jul 6 · 16:20", ...done };
+      rawTimeline[5] = { label: "Reopened — In Progress", detail: "Anda meminta penanganan lanjutan", time: "Baru saja", ...current, hasLine: false };
+    }
+    const timeline = rawTimeline.map((s, i, arr) => ({ ...s, hasLine: s.hasLine ?? i < arr.length - 1 }));
+
+    // ---- Resolution / confirmation flow ----
+    const ticketStatus = this.state.ticketStatus;
+    const STATUS_META = {
+      resolved:  { label: "Resolved", bg: "rgba(52,199,89,0.14)", color: "var(--green-500)" },
+      closed:    { label: "Closed",   bg: "var(--surface-tint)",  color: "var(--slate-500)" },
+      reopened:  { label: "Reopened · In Progress", bg: "var(--blue-050)", color: "var(--blue-ink)" },
+    };
+    const statusBadge = STATUS_META[ticketStatus];
+    const isResolved = ticketStatus === "resolved";
+    const canConfirm = ticketStatus === "resolved";
+
+    const entryOpen = this.state.entryOpen;
+    const closeEntry = () => this.setState({ entryOpen: false });
+    const openConfirm = () => { if (this.state.ticketStatus === "resolved") this.openConfirm(); };
+    const confirmDisabled = !canConfirm;
+    const confirmCursor = canConfirm ? "pointer" : "default";
+
+    const confirmOpen = this.state.confirmOpen;
+    const confirmStep = this.state.confirmStep;
+    const confirmStepChoose = confirmStep === "choose";
+    const confirmStepYes = confirmStep === "yes";
+    const confirmStepNo = confirmStep === "no";
+    const closeConfirm = () => this.closeConfirm();
+    const chooseYes = () => this.setState({ confirmStep: "yes" });
+    const chooseNo = () => this.setState({ confirmStep: "no" });
+    const backToChoose = () => this.setState({ confirmStep: "choose", reopenError: "" });
+
+    const rating = this.state.rating;
+    const setRating = (n) => this.setState({ rating: n });
+    const ratingStars = [1, 2, 3, 4, 5].map((n) => ({
+      n,
+      onClick: () => setRating(n),
+      fill: n <= rating ? "#FF9F0A" : "none",
+      stroke: n <= rating ? "#FF9F0A" : "var(--border)",
+    }));
+    const ratingLabels = { 0: "Ketuk bintang untuk menilai", 1: "Sangat kurang", 2: "Kurang", 3: "Cukup", 4: "Baik", 5: "Sangat baik" };
+    const ratingLabel = ratingLabels[rating];
+    const canSubmitClose = rating > 0;
+    const submitCloseDisabled = !canSubmitClose;
+    const submitCloseBg = canSubmitClose ? "var(--green-500)" : "var(--slate-500)";
+    const submitCloseCursor = canSubmitClose ? "pointer" : "default";
+    const ratingNote = this.state.ratingNote;
+    const onRatingNote = (e) => this.setState({ ratingNote: e.target.value });
+    const reopenNote = this.state.reopenNote;
+    const onReopenNote = (e) => this.setState({ reopenNote: e.target.value, reopenError: "" });
+    const reopenError = this.state.reopenError;
+    const submitClose = () => this.submitClose();
+    const submitReopen = () => this.submitReopen();
+    const toast = this.state.toast;
+    const supportNote = {
+      by: pic.name + " · " + pic.role,
+      time: "Jul 6 · 16:20",
+      text: "Akses SAP MM telah diprovisi — role Z_MM_PURCHASING_CREATE (ME51N & ME52N) sudah aktif pada user ID Anda. Silakan coba buat/ubah purchase requisition, lalu konfirmasi bila sudah sesuai agar tiket dapat kami tutup. Terima kasih.",
+    };
+
+    // Confirm & Close button appearance
+    const confirmBtnBg = canConfirm ? "var(--green-500)" : "var(--surface-tint)";
+    const confirmBtnColor = canConfirm ? "var(--white)" : "var(--slate-500)";
+    const confirmBtnLabel = ticketStatus === "closed" ? "Tiket Ditutup" : (ticketStatus === "reopened" ? "Menunggu Support" : "Confirm & Close");
+    const picResolveMsg = pic.name + " (" + pic.role + ") telah menyelesaikan tiket AR-2026-0093 — akses SAP MM sudah diprovisi. Mohon konfirmasi apakah masalah Anda sudah teratasi agar tiket dapat ditutup.";
+
+    return { userName, initials, messages: rawMessages, people, timeline, notifOpen, profileOpen, toggleNotif, toggleProfile, closeMenus, anyMenuOpen, notifBtnBg, profileBtnBg, notifications, profileMenu, editOpen, openEdit, closeEdit, stopClick, editPriorities,
+      statusBadge, isResolved, canConfirm, canEdit, entryOpen, closeEntry, openConfirm, confirmOpen, confirmStep, closeConfirm, chooseYes, chooseNo, backToChoose,
+      rating, ratingStars, ratingLabel, canSubmitClose, ratingNote, onRatingNote, reopenNote, onReopenNote, reopenError, submitClose, submitReopen, toast, supportNote,
+      confirmBtnBg, confirmBtnColor, confirmBtnLabel, confirmDisabled, confirmCursor,
+      picResolveMsg,
+      confirmStepChoose, confirmStepYes, confirmStepNo, submitCloseDisabled, submitCloseBg, submitCloseCursor };
+  }
+}
+</script>
+</body>
+</html>

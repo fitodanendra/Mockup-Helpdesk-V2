@@ -1,0 +1,5 @@
+/* Slimmed entry point for standalone export — omits tokens/fonts.css (fonts inlined in page) */
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";
+@import "./tokens/base.css";
