@@ -24,12 +24,7 @@
     },
     {
       label: "Team Lead",
-      pages: [
-        { label: "Dashboard", href: "/team-lead/dashboard.html" },
-        { label: "Workflow", href: "/team-lead/workflow.html" },
-        { label: "ERD", href: "/team-lead/erd.html" },
-        { label: "Relasi", href: "/team-lead/relasi.html" },
-      ],
+      pages: [{ label: "Dashboard", href: "/team-lead/dashboard.html" }],
     },
     {
       label: "Admin",
