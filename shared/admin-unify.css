@@ -1,46 +1,73 @@
-/* Visual unification for the Admin console with the rest of the
-   Helpdesk v2.0 screens. Admin already defines its own CSS custom
-   properties (--radius-*, --shadow-*, --blue-*, etc.) and every
-   component consumes them via var(), so overriding the values here
-   cascades through the whole app without touching any component
-   markup, class, or JS logic — purely presentational, nothing about
-   behavior/functionality changes.
-   Values are taken from the shared design system (legacy-tokens.css)
-   and the actual radius/shadow convention used across
-   Requester/Approver/Support/Team Lead (10px controls, 14px cards,
-   soft two-layer drop shadows, light-tint active states). */
+/* Visual unification for the Admin console, using the Team Lead
+   Dashboard as the design reference (its inlined :root token block
+   is the ground truth for radius/shadow/brand-blue values below).
+   Admin drives every color/radius/shadow through its own CSS custom
+   properties and every component consumes them via var(), so
+   overriding the values here cascades through the whole app without
+   touching any component markup, class, or JS logic — purely
+   presentational, nothing about behavior/functionality changes. */
 
 :root {
-  /* Radius: Admin's own 8/15/16/20/24/26 scale -> the 10px controls /
-     14px cards convention used everywhere else. */
-  --radius-sm: 10px !important;
-  --radius-md: 10px !important;
+  /* Brand blue: match Team Lead's --adhi-blue / --adhi-blue-600 exactly. */
+  --accent: #2f6bf0 !important;
+  --accent-fill: #2f6bf0 !important;
+  --accent-pressed: #2359d6 !important;
+  --blue-400: #4c82f7 !important;
+  --blue-500: #2f6bf0 !important;
+  --blue-600: #2359d6 !important;
+  --blue-700: #2359d6 !important;
+
+  /* Radius: Team Lead's explicit --radius-btn(12) / --radius-card(14)
+     scale, applied across Admin's own sm..3xl steps. */
+  --radius-sm: 12px !important;
+  --radius-md: 12px !important;
   --radius-lg: 14px !important;
   --radius-xl: 14px !important;
   --radius-2xl: 16px !important;
-  --radius-3xl: 20px !important;
+  --radius-3xl: 18px !important;
 
-  /* Shadows: swap Admin's heavier flat-gray drop shadows for the
-     softer two-layer elevation used on every other screen's cards
-     and popovers. */
-  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 2px 6px rgba(16, 24, 40, 0.06) !important;
-  --shadow-button: 0 1px 2px rgba(16, 24, 40, 0.06) !important;
+  /* Shadows: Team Lead's soft two-layer elevation instead of Admin's
+     heavier flat-gray drop shadow. */
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.05) !important;
+  --shadow-button: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.05) !important;
   --shadow-chip: 0 1px 2px rgba(16, 24, 40, 0.06) !important;
+
+  /* Priority badge backgrounds: Team Lead uses soft tints, not solid
+     fills. This also fixes a real bug in Admin's own source where
+     --priority-critical and --priority-high were both #ef4444
+     (identical red, so High and Critical were indistinguishable). */
+  --priority-critical: rgba(229, 72, 77, 0.12) !important;
+  --priority-high: rgba(178, 106, 46, 0.16) !important;
+  --priority-medium: #eaf1fe !important;
+  --priority-low: #eceef4 !important;
 }
 
-/* Active nav item: Admin used a solid filled blue pill with white
-   text (a "primary button" treatment). Every other screen marks the
-   active nav tab with a light blue tint + dark blue text instead, so
-   align it here. */
+/* Priority badges also hardcode color:var(--white) for the solid-fill
+   look, which a --priority-* var override can't reach — target the
+   badges directly via the literal var() name in their inline style
+   (stable regardless of resolved color format) to set the matching
+   dark tint text color from the Team Lead reference. */
+span[style*="var(--priority-critical)"] { color: #e5484d !important; }
+span[style*="var(--priority-high)"] { color: #b45309 !important; }
+span[style*="var(--priority-medium)"] { color: #1a3f9e !important; }
+span[style*="var(--priority-low)"] { color: #6c7486 !important; }
+
+/* Active nav item: Team Lead marks the active tab with a light blue
+   tint + dark navy text/icon, not a solid filled blue pill with white
+   text/icon (which is what Admin used natively). The icon renders via
+   mask-image + background-color:currentColor, so it already follows
+   this color change through inheritance — no separate icon rule
+   needed (and setting background on it directly would blank the
+   mask out, since background-color IS the icon's visible fill here). */
 .admin-nav-item.active {
-  background: #eff4ff !important;
-  color: #0051d5 !important;
-  border-radius: 10px !important;
+  background: #eaf1fe !important;
+  color: #1a3f9e !important;
+  border-radius: 12px !important;
   box-shadow: none !important;
 }
 .admin-nav-item {
-  border-radius: 10px !important;
+  border-radius: 12px !important;
 }
 .admin-iconbtn {
-  border-radius: 10px !important;
+  border-radius: 12px !important;
 }

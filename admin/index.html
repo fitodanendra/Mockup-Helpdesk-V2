@@ -33,7 +33,7 @@
           clearInterval(timer);
           var link = doc.createElement('link');
           link.rel = 'stylesheet';
-          link.href = '/shared/admin-unify.css';
+          link.href = '/shared/admin-unify.css?v=' + Date.now();
           doc.head.appendChild(link);
         } else if (attempts > 100) {
           clearInterval(timer);
