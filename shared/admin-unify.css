@@ -53,21 +53,16 @@ span[style*="var(--priority-medium)"] { color: #1a3f9e !important; }
 span[style*="var(--priority-low)"] { color: #6c7486 !important; }
 
 /* Active nav item: Team Lead marks the active tab with a light blue
-   tint + dark navy text, not a solid filled blue pill with white
-   text (which is what Admin used natively). */
+   tint + dark navy text AND icon (both follow the same color), not a
+   solid filled blue pill with white text/icon (which is what Admin
+   used natively). The icon renders via mask-image +
+   background-color:currentColor, so it automatically follows this
+   color change through inheritance — no separate icon rule needed. */
 .admin-nav-item.active {
   background: #eaf1fe !important;
   color: #1a3f9e !important;
   border-radius: 12px !important;
   box-shadow: none !important;
-}
-
-/* Nav icons render via mask-image + background-color:currentColor,
-   so they'd otherwise flip color along with the active-state text
-   color above. Lock them to a fixed neutral gray instead so the icon
-   never changes on selection — only the pill background/text does. */
-.admin-nav-item .om-icon {
-  background-color: #717786 !important;
 }
 .admin-nav-item {
   border-radius: 12px !important;
