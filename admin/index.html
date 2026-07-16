@@ -12,5 +12,35 @@
 <body>
 <iframe id="hd-admin-frame" src="console-raw.html" title="Admin Console"></iframe>
 <script src="../shared/nav-widget.js" defer></script>
+<script>
+  // Inject the visual-unification stylesheet into the Admin bundle once
+  // it has finished unpacking and mounted its React tree. Pure CSS
+  // custom-property overrides — never touches the bundle's own JS/DOM,
+  // so functionality is untouched.
+  (function () {
+    var frame = document.getElementById('hd-admin-frame');
+    frame.addEventListener('load', function () {
+      var attempts = 0;
+      var timer = setInterval(function () {
+        attempts++;
+        var doc;
+        try {
+          doc = frame.contentDocument;
+        } catch (e) {
+          doc = null;
+        }
+        if (doc && doc.querySelector('.admin-shell, .admin-nav-item, .admin-head')) {
+          clearInterval(timer);
+          var link = doc.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = '/shared/admin-unify.css';
+          doc.head.appendChild(link);
+        } else if (attempts > 100) {
+          clearInterval(timer);
+        }
+      }, 100);
+    });
+  })();
+</script>
 </body>
 </html>

@@ -1,0 +1,46 @@
+/* Visual unification for the Admin console with the rest of the
+   Helpdesk v2.0 screens. Admin already defines its own CSS custom
+   properties (--radius-*, --shadow-*, --blue-*, etc.) and every
+   component consumes them via var(), so overriding the values here
+   cascades through the whole app without touching any component
+   markup, class, or JS logic — purely presentational, nothing about
+   behavior/functionality changes.
+   Values are taken from the shared design system (legacy-tokens.css)
+   and the actual radius/shadow convention used across
+   Requester/Approver/Support/Team Lead (10px controls, 14px cards,
+   soft two-layer drop shadows, light-tint active states). */
+
+:root {
+  /* Radius: Admin's own 8/15/16/20/24/26 scale -> the 10px controls /
+     14px cards convention used everywhere else. */
+  --radius-sm: 10px !important;
+  --radius-md: 10px !important;
+  --radius-lg: 14px !important;
+  --radius-xl: 14px !important;
+  --radius-2xl: 16px !important;
+  --radius-3xl: 20px !important;
+
+  /* Shadows: swap Admin's heavier flat-gray drop shadows for the
+     softer two-layer elevation used on every other screen's cards
+     and popovers. */
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 2px 6px rgba(16, 24, 40, 0.06) !important;
+  --shadow-button: 0 1px 2px rgba(16, 24, 40, 0.06) !important;
+  --shadow-chip: 0 1px 2px rgba(16, 24, 40, 0.06) !important;
+}
+
+/* Active nav item: Admin used a solid filled blue pill with white
+   text (a "primary button" treatment). Every other screen marks the
+   active nav tab with a light blue tint + dark blue text instead, so
+   align it here. */
+.admin-nav-item.active {
+  background: #eff4ff !important;
+  color: #0051d5 !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+.admin-nav-item {
+  border-radius: 10px !important;
+}
+.admin-iconbtn {
+  border-radius: 10px !important;
+}
