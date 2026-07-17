@@ -18,5 +18,40 @@
      stylesheet/chrome would be applied twice. -->
 <iframe id="hd-admin-frame" src="console.html" title="Admin Console"></iframe>
 <script src="../shared/nav-widget.js" defer></script>
+<script>
+  // Remove the Dashboard subtitle "Ringkasan konfigurasi dan operasional
+  // Enterprise Helpdesk 2.0". The Admin content lives inside console.html
+  // as a gzip+base64 compiled module (with SRI integrity hashes), so it
+  // can't be edited by hand — instead we delete the node here, in the
+  // wrapper. A MutationObserver re-applies it because the admin is a
+  // React SPA: navigating away from and back to the Dashboard re-creates
+  // the element. Matching the exact text keeps it Dashboard-specific
+  // (other screens have different subtitles).
+  (function () {
+    var TARGET = 'Ringkasan konfigurasi dan operasional Enterprise Helpdesk 2.0';
+    var frame = document.getElementById('hd-admin-frame');
+
+    function sweep(doc) {
+      var nodes = doc.querySelectorAll('span, p');
+      for (var i = 0; i < nodes.length; i++) {
+        if (nodes[i].children.length === 0 &&
+            nodes[i].textContent.trim() === TARGET) {
+          nodes[i].remove();
+        }
+      }
+    }
+
+    frame.addEventListener('load', function () {
+      var doc;
+      try { doc = frame.contentDocument; } catch (e) { return; }
+      if (!doc) return;
+      sweep(doc);
+      // The bundle swaps documentElement while unpacking and re-renders
+      // on navigation; observe so the subtitle stays removed.
+      var obs = new MutationObserver(function () { sweep(frame.contentDocument); });
+      obs.observe(doc.documentElement, { childList: true, subtree: true });
+    });
+  })();
+</script>
 </body>
 </html>
