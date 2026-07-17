@@ -1,72 +1,322 @@
-/* Visual unification for the Admin console, using the Team Lead
-   Dashboard as the design reference (its inlined :root token block
-   is the ground truth for radius/shadow/brand-blue values below).
-   Admin drives every color/radius/shadow through its own CSS custom
-   properties and every component consumes them via var(), so
-   overriding the values here cascades through the whole app without
-   touching any component markup, class, or JS logic — purely
-   presentational, nothing about behavior/functionality changes. */
+/* Visual unification for the Admin console.
+   Ground truth: the agreed single-file mockup's :root token overrides
+   ("Helpdesk Administrator -single-.html") for colors/radii/shadows,
+   plus the Team Lead dashboard's top navbar as the layout reference —
+   all applied as a pure-CSS override layer injected on top of the
+   untouched functionality bundle (console-raw.html). No JS/DOM/markup
+   is modified, so behavior is identical. */
 
+/* ---- Webfonts ------------------------------------------------------
+   The bundle embeds SF Pro Rounded 600/700 but its weight-400 face
+   fails to load and 500/800 are absent, so body text fell back to the
+   system font. Fill the gaps from the design-system folder (same
+   files the mockup references). */
+@font-face { font-family: "SF Pro Rounded"; font-weight: 400; font-style: normal; font-display: swap; src: url("/_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/assets/fonts/SF-Pro-Rounded-Regular.otf") format("opentype"); }
+@font-face { font-family: "SF Pro Rounded"; font-weight: 500; font-style: normal; font-display: swap; src: url("/_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/assets/fonts/SF-Pro-Rounded-Medium.otf") format("opentype"); }
+@font-face { font-family: "SF Pro Rounded"; font-weight: 800; font-style: normal; font-display: swap; src: url("/_ds/helpdesk-v2-0-design-system-8c727222-72e8-4226-9e8e-ffba367aa915/assets/fonts/SF-Pro-Rounded-Bold.otf") format("opentype"); }
+
+/* ---- Tokens --------------------------------------------------------
+   Only the values the mockup changed vs. the bundle, plus the extra
+   tokens the mockup introduced (blue tints & co.) that the sidebar
+   rules below consume. Everything else in the bundle's :root is
+   already identical to the mockup. */
 :root {
-  /* Brand blue: match Team Lead's --adhi-blue / --adhi-blue-600 exactly. */
-  --accent: #2f6bf0 !important;
-  --accent-fill: #2f6bf0 !important;
-  --accent-pressed: #2359d6 !important;
-  --blue-400: #4c82f7 !important;
-  --blue-500: #2f6bf0 !important;
-  --blue-600: #2359d6 !important;
-  --blue-700: #2359d6 !important;
+  /* New tokens from the mockup (not present in the bundle) */
+  --blue-ink: #0051d5;
+  --blue-050: #eff4ff;
+  --blue-050-alt: #e5eeff;
+  --blue-050-cool: #eff6ff;
+  --slate-500: #717786;
+  --surface-tint: #f8f9ff;
+  --clay-600: #b45309;
+  --clay-700: #92400e;
+  --red-600: #ba1a1a;
+  --rose-200: #fef1e0;
 
-  /* Radius: Team Lead's explicit --radius-btn(12) / --radius-card(14)
-     scale, applied across Admin's own sm..3xl steps. */
-  --radius-sm: 12px !important;
+  /* Radii — mockup flattens the bundle's md..3xl steps to 12/14 */
   --radius-md: 12px !important;
   --radius-lg: 14px !important;
   --radius-xl: 14px !important;
-  --radius-2xl: 16px !important;
-  --radius-3xl: 18px !important;
+  --radius-2xl: 14px !important;
+  --radius-3xl: 14px !important;
 
-  /* Shadows: Team Lead's soft two-layer elevation instead of Admin's
-     heavier flat-gray drop shadow. */
-  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.05) !important;
-  --shadow-button: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.05) !important;
-  --shadow-chip: 0 1px 2px rgba(16, 24, 40, 0.06) !important;
+  /* Elevation — soft cool drop shadows instead of the bundle's heavy
+     flat-gray ones (mockup: "soft warm drop shadow instead of the DS
+     inset ring") */
+  --ring-card: 0 1px 2px rgba(16,24,40,0.04), 0 2px 6px rgba(16,24,40,0.06) !important;
+  --ring-field: inset 0 0 0 1px var(--border), 0 1px 2px 0 rgba(16,24,40,0.04) !important;
+  --shadow-cool: 0 1px 2px rgba(16,24,40,0.04), 0 2px 6px rgba(16,24,40,0.06) !important;
+  --shadow-card: 0 1px 2px rgba(16,24,40,0.04), 0 2px 6px rgba(16,24,40,0.06) !important;
+  --shadow-faint: 0 1px 2px rgba(16,24,40,0.04) !important;
+  --shadow-chip: 0 2px 6px rgba(16,24,40,0.10) !important;
+  --shadow-pop: 0 12px 32px rgba(16,24,40,0.16), 0 2px 10px rgba(16,24,40,0.08) !important;
 
-  /* Priority badge backgrounds: Team Lead uses soft tints, not solid
-     fills. This also fixes a real bug in Admin's own source where
-     --priority-critical and --priority-high were both #ef4444
-     (identical red, so High and Critical were indistinguishable). */
-  --priority-critical: rgba(229, 72, 77, 0.12) !important;
-  --priority-high: rgba(178, 106, 46, 0.16) !important;
-  --priority-medium: #eaf1fe !important;
-  --priority-low: #eceef4 !important;
+  /* Buttons — aligned with the other roles (Requester CTA spec):
+     primary fill uses the true brand blue (#007aff, blue-500) instead
+     of Admin's washed-out blue-400, and the heavy flat-gray button
+     shadow becomes the soft elev-card shadow every other role uses. */
+  --accent-fill: #007aff !important;
+  --shadow-button: 0 1px 2px rgba(16, 24, 40, 0.04), 0 2px 6px rgba(16, 24, 40, 0.06) !important;
+
+  /* Priority badges — aligned with the other roles (values from the
+     Team Lead dashboard's _prio map): soft tints instead of Admin's
+     native solid fills. */
+  --priority-critical: rgba(186, 26, 26, 0.10) !important;
+  --priority-high: rgba(255, 149, 0, 0.16) !important;
+  --priority-medium: #eff4ff !important;  /* blue-050 */
+  --priority-low: #f8f9ff !important;     /* surface-tint */
 }
 
-/* Priority badges also hardcode color:var(--white) for the solid-fill
-   look, which a --priority-* var override can't reach — target the
-   badges directly via the literal var() name in their inline style
-   (stable regardless of resolved color format) to set the matching
-   dark tint text color from the Team Lead reference. */
-span[style*="var(--priority-critical)"] { color: #e5484d !important; }
-span[style*="var(--priority-high)"] { color: #b45309 !important; }
-span[style*="var(--priority-medium)"] { color: #1a3f9e !important; }
-span[style*="var(--priority-low)"] { color: #6c7486 !important; }
-
-/* Active nav item: Team Lead marks the active tab with a light blue
-   tint + dark navy text AND icon (both follow the same color), not a
-   solid filled blue pill with white text/icon (which is what Admin
-   used natively). The icon renders via mask-image +
-   background-color:currentColor, so it automatically follows this
-   color change through inheritance — no separate icon rule needed. */
-.admin-nav-item.active {
-  background: #eaf1fe !important;
-  color: #1a3f9e !important;
+/* Button geometry/typography per the Requester CTA spec: radius 12,
+   13px/700 label, 11px 18px padding (Admin's DS buttons were 16px
+   text on 8px 24-32px padding with radius 14). Primary buttons carry
+   inline background:var(--accent-fill), secondary ones inline
+   color:var(--accent-pressed) — both signatures are unique to the
+   Button component, so nothing else is touched. */
+button[style*="background: var(--accent-fill)"],
+button[style*="color: var(--accent-pressed)"] {
   border-radius: 12px !important;
+  padding: 11px 18px !important;
+  font-size: 13px !important;
+  line-height: 1.3 !important;
+}
+/* Their leading icons scale down to match the 13px label */
+button[style*="background: var(--accent-fill)"] > span:first-child,
+button[style*="color: var(--accent-pressed)"] > span:first-child {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* Priority badges hardcode color:var(--white) inline for the old
+   solid-fill look — retarget via the literal var() name in their
+   inline style to the matching tint text colors used by other roles. */
+span[style*="var(--priority-critical)"] { color: #ba1a1a !important; }
+span[style*="var(--priority-high)"] { color: #b45309 !important; }
+span[style*="var(--priority-medium)"] { color: #0051d5 !important; }
+span[style*="var(--priority-low)"] { color: #717786 !important; }
+
+/* ---- Top navbar, matching the other roles ---------------------------
+   The bundle natively renders a top header (.admin-head: brand + nav
+   on the left, bell/user/logout on the right) — the same layout every
+   other role uses. Polish it to the Team Lead navbar spec: 62px solid
+   white bar, compact 13px nav pills (radius 10, blue-050 tint when
+   active), bell + profile on the right. */
+.admin-head {
+  min-height: 62px !important;
+  flex-wrap: nowrap !important;
+  gap: 12px !important;
+  padding: 8px 20px !important;
+  background: var(--white) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+/* Left group (brand + nav) shares the row. The bundle gives this div
+   an inline flex-wrap:wrap, which dropped the nav onto a second line
+   whenever the row got tight — force a single row and let the nav
+   items shrink instead. */
+.admin-head > div:first-child {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  flex-wrap: nowrap !important;
+}
+.admin-head nav {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  flex-wrap: nowrap !important;
+  overflow-x: hidden !important;
+  scrollbar-width: none !important;
+  column-gap: 3px !important;
+}
+.admin-head nav::-webkit-scrollbar {
+  display: none;
+}
+
+/* Nav pills (Team Lead _navStyle, slightly slimmer so all seven fit a
+   1440px screen). On tight widths the pills shrink and their labels
+   ellipsize rather than wrapping the bar onto a second row. */
+.admin-nav-item {
+  gap: 7px !important;
+  padding: 8px 10px !important;
+  border-radius: 10px !important;
+  font: 500 13px/1.2 var(--font-sans) !important;
+  flex-shrink: 1 !important;
+  min-width: 0 !important;
+}
+.admin-nav-item > span:first-child {
+  flex-shrink: 0 !important;
+}
+.admin-nav-item > span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* The active page's name should always be readable in full */
+.admin-nav-item.active {
+  flex-shrink: 0 !important;
+}
+.admin-nav-item:hover {
+  background: var(--blue-050-cool) !important;
+  color: var(--ink-900) !important;
+}
+/* Active: light-blue tint + blue ink text (Team Lead), not the
+   bundle's solid blue pill with white text/icon */
+.admin-nav-item.active {
+  background: var(--blue-050) !important;
+  color: var(--blue-ink) !important;
+  font-weight: 600 !important;
   box-shadow: none !important;
 }
-.admin-nav-item {
-  border-radius: 12px !important;
+.admin-nav-item.active .om-icon {
+  background-color: currentColor !important;
 }
+
+/* Right group: bell + profile chip, like the other roles' navbars.
+   The standalone Keluar button is hidden — logout lives in the
+   profile popup (admin-chrome.js forwards to the real button). */
+.admin-head > div:last-child {
+  flex: none !important;
+}
+/* Decorative vertical divider from the bundle's native bar — the
+   other roles' navbars have none */
+.admin-head > div:last-child > div:nth-child(2) {
+  display: none !important;
+}
+.admin-head > div:last-child > button.admin-iconbtn {
+  display: none !important;
+}
+
+/* Bell button: Requester spec — 36px borderless transparent button,
+   radius 10, surface-tint on hover (instead of Admin's bordered white
+   icon button). */
+.admin-head > div:last-child > div:first-child button.admin-iconbtn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.admin-head > div:last-child > div:first-child button.admin-iconbtn:hover {
+  background: var(--surface-tint) !important;
+}
+
+/* Badge: Requester shows a 15px red counter pill ("3"), not a 7px
+   dot. The count text is drawn via ::after since the bundle's badge
+   span is empty — its own notification data is 3 unread, matching. */
+.admin-head > div:last-child > div:first-child button.admin-iconbtn > span:last-child {
+  top: 4px !important;
+  right: 4px !important;
+  width: auto !important;
+  min-width: 15px !important;
+  height: 15px !important;
+  border-radius: 999px !important;
+  background: var(--red-600) !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 3px !important;
+}
+.admin-head > div:last-child > div:first-child button.admin-iconbtn > span:last-child::after {
+  content: "3";
+  font: 700 10px/1 var(--font-sans);
+  color: var(--white);
+}
+
+/* Bell icon: swap Admin's filled glyph for the outline bell every
+   other role uses (Requester/Team Lead ICON.notifications path), via
+   the mask the bundle already renders icons with. */
+.admin-head > div:last-child > div:first-child button.admin-iconbtn > span:first-child {
+  width: 19px !important;
+  height: 19px !important;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z M10 21h4'/%3E%3C/svg%3E") !important;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z M10 21h4'/%3E%3C/svg%3E") !important;
+  -webkit-mask-size: contain !important;
+  mask-size: contain !important;
+  -webkit-mask-repeat: no-repeat !important;
+  mask-repeat: no-repeat !important;
+  -webkit-mask-position: center !important;
+  mask-position: center !important;
+}
+
+/* User chip: Requester profile-button spec — transparent, radius 10,
+   surface-tint hover, initials circle instead of the photo avatar,
+   and a chevron. The initials come from data-initials, set by
+   shared/admin-chrome.js (which also wires the click-popup). */
+.admin-head > div:last-child > div:nth-child(3) {
+  padding: 4px 6px !important;
+  border-radius: 10px !important;
+  column-gap: 10px !important;
+  transition: background 0.15s !important;
+}
+.admin-head > div:last-child > div:nth-child(3):hover {
+  background: var(--surface-tint) !important;
+}
+/* Photo avatar → 34px initials circle (blue tint, blue ink) */
+.admin-head > div:last-child > div:nth-child(3) > img {
+  display: none !important;
+}
+.admin-head > div:last-child > div:nth-child(3)::before {
+  content: attr(data-initials);
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: var(--blue-050-alt);
+  color: var(--blue-ink);
+  font: 700 12px/1 var(--font-sans);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+/* Name/role typography per Requester (600/13 name, 500/11 subtitle) */
+.admin-head > div:last-child > div:nth-child(3) span span:first-child {
+  font: 600 13px/1.2 var(--font-sans) !important;
+  color: var(--ink-900) !important;
+}
+.admin-head > div:last-child > div:nth-child(3) span span:last-child {
+  font: 500 11px/1.4 var(--font-sans) !important;
+  color: var(--slate-500) !important;
+}
+/* Chevron */
+.admin-head > div:last-child > div:nth-child(3)::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  margin-left: 2px;
+  flex-shrink: 0;
+  background-color: var(--slate-500);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* ---- Modal overflow fix --------------------------------------------
+   The Modal component caps its panel at max-height:90vh with
+   overflow:hidden and gives the body overflow-y:auto — but the body is
+   itself a flex column, so on short viewports its children get
+   squashed (cards collapse to their headers, tables crush) instead of
+   triggering the body's scrollbar. Pin the children's natural height
+   so the body actually scrolls. Applies to every modal, since they all
+   share the same 90vh panel structure. */
+div[style*="max-height: 90vh"] > div[style*="overflow-y: auto"] > * {
+  flex-shrink: 0 !important;
+}
+
+/* ---- Component hovers from the mockup ------------------------------ */
 .admin-iconbtn {
   border-radius: 12px !important;
+}
+.admin-iconbtn:hover {
+  background: var(--blue-050-cool);
+  filter: none !important;
+}
+.admin-row:hover {
+  background: var(--blue-050-cool) !important;
 }
