@@ -211,6 +211,10 @@ span[style*="var(--priority-low)"] { color: #717786 !important; }
   width: auto !important;
   min-width: 15px !important;
   height: 15px !important;
+  /* Requester pages set *{box-sizing:border-box}; the Admin bundle
+     doesn't, so without this the 15px minimum lands on the content
+     box and the padding inflates the pill to 21px. */
+  box-sizing: border-box !important;
   border-radius: 999px !important;
   background: var(--red-600) !important;
   border: none !important;
