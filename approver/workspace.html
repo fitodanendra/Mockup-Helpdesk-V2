@@ -54,7 +54,7 @@
       <button type="button" onClick="{{ toggleNotif }}" style="position: relative; width: 36px; height: 36px; border-radius: 10px; border: none; display: flex; align-items: center; justify-content: center; color: var(--ink-700); cursor: pointer; background: {{ notifBtnBg }};">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z"></path><path d="M10 21h4"></path></svg>
         <sc-if value="{{ hasUnread }}" hint-placeholder-val="{{ true }}">
-          <span style="position: absolute; top: 4px; right: 4px; min-width: 9px; height: 9px; border-radius: 999px; background: var(--red-600);"></span>
+          <span style="position: absolute; top: 4px; right: 4px; min-width: 15px; height: 15px; border-radius: 999px; background: var(--red-600); color: var(--white); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 3px;">{{ unreadCount }}</span>
         </sc-if>
       </button>
       <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
@@ -65,7 +65,7 @@
           </div>
           <div style="max-height: 360px; overflow-y: auto;">
             <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="4">
-              <div onClick="{{ n.onOpen }}" style="display: flex; gap: 11px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border-soft); background: {{ n.rowBg }};">
+              <div onClick="{{ n.onOpen }}" style="display: flex; gap: 11px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border-soft); background: {{ n.rowBg }};" style-hover="background: var(--blue-050-cool);">
                 <span style="width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: {{ n.iconBg }}; color: {{ n.iconColor }};">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.iconPath }}"></path></svg>
                 </span>
@@ -77,6 +77,7 @@
               </div>
             </sc-for>
           </div>
+          <a href="#" style="padding: 12px 16px; text-align: center; font-size: 12px; font-weight: 700; color: var(--blue-500); border-top: 1px solid var(--border-soft); text-decoration: none;" style-hover="background: var(--blue-050-cool);">Lihat semua notifikasi</a>
         </div>
       </sc-if>
     </div>
@@ -226,19 +227,22 @@
         </div>
 
         <sc-if value="{{ hasPendingView }}" hint-placeholder-val="{{ true }}">
-          <div style="min-width: 940px; display: grid; grid-template-columns: 1.1fr 2.2fr 1.1fr 0.9fr 1.1fr 1fr; gap: 12px; padding: 10px 22px; background: var(--canvas); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">
-            <span>No. Tiket</span><span>SUBJECT</span><span>Layanan</span><span>Prioritas</span><span>Requester</span><span>Dibuat</span>
+          <div style="min-width: 1040px; display: grid; grid-template-columns: 1fr 1fr 1fr 2fr 0.9fr 1.1fr 1fr; gap: 12px; padding: 10px 22px; background: var(--canvas); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;">
+            <sc-for list="{{ pendHeaders }}" as="h" hint-placeholder-count="7">
+              <button type="button" onClick="{{ h.onClick }}" style="display: flex; align-items: center; gap: 4px; border: none; background: transparent; padding: 0; cursor: pointer; font-family: var(--font-sans); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: {{ h.color }};">
+                {{ h.label }}
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{ h.arrowOpacity }}; flex-shrink: 0;"><path d="{{ h.arrow }}"></path></svg>
+              </button>
+            </sc-for>
           </div>
           <sc-for list="{{ pendingView }}" as="item" hint-placeholder-count="4">
-            <div onClick="{{ item.open }}" style="min-width: 940px; display: grid; grid-template-columns: 1.1fr 2.2fr 1.1fr 0.9fr 1.1fr 1fr; gap: 12px; align-items: center; padding: 14px 22px; border-bottom: 1px solid var(--border-soft); cursor: pointer;" style-hover="background: var(--blue-050-cool);">
+            <div onClick="{{ item.open }}" style="min-width: 1040px; display: grid; grid-template-columns: 1fr 1fr 1fr 2fr 0.9fr 1.1fr 1fr; gap: 12px; align-items: center; padding: 14px 22px; border-bottom: 1px solid var(--border-soft); cursor: pointer;" style-hover="background: var(--blue-050-cool);">
               <span style="font-size: 12.5px; font-weight: 700; color: var(--blue-500); font-variant-numeric: tabular-nums;">{{ item.idLabel }}</span>
+              <div><span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--surface-tint); color: var(--ink-700);">{{ item.aplikasi }}</span></div>
+              <span style="font-size: 12px; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.kategori }}</span>
               <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
                 <span style="font-size: 13.5px; font-weight: 700; color: var(--ink-900); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.judul }}</span>
                 <span style="font-size: 11.5px; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.requesterName }} · {{ item.requesterUnit }}</span>
-              </div>
-              <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-start; min-width: 0;">
-                <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--surface-tint); color: var(--ink-700);">{{ item.aplikasi }}</span>
-                <span style="font-size: 11px; color: var(--slate-500);">{{ item.kategori }}</span>
               </div>
               <div><span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ item.prioBg }}; color: {{ item.prioColor }};">{{ item.priorityLabel }}</span></div>
               <span style="font-size: 12px; color: var(--ink-700);">{{ item.requesterName }}</span>
@@ -309,8 +313,13 @@
       </div>
 
       <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); overflow: hidden;">
-        <div style="min-width: 1000px; display: grid; grid-template-columns: 2fr 1.1fr 0.9fr 1fr 1.6fr 1.2fr 0.9fr; gap: 12px; padding: 10px 22px; background: var(--canvas); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">
-          <span>Tiket</span><span>Layanan</span><span>Status</span><span>Keputusan</span><span>Catatan</span><span>Diteruskan Ke</span><span>Waktu</span>
+        <div style="min-width: 1000px; display: grid; grid-template-columns: 2fr 1.1fr 0.9fr 1fr 1.6fr 1.2fr 0.9fr; gap: 12px; padding: 10px 22px; background: var(--canvas); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;">
+          <sc-for list="{{ historyHeaders }}" as="h" hint-placeholder-count="7">
+            <button type="button" onClick="{{ h.onClick }}" style="display: flex; align-items: center; gap: 4px; border: none; background: transparent; padding: 0; cursor: pointer; font-family: var(--font-sans); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: {{ h.color }}; text-align: left;">
+              {{ h.label }}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{ h.arrowOpacity }}; flex-shrink: 0;"><path d="{{ h.arrow }}"></path></svg>
+            </button>
+          </sc-for>
         </div>
         <sc-for list="{{ history }}" as="h" hint-placeholder-count="4">
           <div onClick="{{ h.open }}" style="min-width: 1000px; display: grid; grid-template-columns: 2fr 1.1fr 0.9fr 1fr 1.6fr 1.2fr 0.9fr; gap: 12px; align-items: center; padding: 14px 22px; border-bottom: 1px solid var(--border-soft); cursor: pointer;" style-hover="background: var(--blue-050-cool);">
@@ -319,8 +328,8 @@
               <span style="font-size: 13px; font-weight: 600; color: var(--ink-900); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ h.judul }}</span>
             </div>
             <span style="font-size: 12px; color: var(--ink-700);">{{ h.layananShort }}</span>
-            <div><span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ h.sBg }}; color: {{ h.sFg }};">{{ h.statusLabel }}</span></div>
-            <div><span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ h.kBg }}; color: {{ h.kFg }};">{{ h.kLabel }}</span></div>
+            <div><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-700); white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 999px; background: {{ h.sDot }}; flex-shrink: 0;"></span>{{ h.statusLabel }}</span></div>
+            <div><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: {{ h.kFg }}; white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 999px; background: {{ h.kDot }}; flex-shrink: 0;"></span>{{ h.kLabel }}</span></div>
             <span style="font-size: 12px; line-height: 1.45; color: var(--slate-500);">{{ h.catatan }}</span>
             <div><span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ h.nextBg }}; color: {{ h.nextFg }};">{{ h.nextHandler }}</span></div>
             <span style="font-size: 12px; color: var(--slate-500);">{{ h.waktu }}</span>
@@ -367,7 +376,7 @@
         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
           <span style="font-size: 13px; font-weight: 800; color: var(--blue-500);">{{ t.idLabel }}</span>
           <span style="font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--blue-050); color: var(--blue-ink); letter-spacing: 0.3px;">MODE APPROVAL</span>
-          <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ t.statusBg }}; color: {{ t.statusFg }};">{{ t.statusLabel }}</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-700); white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 999px; background: {{ t.statusDot }}; flex-shrink: 0;"></span>{{ t.statusLabel }}</span>
           <span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ t.prioBg }}; color: {{ t.prioColor }};">{{ t.priorityLabel }}</span>
         </div>
         <h1 style="margin: 0; font-size: 21px; font-weight: 800; color: var(--ink-900); letter-spacing: -0.2px;">{{ t.judul }}</h1>
@@ -583,17 +592,19 @@ class Component extends DCLogic {
     low: { label: "Low", bg: "var(--surface-tint)", color: "var(--slate-500)", solid: "var(--slate-500)" },
   };
 
+  // Decision & status pills follow the Team Lead "status · PIC" style:
+  // a leading colored dot + tinted pill + colored label.
   DECISION = {
-    "Disetujui": { bg: "rgba(52,199,89,0.14)", fg: "var(--green-500)" },
-    "Ditolak": { bg: "rgba(186,26,26,0.10)", fg: "var(--red-600)" },
-    "Minta Perbaikan": { bg: "var(--rose-200)", fg: "var(--clay-700)" },
+    "Disetujui": { bg: "rgba(52,199,89,0.12)", fg: "#187C45", dot: "var(--green-500)" },
+    "Ditolak": { bg: "rgba(186,26,26,0.10)", fg: "var(--red-600)", dot: "var(--red-600)" },
+    "Minta Perbaikan": { bg: "rgba(255,159,10,0.14)", fg: "#b45309", dot: "#f59e0b" },
   };
 
   STATUS_MON = {
-    "open": { label: "Open", bg: "var(--blue-050)", fg: "var(--blue-ink)" },
-    "in-progress": { label: "In Progress", bg: "var(--rose-200)", fg: "var(--clay-700)" },
-    "resolved": { label: "Resolved", bg: "rgba(52,199,89,0.14)", fg: "var(--green-500)" },
-    "closed": { label: "Closed", bg: "var(--surface-tint)", fg: "var(--slate-500)" },
+    "open": { label: "Open", bg: "var(--surface-tint)", fg: "var(--ink-700)", dot: "var(--slate-500)" },
+    "in-progress": { label: "In Progress", bg: "var(--blue-050)", fg: "var(--blue-ink)", dot: "var(--blue-500)" },
+    "resolved": { label: "Resolved", bg: "rgba(52,199,89,0.12)", fg: "#187C45", dot: "var(--green-500)" },
+    "closed": { label: "Closed", bg: "var(--surface-tint)", fg: "var(--ink-700)", dot: "var(--slate-500)" },
   };
 
   SLA_WINDOW_MIN = { critical: 240, high: 480, medium: 2880, low: 7200 };
@@ -617,6 +628,7 @@ class Component extends DCLogic {
       view: "inbox", mode: "pending", sel: null, selHist: null,
       note: "", noteError: "", draft: "", toast: "", confirmKind: null,
       pendingFilter: "all", categoryFilter: "all", showPendingFilter: false, historyFilter: "all", historyPeriod: "year", historyQuery: "",
+      pendSortKey: "dibuat", pendSortDir: "desc", hSortKey: "waktu", hSortDir: "desc",
       now: Date.now(),
       notifOpen: false, profileOpen: false,
       notifications: this.seedNotifications(),
@@ -1058,6 +1070,42 @@ class Component extends DCLogic {
     if (S.pendingFilter === "sla-issue") pendingView = pendingView.filter((p) => p.sla.state !== "ontrack");
     else if (S.pendingFilter !== "all") pendingView = pendingView.filter((p) => p.prioritas === S.pendingFilter);
 
+    // Sortable columns (ASC/DESC per column)
+    const PRANK = { critical: 4, high: 3, medium: 2, low: 1 };
+    const sortVal = (p, key) => {
+      if (key === "prioritas") return PRANK[p.prioritas] || 0;
+      if (key === "dibuat") return -(p.daysAgo != null ? p.daysAgo : 0);
+      if (key === "idLabel") return p.idLabel;
+      if (key === "aplikasi") return (p.aplikasi || "").toLowerCase();
+      if (key === "kategori") return (p.kategori || "").toLowerCase();
+      if (key === "judul") return (p.judul || "").toLowerCase();
+      if (key === "requesterName") return (p.requesterName || "").toLowerCase();
+      return "";
+    };
+    const sk = S.pendSortKey, sdir = S.pendSortDir === "asc" ? 1 : -1;
+    pendingView = pendingView.slice().sort((a, b) => {
+      const va = sortVal(a, sk), vb = sortVal(b, sk);
+      if (va < vb) return -1 * sdir;
+      if (va > vb) return 1 * sdir;
+      return 0;
+    });
+    const setPendSort = (key) => this.setState((s) => ({ pendSortKey: key, pendSortDir: s.pendSortKey === key && s.pendSortDir === "asc" ? "desc" : "asc" }));
+    const pendHeaders = [
+      { key: "idLabel", label: "No. Tiket" },
+      { key: "aplikasi", label: "Layanan" },
+      { key: "kategori", label: "Sub Category" },
+      { key: "judul", label: "Subject" },
+      { key: "prioritas", label: "Prioritas" },
+      { key: "requesterName", label: "Requester" },
+      { key: "dibuat", label: "Dibuat" },
+    ].map((h) => ({
+      label: h.label, onClick: () => setPendSort(h.key),
+      active: S.pendSortKey === h.key,
+      arrow: S.pendSortKey === h.key ? (S.pendSortDir === "asc" ? "M6 15l6-6 6 6" : "M6 9l6 6 6-6") : "M8 9l4-4 4 4 M8 15l4 4 4-4",
+      arrowOpacity: S.pendSortKey === h.key ? "1" : "0.4",
+      color: S.pendSortKey === h.key ? "var(--blue-ink)" : "var(--slate-500)",
+    }));
+
     const categoryChips = this.categoryFilters.map((f) => ({
       label: f.label, onClick: () => this.setCategoryFilter(f.key),
       bg: S.categoryFilter === f.key ? "var(--blue-500)" : "var(--surface-tint)",
@@ -1133,14 +1181,48 @@ class Component extends DCLogic {
     }).map((h) => {
       const st = this.STATUS_MON[h.status] || this.STATUS_MON.open;
       const rejected = h.keputusan === "Ditolak";
-      const dec = this.DECISION[h.keputusan] || { bg: "var(--surface-tint)", fg: "var(--ink-700)" };
-      return { ...h, statusLabel: st.label, sBg: st.bg, sFg: st.fg,
-        kLabel: h.keputusan, kBg: dec.bg, kFg: dec.fg,
+      const dec = this.DECISION[h.keputusan] || { bg: "var(--surface-tint)", fg: "var(--ink-700)", dot: "var(--slate-500)" };
+      return { ...h, statusLabel: st.label, sBg: st.bg, sFg: st.fg, sDot: st.dot,
+        kLabel: h.keputusan, kBg: dec.bg, kFg: dec.fg, kDot: dec.dot,
         nextHandler: rejected ? "Kirim ke Requester" : "Support " + h.handlerType + " - " + h.app,
         nextBg: rejected ? "rgba(186,26,26,0.10)" : (h.handlerType === "BPO" ? "var(--rose-200)" : "var(--blue-050)"),
         nextFg: rejected ? "var(--red-600)" : (h.handlerType === "BPO" ? "var(--clay-700)" : "var(--blue-ink)"),
         open: () => this.openHistory(h.idLabel) };
     });
+    const hSRANK = { "open": 1, "in-progress": 2, "resolved": 3, "closed": 4 };
+    const hKRANK = { "Disetujui": 3, "Minta Perbaikan": 2, "Ditolak": 1 };
+    const hVal = (h, key) => {
+      if (key === "tiket") return (h.judul || "").toLowerCase();
+      if (key === "layanan") return (h.layananShort || "").toLowerCase();
+      if (key === "status") return hSRANK[h.status] || 0;
+      if (key === "keputusan") return hKRANK[h.keputusan] || 0;
+      if (key === "catatan") return (h.catatan || "").toLowerCase();
+      if (key === "diteruskan") return (h.nextHandler || "").toLowerCase();
+      if (key === "waktu") return -(h.daysAgo != null ? h.daysAgo : 0);
+      return 0;
+    };
+    const hk = S.hSortKey, hdir = S.hSortDir === "asc" ? 1 : -1;
+    historyView.sort((a, b) => {
+      const va = hVal(a, hk), vb = hVal(b, hk);
+      if (va < vb) return -1 * hdir;
+      if (va > vb) return 1 * hdir;
+      return 0;
+    });
+    const setHSort = (key) => this.setState((s) => ({ hSortKey: key, hSortDir: s.hSortKey === key && s.hSortDir === "asc" ? "desc" : "asc" }));
+    const historyHeaders = [
+      { key: "tiket", label: "Tiket" },
+      { key: "layanan", label: "Layanan" },
+      { key: "status", label: "Status" },
+      { key: "keputusan", label: "Keputusan" },
+      { key: "catatan", label: "Catatan" },
+      { key: "diteruskan", label: "Diteruskan Ke" },
+      { key: "waktu", label: "Waktu" },
+    ].map((h) => ({
+      label: h.label, onClick: () => setHSort(h.key),
+      arrow: S.hSortKey === h.key ? (S.hSortDir === "asc" ? "M6 15l6-6 6 6" : "M6 9l6 6 6-6") : "M8 9l4-4 4 4 M8 15l4 4 4-4",
+      arrowOpacity: S.hSortKey === h.key ? "1" : "0.4",
+      color: S.hSortKey === h.key ? "var(--blue-ink)" : "var(--slate-500)",
+    }));
     const historyChips = this.historyFilters.map((f) => ({
       label: f.label, onClick: () => this.setHistoryFilter(f.key),
       bg: S.historyFilter === f.key ? "var(--blue-500)" : "var(--surface-tint)",
@@ -1191,7 +1273,7 @@ class Component extends DCLogic {
         ? { state: "done", color: "var(--slate-500)", stateBg: "var(--surface-tint)", stateFg: "var(--slate-500)", stateLabel: "Selesai", text: "—", barPct: 100 }
         : this.computeSla(rawSel, now);
       const statusLabel = decision ? decision.keputusan : "Waiting for Approval";
-      const statusStyle = decision ? this.DECISION[decision.keputusan] : { bg: "var(--surface-tint)", fg: "var(--ink-700)" };
+      const statusStyle = decision ? this.DECISION[decision.keputusan] : { bg: "var(--surface-tint)", fg: "var(--ink-700)", dot: "var(--slate-500)" };
       const lastIdx = rawSel.timeline.length - 1;
       const reqMsg = (rawSel.forum || []).find((m) => (m.role || "").toLowerCase() === "requester");
       const reqNote = rawSel.catatanRequester || (reqMsg ? reqMsg.text : "");
@@ -1203,7 +1285,7 @@ class Component extends DCLogic {
         reqNoteTime: (reqMsg && reqMsg.time) || rawSel.masuk || rawSel.dibuat || "",
         reqInitials: (rawSel.requesterName || "R").split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase(),
         priorityLabel: pr.label, prioBg: pr.bg, prioColor: pr.color,
-        statusLabel, statusBg: statusStyle.bg, statusFg: statusStyle.fg,
+        statusLabel, statusBg: statusStyle.bg, statusFg: statusStyle.fg, statusDot: statusStyle.dot,
         slaColor: sla.color, slaText: sla.text, slaBarPct: sla.barPct,
         slaStateLabel: sla.stateLabel, slaStateBg: sla.stateBg, slaStateFg: sla.stateFg,
         slaRespons: this.SLA_RESP_LABEL[rawSel.prioritas], slaSelesai: this.SLA_SELESAI_LABEL[rawSel.prioritas],
@@ -1286,11 +1368,11 @@ class Component extends DCLogic {
       kpis,
       priorityDist, priorityInsight,
       approvedPoints, rejectedPoints, approvedDots, weekLabels, trendInsight,
-      pendingView, hasPendingView: pendingView.length > 0,
+      pendingView, hasPendingView: pendingView.length > 0, pendHeaders,
       isEmpty: pending.length === 0, isFilterEmpty: pending.length > 0 && pendingView.length === 0,
       showPendingFilter: S.showPendingFilter, togglePendingFilter: this.togglePendingFilter, filterChips, categoryChips, filterButtonLabel,
       resetPendingFilter: () => this.setPendingFilter("all"), activeFilterLabel: activeFilterDef.label,
-      history: historyView, historyChips, historySub, historyPeriodSegments, historyKpis, historyEmpty: historyView.length === 0,
+      history: historyView, historyHeaders, historyChips, historySub, historyPeriodSegments, historyKpis, historyEmpty: historyView.length === 0,
       historyQuery: S.historyQuery, onHistoryQuery: this.onHistoryQuery,
       confirmOpen: !!S.confirmKind, confirmModal, cancelDecide: this.cancelDecide, confirmDecide: this.confirmDecide,
       t, back: this.back,
@@ -1304,6 +1386,7 @@ class Component extends DCLogic {
       notifBtnBg: S.notifOpen ? "var(--surface-tint)" : "transparent", profileBtnBg: S.profileOpen ? "var(--surface-tint)" : "transparent",
       stop: (e) => e.stopPropagation(), markAllRead: () => this.markAllRead(),
       hasUnread: S.notifications.some((n) => n.unread),
+      unreadCount: S.notifications.filter((n) => n.unread).length,
       notifications: S.notifications.map((n) => ({
         ...n, iconBg: n.bg, iconColor: n.color, iconPath: this.ICONS[n.icon],
         rowBg: n.unread ? "var(--blue-050-cool)" : "var(--white)",

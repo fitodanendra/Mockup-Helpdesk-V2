@@ -74,10 +74,7 @@
 
     <div style="flex: 1;"></div>
 
-    <div style="width: 300px; display: flex; align-items: center; gap: 8px; background: var(--surface-tint); border-radius: 10px; padding: 8px 12px;">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: var(--slate-500);"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
-      <span style="font-size: 13px; color: var(--slate-500);">Search tickets or services…</span>
-    </div>
+    
 
     <div style="position: relative;">
       <button onClick="{{ toggleNotif }}" style="position: relative; width: 36px; height: 36px; border-radius: 10px; border: none; display: flex; align-items: center; justify-content: center; color: var(--ink-700); cursor: pointer; background: {{ notifBtnBg }};" style-hover="background: var(--surface-tint);">
@@ -294,8 +291,13 @@
         <a href="my-tickets.html" style="font-size: 12px; font-weight: 600;">View all tickets →</a>
       </div>
       <div style="overflow-x: auto;">
-        <div style="min-width: 760px; display: grid; grid-template-columns: minmax(108px, auto) minmax(160px, 1.8fr) minmax(80px, auto) minmax(70px, auto) minmax(130px, auto) minmax(110px, 150px); gap: 12px; padding: 8px 22px; background: var(--canvas); border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">
-          <span>Ticket No.</span><span>SUBJECT</span><span style="text-align: left;">Category</span><span style="text-align: left;">Priority</span><span style="text-align: left;">Status</span><span>SLA Remaining</span>
+        <div style="min-width: 760px; display: grid; grid-template-columns: minmax(108px, auto) minmax(160px, 1.8fr) minmax(80px, auto) minmax(70px, auto) minmax(130px, auto) minmax(110px, 150px); gap: 12px; padding: 8px 22px; background: var(--canvas); border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;">
+          <sc-for list="{{ slaHeaders }}" as="h" hint-placeholder-count="6">
+            <button type="button" onClick="{{ h.onClick }}" style="display: flex; align-items: center; gap: 4px; border: none; background: transparent; padding: 0; cursor: pointer; font-family: var(--font-sans); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: {{ h.color }}; text-align: left;">
+              {{ h.label }}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{ h.arrowOpacity }}; flex-shrink: 0;"><path d="{{ h.arrow }}"></path></svg>
+            </button>
+          </sc-for>
         </div>
         <sc-for list="{{ slaRows }}" as="row" hint-placeholder-count="5">
           <a href="ticket-detail.html" style="text-decoration: none; color: inherit; min-width: 760px; display: grid; grid-template-columns: minmax(108px, auto) minmax(160px, 1.8fr) minmax(80px, auto) minmax(70px, auto) minmax(130px, auto) minmax(110px, 150px); gap: 12px; padding: 13px 22px; border-bottom: 1px solid var(--border-soft); align-items: center; background: {{ row.rowBg }}; cursor: pointer;" style-hover="background: var(--blue-050-cool);">
@@ -306,7 +308,7 @@
             </div>
             <span style="font-size: 12px; color: var(--ink-700);">{{ row.category }}</span>
             <span style="justify-self: start; white-space: nowrap; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ row.prioBg }}; color: {{ row.prioColor }};">{{ row.priority }}</span>
-            <span style="justify-self: start; white-space: nowrap; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ row.statusBg }}; color: {{ row.statusColor }};">{{ row.status }}</span>
+            <span style="justify-self: start; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-size: 12px; color: var(--ink-700);"><span style="width: 7px; height: 7px; border-radius: 999px; background: {{ row.statusDot }}; flex-shrink: 0;"></span>{{ row.status }}</span>
             <div style="display: flex; flex-direction: column; gap: 5px;">
               <span style="font-size: 12px; font-weight: 700; color: {{ row.slaColor }}; font-variant-numeric: tabular-nums;">{{ row.slaLeft }}</span>
               <div style="height: 4px; border-radius: 999px; background: var(--border-soft); overflow: hidden;"><div style="height: 100%; border-radius: 999px; background: {{ row.slaColor }}; width: {{ row.slaPct }};"></div></div>
@@ -518,7 +520,7 @@
   &quot;tableRows&quot;: { &quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 5, &quot;min&quot;: 3, &quot;max&quot;: 6, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;SLA Table&quot; }
 }">
 class Component extends DCLogic {
-  state = { modalOpen: false, priority: "Low", notifOpen: false, profileOpen: false, application: "", subCategory: "", subject: "", appOpen: false, subCatOpen: false, subjectOpen: false, otherCategory: "", otherCatOpen: false, approverQuery: "", approverSel: null, approverOpen: false, subjectError: "" };
+  state = { modalOpen: false, priority: "Low", notifOpen: false, profileOpen: false, sSortKey: "sla", sSortDir: "desc", application: "", subCategory: "", subject: "", appOpen: false, subCatOpen: false, subjectOpen: false, otherCategory: "", otherCatOpen: false, approverQuery: "", approverSel: null, approverOpen: false, subjectError: "" };
 
   // Direktori IPA (Identity Provider Adhi) — sumber tunggal data approver.
   // Nama yang diketik requester divalidasi terhadap daftar ini.
@@ -750,11 +752,12 @@ class Component extends DCLogic {
       Medium:   { bg: "var(--blue-050)",      color: "var(--blue-ink)" },
       Low:      { bg: "var(--surface-tint)",  color: "var(--slate-500)" }
     };
+    // Team Lead "status · PIC" style: leading colored dot + tinted pill.
     const st = {
-      "In Progress":          { bg: "var(--blue-050)",     color: "var(--blue-ink)" },
-      "Assigned":             { bg: "var(--blue-050-alt)", color: "var(--blue-ink)" },
-      "Open":                 { bg: "var(--surface-tint)", color: "var(--ink-700)" },
-      "Waiting for Response": { bg: "rgba(124, 58, 237, 0.12)", color: "rgb(109, 40, 217)" }
+      "In Progress":          { bg: "var(--blue-050)",     color: "var(--blue-ink)", dot: "var(--blue-500)" },
+      "Assigned":             { bg: "var(--blue-050-alt)", color: "var(--blue-ink)", dot: "var(--blue-500)" },
+      "Open":                 { bg: "var(--surface-tint)", color: "var(--ink-700)",  dot: "var(--slate-500)" },
+      "Waiting for Response": { bg: "var(--blue-050)",     color: "var(--blue-ink)", dot: "var(--blue-500)" }
     };
 
     const rows = [
@@ -767,10 +770,53 @@ class Component extends DCLogic {
     ].map(r => ({
       ...r,
       prioBg: prio[r.priority].bg, prioColor: prio[r.priority].color,
-      statusBg: st[r.status].bg, statusColor: st[r.status].color
+      statusBg: st[r.status].bg, statusColor: st[r.status].color, statusDot: st[r.status].dot
     }));
 
-    return { userName, firstName, initials, showDeltas, slaRows: rows.slice(0, rowCount), modalOpen, openModal, closeModal, stopClick, priorities, notifOpen, profileOpen, toggleNotif, toggleProfile, closeMenus, anyMenuOpen, notifBtnBg, profileBtnBg, notifications, profileMenu,
+    // Per-column sorting
+    const PRANK = { Critical: 4, High: 3, Medium: 2, Low: 1 };
+    const SRANK = { "Open": 1, "Assigned": 2, "In Progress": 3, "Waiting for Response": 4, "Resolved": 5, "Closed": 6 };
+    const slaSortVal = (r) => {
+      const t = r.slaLeft.toLowerCase();
+      if (t.startsWith("breach")) { const m = t.match(/([\d.]+)/); return 1e6 + (m ? parseFloat(m[1]) : 0); }
+      let mins = 0; const hM = t.match(/([\d.]+)\s*hr/); const dM = t.match(/([\d.]+)\s*day/); const mM = t.match(/([\d.]+)\s*min/);
+      if (dM) mins += parseFloat(dM[1]) * 1440;
+      if (hM) mins += parseFloat(hM[1]) * 60;
+      if (mM) mins += parseFloat(mM[1]);
+      return 1e6 - mins;
+    };
+    const sVal = (r, key) => {
+      if (key === "id") return r.id.toLowerCase();
+      if (key === "title") return r.title.toLowerCase();
+      if (key === "category") return r.category.toLowerCase();
+      if (key === "priority") return PRANK[r.priority] || 0;
+      if (key === "status") return SRANK[r.status] || 99;
+      if (key === "sla") return slaSortVal(r);
+      return 0;
+    };
+    const sk = this.state.sSortKey, sdir = this.state.sSortDir === "asc" ? 1 : -1;
+    const sortedRows = rows.slice(0, rowCount).slice().sort((a, b) => {
+      const va = sVal(a, sk), vb = sVal(b, sk);
+      if (va < vb) return -1 * sdir;
+      if (va > vb) return 1 * sdir;
+      return 0;
+    });
+    const setSSort = (key) => this.setState((s) => ({ sSortKey: key, sSortDir: s.sSortKey === key && s.sSortDir === "asc" ? "desc" : "asc" }));
+    const slaHeaders = [
+      { key: "id", label: "Ticket No." },
+      { key: "title", label: "Subject" },
+      { key: "category", label: "Category" },
+      { key: "priority", label: "Priority" },
+      { key: "status", label: "Status" },
+      { key: "sla", label: "SLA Remaining" },
+    ].map((h) => ({
+      label: h.label, onClick: () => setSSort(h.key),
+      arrow: this.state.sSortKey === h.key ? (this.state.sSortDir === "asc" ? "M6 15l6-6 6 6" : "M6 9l6 6 6-6") : "M8 9l4-4 4 4 M8 15l4 4 4-4",
+      arrowOpacity: this.state.sSortKey === h.key ? "1" : "0.4",
+      color: this.state.sSortKey === h.key ? "var(--blue-ink)" : "var(--slate-500)",
+    }));
+
+    return { userName, firstName, initials, showDeltas, slaRows: sortedRows, slaHeaders, modalOpen, openModal, closeModal, stopClick, priorities, notifOpen, profileOpen, toggleNotif, toggleProfile, closeMenus, anyMenuOpen, notifBtnBg, profileBtnBg, notifications, profileMenu,
       applicationOptions, application, appOpen, toggleApp, appItems, appLabel, appLabelColor, appChevron,
       subCatOptions, subCategory, subCatOpen, subCatDisabled, toggleSubCat, subCatItems, subCatLabel, subCatLabelColor, subCatChevron, subCatTriggerCursor, subCatTriggerOpacity,
       subjectOptions, subject, subjectOpen, subjectDisabled, toggleSubject, subjectItems, subjectLabel, subjectLabelColor, subjectChevron, subjectTriggerCursor, subjectTriggerOpacity, closeDropdowns, submitTicket, subjectError,

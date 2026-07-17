@@ -200,8 +200,13 @@
     <!-- ============ TICKET HISTORY TABLE ============ -->
     <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); overflow: hidden;">
       <div style="overflow-x: auto;">
-        <div style="min-width: 860px; display: grid; grid-template-columns: minmax(112px, auto) minmax(180px, 2fr) minmax(96px, auto) minmax(72px, auto) minmax(120px, auto) minmax(96px, auto) minmax(92px, auto); gap: 12px; padding: 10px 22px; background: var(--canvas); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">
-          <span>Ticket No.</span><span>Title</span><span>Category</span><span>Priority</span><span>Status</span><span>SLA</span><span>Created</span>
+        <div style="min-width: 860px; display: grid; grid-template-columns: minmax(112px, auto) minmax(180px, 2fr) minmax(96px, auto) minmax(72px, auto) minmax(120px, auto) minmax(96px, auto) minmax(92px, auto); gap: 12px; padding: 10px 22px; background: var(--canvas); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;">
+          <sc-for list="{{ ticketHeaders }}" as="h" hint-placeholder-count="7">
+            <button type="button" onClick="{{ h.onClick }}" style="display: flex; align-items: center; gap: 4px; border: none; background: transparent; padding: 0; cursor: pointer; font-family: var(--font-sans); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: {{ h.color }}; text-align: left;">
+              {{ h.label }}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{ h.arrowOpacity }}; flex-shrink: 0;"><path d="{{ h.arrow }}"></path></svg>
+            </button>
+          </sc-for>
         </div>
         <sc-for list="{{ rows }}" as="row" hint-placeholder-count="8">
           <a href="{{ row.href }}" style="text-decoration: none; color: inherit; min-width: 860px; display: grid; grid-template-columns: minmax(112px, auto) minmax(180px, 2fr) minmax(96px, auto) minmax(72px, auto) minmax(120px, auto) minmax(96px, auto) minmax(92px, auto); gap: 12px; padding: 13px 22px; border-bottom: 1px solid var(--border-soft); align-items: center; cursor: pointer;" style-hover="background: var(--blue-050-cool);">
@@ -212,7 +217,7 @@
             </div>
             <span style="font-size: 12px; color: var(--ink-700);">{{ row.category }}</span>
             <span style="justify-self: start; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ row.prioBg }}; color: {{ row.prioColor }};">{{ row.priority }}</span>
-            <span style="justify-self: start; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ row.statusBg }}; color: {{ row.statusColor }}; white-space: nowrap;">{{ row.status }}</span>
+            <span style="justify-self: start; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-700); white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 999px; background: {{ row.statusDot }}; flex-shrink: 0;"></span>{{ row.status }}</span>
             <span style="font-size: 12px; font-weight: 600; color: {{ row.slaColor }};">{{ row.sla }}</span>
             <span style="font-size: 12px; color: var(--slate-500); font-variant-numeric: tabular-nums;">{{ row.created }}</span>
           </a>
@@ -422,7 +427,7 @@
   &quot;userName&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Andi Pratama&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Profile&quot; }
 }">
 class Component extends DCLogic {
-  state = { modalOpen: false, priority: "Low", tab: "All", notifOpen: false, profileOpen: false, openFilter: null, fCat: "All Categories", fPrio: "All Priorities", fTime: "Last 6 months", application: "", subCategory: "", subject: "", appOpen: false, subCatOpen: false, subjectOpen: false, otherCategory: "", otherCatOpen: false, approverQuery: "", approverSel: null, approverOpen: false, subjectError: "" };
+  state = { modalOpen: false, priority: "Low", tab: "All", notifOpen: false, profileOpen: false, mSortKey: "created", mSortDir: "desc", openFilter: null, fCat: "All Categories", fPrio: "All Priorities", fTime: "Last 6 months", application: "", subCategory: "", subject: "", appOpen: false, subCatOpen: false, subjectOpen: false, otherCategory: "", otherCatOpen: false, approverQuery: "", approverSel: null, approverOpen: false, subjectError: "" };
 
   IPA_DIRECTORY = [
     { name: "Slamet Riyadi", role: "Manager IT & Operations", unit: "Biro Infrastruktur Operasional IT" },
@@ -660,17 +665,27 @@ class Component extends DCLogic {
       Medium:   { bg: "var(--blue-050)",      color: "var(--blue-ink)" },
       Low:      { bg: "var(--surface-tint)",  color: "var(--slate-500)" }
     };
+    // Status pills follow the Team Lead "status · PIC" style: a leading
+    // colored dot + tinted pill + colored label. The dot (which the
+    // Priority badges don't have) keeps the two columns readable even
+    // when a status and a priority share a hue.
+    const S_GRAY  = { bg: "var(--surface-tint)",   color: "var(--ink-700)",  dot: "var(--slate-500)" };
+    const S_BLUE  = { bg: "var(--blue-050)",       color: "var(--blue-ink)", dot: "var(--blue-500)" };
+    const S_BLUEA = { bg: "var(--blue-050-alt)",   color: "var(--blue-ink)", dot: "var(--blue-500)" };
+    const S_GREEN = { bg: "rgba(52,199,89,0.12)",  color: "#187C45",         dot: "var(--green-500)" };
+    const S_AMBER = { bg: "rgba(255,159,10,0.14)", color: "#b45309",         dot: "#f59e0b" };
+    const S_RED   = { bg: "rgba(186,26,26,0.10)",  color: "var(--red-600)",  dot: "var(--red-600)" };
     const st = {
-      "Draft":                { bg: "var(--surface-tint)",       color: "var(--slate-500)" },
-      "Waiting for Approval": { bg: "var(--blue-050-cool)",      color: "var(--navy-700)" },
-      "Rejected":             { bg: "rgba(186,26,26,0.10)",      color: "var(--red-600)" },
-      "Open":                 { bg: "var(--surface-tint)",       color: "var(--ink-700)" },
-      "Assigned":             { bg: "var(--blue-050-alt)",       color: "var(--blue-ink)" },
-      "In Progress":          { bg: "var(--blue-050)",           color: "var(--blue-ink)" },
-      "Waiting for Response": { bg: "rgba(124, 58, 237, 0.12)",  color: "rgb(109, 40, 217)" },
-      "Resolved":             { bg: "rgba(52,199,89,0.14)",      color: "var(--green-500)" },
-      "Completed":            { bg: "rgba(52,199,89,0.14)",      color: "var(--green-500)" },
-      "Closed":               { bg: "var(--surface-tint)",       color: "var(--slate-500)" }
+      "Draft":                S_GRAY,
+      "Waiting for Approval": S_AMBER,
+      "Rejected":             S_RED,
+      "Open":                 S_GRAY,
+      "Assigned":             S_BLUEA,
+      "In Progress":          S_BLUE,
+      "Waiting for Response": S_BLUE,
+      "Resolved":             S_GREEN,
+      "Completed":            S_GREEN,
+      "Closed":               S_GRAY
     };
     const slaColors = { ontrack: "var(--green-500)", warning: "var(--clay-600)", breach: "var(--red-600)", none: "var(--slate-500)" };
 
@@ -705,8 +720,54 @@ class Component extends DCLogic {
       ...r,
       href: r.status === "Rejected" ? "ticket-detail-rejected.html" : "ticket-detail.html",
       prioBg: prio[r.priority].bg, prioColor: prio[r.priority].color,
-      statusBg: st[r.status].bg, statusColor: st[r.status].color,
+      statusBg: st[r.status].bg, statusColor: st[r.status].color, statusDot: st[r.status].dot,
       slaColor: slaColors[r.slaKind]
+    }));
+
+    // Per-column sorting
+    const mPRANK = { Critical: 4, High: 3, Medium: 2, Low: 1 };
+    const mSRANK = { "Draft": 0, "Waiting for Approval": 1, "Open": 2, "Assigned": 3, "In Progress": 4, "Waiting for Response": 5, "Resolved": 6, "Completed": 7, "Closed": 8, "Rejected": 9 };
+    const mSlaVal = (r) => {
+      const t = (r.sla || "").toLowerCase();
+      if (t.startsWith("breach")) { const m = t.match(/([\d.]+)/); return 1e7 + (m ? parseFloat(m[1]) : 0); }
+      if (t === "—" || t === "not started" || t === "met") return -1;
+      let mins = 0; const dM = t.match(/([\d.]+)\s*d/); const hM = t.match(/([\d.]+)\s*h/); const mM = t.match(/([\d.]+)\s*min/);
+      if (dM) mins += parseFloat(dM[1]) * 1440;
+      if (hM) mins += parseFloat(hM[1]) * 60;
+      if (mM) mins += parseFloat(mM[1]);
+      return 1e6 - mins;
+    };
+    const mVal = (r, key) => {
+      if (key === "id") return r.id.toLowerCase();
+      if (key === "title") return r.title.toLowerCase();
+      if (key === "category") return r.category.toLowerCase();
+      if (key === "priority") return mPRANK[r.priority] || 0;
+      if (key === "status") return mSRANK[r.status] != null ? mSRANK[r.status] : 99;
+      if (key === "sla") return mSlaVal(r);
+      if (key === "created") return new Date(r.created).getTime() || 0;
+      return 0;
+    };
+    const mk = this.state.mSortKey, mdir = this.state.mSortDir === "asc" ? 1 : -1;
+    rows.sort((a, b) => {
+      const va = mVal(a, mk), vb = mVal(b, mk);
+      if (va < vb) return -1 * mdir;
+      if (va > vb) return 1 * mdir;
+      return 0;
+    });
+    const setMSort = (key) => this.setState((s) => ({ mSortKey: key, mSortDir: s.mSortKey === key && s.mSortDir === "asc" ? "desc" : "asc" }));
+    const ticketHeaders = [
+      { key: "id", label: "Ticket No." },
+      { key: "title", label: "Title" },
+      { key: "category", label: "Category" },
+      { key: "priority", label: "Priority" },
+      { key: "status", label: "Status" },
+      { key: "sla", label: "SLA" },
+      { key: "created", label: "Created" },
+    ].map((h) => ({
+      label: h.label, onClick: () => setMSort(h.key),
+      arrow: this.state.mSortKey === h.key ? (this.state.mSortDir === "asc" ? "M6 15l6-6 6 6" : "M6 9l6 6 6-6") : "M8 9l4-4 4 4 M8 15l4 4 4-4",
+      arrowOpacity: this.state.mSortKey === h.key ? "1" : "0.4",
+      color: this.state.mSortKey === h.key ? "var(--blue-ink)" : "var(--slate-500)",
     }));
 
     const counts = {
@@ -731,7 +792,7 @@ class Component extends DCLogic {
     });
 
     return {
-      userName, initials, tabs, rows,
+      userName, initials, tabs, rows, ticketHeaders,
       shownCount: rows.length, totalCount: all.length,
       modalOpen, openModal, closeModal, stopClick, priorities,
       notifOpen, profileOpen, toggleNotif, toggleProfile, closeMenus, anyMenuOpen, notifBtnBg, profileBtnBg, notifications, profileMenu,

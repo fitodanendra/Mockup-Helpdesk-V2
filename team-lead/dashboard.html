@@ -57,6 +57,16 @@
     .op-dot { transition:left .5s cubic-bezier(.4,0,.2,1), top .5s cubic-bezier(.4,0,.2,1); }
     ::-webkit-scrollbar { width:10px; height:10px; }
     ::-webkit-scrollbar-thumb { background:rgba(0,0,0,.14); border-radius:99px; border:3px solid var(--canvas); }
+    @media (max-width:1000px){
+      main{ padding:18px !important; }
+      [style*="grid-template-columns:repeat(5,1fr)"],[style*="grid-template-columns:repeat(4,1fr)"]{ grid-template-columns:repeat(2,1fr) !important; }
+      [style*="grid-template-columns:repeat(3,1fr)"]{ grid-template-columns:repeat(3,1fr) !important; }
+      [style*="grid-template-columns:1fr 1.35fr"],[style*="grid-template-columns:1.5fr 1fr"],[style*="grid-template-columns:0.82fr 1.6fr"],[style*="grid-template-columns:1fr 1.6fr"],[style*="grid-template-columns:1fr 1fr"],[style*="grid-template-columns:310px 1fr"]{ grid-template-columns:1fr !important; }
+    }
+    @media (max-width:620px){
+      main{ padding:14px !important; }
+      [style*="grid-template-columns:repeat(5,1fr)"],[style*="grid-template-columns:repeat(4,1fr)"],[style*="grid-template-columns:repeat(3,1fr)"]{ grid-template-columns:1fr !important; }
+    }
   </style>
 </helmet>
 
@@ -298,7 +308,7 @@
 
         </div>
 
-        <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:14px;align-items:start;">
+        <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:14px;align-items:stretch;">
           <!-- Created vs Resolved LINE chart -->
           <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px 22px;box-shadow:var(--elev-card);display:flex;flex-direction:column;gap:8px;">
             <div style="display:flex;align-items:flex-start;justify-content:space-between;">
@@ -354,7 +364,7 @@
                   <div style="height:9px;width:100%;border-radius:999px;background:var(--surface-tint);overflow:hidden;"><div class="op-bar" style="height:100%;border-radius:999px;background:{{ c.color }};width:{{ c.pctW }};"></div></div>
                   <div style="display:flex;flex-direction:column;gap:7px;padding-left:19px;margin-top:2px;">
                     <sc-for list="{{ c.subs }}" as="s" hint-placeholder-count="3">
-                      <div style="display:flex;align-items:center;gap:10px;">
+                      <div onClick="{{ s.onClick }}" style="display:flex;align-items:center;gap:10px;cursor:pointer;border-radius:7px;padding:2px 4px;margin:0 -4px;" style-hover="background:var(--blue-050-cool);">
                         <span style="flex:1;font-size:12px;color:var(--slate-500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ s.name }}</span>
                         <div style="width:74px;height:5px;border-radius:999px;background:var(--surface-tint);overflow:hidden;flex:none;"><div style="height:100%;border-radius:999px;background:{{ c.color }};opacity:.5;width:{{ s.pctW }};"></div></div>
                         <span style="font-size:12px;font-weight:700;color:var(--ink-700);width:34px;text-align:right;">{{ s.count }}</span>
@@ -514,11 +524,12 @@
             <div style="padding:28px 24px;text-align:center;font-size:13px;color:var(--slate-500);">Tidak ada subjek yang cocok dengan filter.</div>
           </sc-if>
           <sc-if value="{{ slaTopPager.show }}" hint-placeholder-val="{{ no }}">
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-top:1px solid var(--border-soft);">
-              <span style="font-size:12px;font-weight:600;color:var(--slate-500);">{{ slaTopPager.label }}</span>
-              <div style="display:flex;gap:8px;">
-                <button onClick="{{ slaTopPager.prev }}" style="{{ slaTopPager.prevStyle }}">Sebelumnya</button>
-                <button onClick="{{ slaTopPager.next }}" style="{{ slaTopPager.nextStyle }}">Berikutnya</button>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 24px;border-top:1px solid var(--border-soft);">
+              <span style="font-size:12.5px;color:var(--slate-500);">{{ slaTopPager.label }}</span>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <button onClick="{{ slaTopPager.prev }}" style="{{ slaTopPager.prevStyle }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>Sebelumnya</button>
+                <span style="font-size:12.5px;font-weight:700;color:var(--ink-800);">{{ slaTopPager.pageLabel }}</span>
+                <button onClick="{{ slaTopPager.next }}" style="{{ slaTopPager.nextStyle }}">Berikutnya<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></button>
               </div>
             </div>
           </sc-if>
@@ -554,22 +565,41 @@
             </div>
             <span style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:var(--surface-tint);color:var(--slate-500);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9 M12 3V2 M9 21a3 3 0 0 0 6 0"></path></svg>Read-only · diatur Administrator</span>
           </div>
-          <div style="padding:0 26px 14px 26px;">
-            <div style="position:relative;max-width:420px;">
+          <div style="padding:0 26px 14px 26px;display:flex;align-items:center;gap:10px;">
+            <div style="position:relative;flex:1;min-width:200px;max-width:420px;">
               <span style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--ink-400);display:flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14Z M20 20l-3.6-3.6"></path></svg></span>
               <input value="{{ picQuery }}" onChange="{{ onPicQuery }}" placeholder="Cari subjek, PIC, aplikasi, atau sub-kategori..." style="width:100%;padding:10px 14px 10px 40px;border-radius:11px;border:1px solid var(--border);background:var(--white);font-family:var(--font-sans);font-size:13px;color:var(--ink-900);outline:none;" style-focus="border-color:var(--blue-400);" />
             </div>
+            <div style="position:relative;flex:none;">
+              <button onClick="{{ togglePicFilter }}" style="{{ picFilterBtnStyle }}">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16 M7 12h10 M10 18h4"></path></svg>{{ picFilterLabel }}
+              </button>
+              <sc-if value="{{ picFilterOpen }}" hint-placeholder-val="{{ no }}">
+                <div style="position:absolute;top:44px;right:0;width:330px;max-height:400px;overflow-y:auto;background:var(--white);border:1px solid var(--border);border-radius:14px;box-shadow:var(--elev-pop);z-index:25;padding:16px 18px;display:flex;flex-direction:column;gap:16px;">
+                  <div style="display:flex;flex-direction:column;gap:9px;">
+                    <span style="font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--slate-500);">Aplikasi</span>
+                    <div style="display:flex;flex-wrap:wrap;gap:7px;"><sc-for list="{{ picAppChips }}" as="f" hint-placeholder-count="6"><button onClick="{{ f.onClick }}" style="{{ f.style }}">{{ f.label }}</button></sc-for></div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:9px;">
+                    <span style="font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--slate-500);">Sub-kategori</span>
+                    <div style="display:flex;flex-wrap:wrap;gap:7px;"><sc-for list="{{ picSubChips }}" as="f" hint-placeholder-count="8"><button onClick="{{ f.onClick }}" style="{{ f.style }}">{{ f.label }}</button></sc-for></div>
+                  </div>
+                  <a onClick="{{ resetPicFilter }}" style="font-size:12.5px;font-weight:700;color:var(--blue-500);cursor:pointer;">Reset semua filter</a>
+                </div>
+              </sc-if>
+            </div>
           </div>
-          <div style="display:grid;grid-template-columns:150px 120px 1fr 150px;gap:12px;padding:8px 26px;background:var(--surface-sunken);border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);font-size:11px;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.4px;">
-            <span>PIC</span><span>Aplikasi</span><span>Subjek</span><span>Sub-kategori</span>
+          <sc-if value="{{ picFilterOpen }}" hint-placeholder-val="{{ no }}"><div onClick="{{ closePicFilter }}" style="position:fixed;inset:0;z-index:20;"></div></sc-if>
+          <div style="display:grid;grid-template-columns:150px 120px 150px 1fr;gap:12px;padding:8px 26px;background:var(--surface-sunken);border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);font-size:11px;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.4px;">
+            <span>PIC</span><span>Layanan</span><span>Sub-kategori</span><span>Subjek</span>
           </div>
           <div style="max-height:360px;overflow-y:auto;">
             <sc-for list="{{ picRows }}" as="r" hint-placeholder-count="8">
-              <div style="display:grid;grid-template-columns:150px 120px 1fr 150px;gap:12px;align-items:center;padding:11px 26px;border-bottom:1px solid var(--border-soft);" style-hover="background:var(--blue-050-cool);">
+              <div style="display:grid;grid-template-columns:150px 120px 150px 1fr;gap:12px;align-items:center;padding:11px 26px;border-bottom:1px solid var(--border-soft);" style-hover="background:var(--blue-050-cool);">
                 <span style="display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:var(--ink-800);"><span style="width:20px;height:20px;flex:none;border-radius:999px;background:var(--blue-050-alt);color:var(--blue-ink);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;">{{ r.init }}</span>{{ r.person }}</span>
                 <span style="display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;color:var(--ink-900);"><span style="width:8px;height:8px;border-radius:3px;background:{{ r.color }};flex:none;"></span>{{ r.app }}</span>
-                <span style="font-size:12.5px;font-weight:600;color:var(--ink-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.subject }}</span>
                 <span style="font-size:11px;color:var(--slate-500);">{{ r.group }}</span>
+                <span style="font-size:12.5px;font-weight:600;color:var(--ink-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.subject }}</span>
               </div>
             </sc-for>
             <sc-if value="{{ picEmpty }}" hint-placeholder-val="{{ no }}">
@@ -807,6 +837,12 @@
                   </div>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:10px;">
+                  <span style="font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--slate-500);">Sub-kategori</span>
+                  <div style="display:flex;flex-wrap:wrap;gap:8px;max-height:132px;overflow-y:auto;">
+                    <sc-for list="{{ monSubChips }}" as="f" hint-placeholder-count="8"><button onClick="{{ f.onClick }}" style="{{ f.style }}">{{ f.label }}</button></sc-for>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:10px;">
                   <span style="font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--slate-500);">Jenis Tiket</span>
                   <div style="display:flex;flex-wrap:wrap;gap:8px;">
                     <sc-for list="{{ typeChips }}" as="f" hint-placeholder-count="4"><button onClick="{{ f.onClick }}" style="{{ f.style }}">{{ f.label }}</button></sc-for>
@@ -847,17 +883,18 @@
 
         <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;box-shadow:var(--elev-card);overflow:hidden;">
           <div style="overflow-x:auto;">
-            <div style="min-width:940px;display:grid;grid-template-columns:100px 1fr 80px 96px 110px 130px 150px 108px;gap:12px;padding:10px 26px;background:var(--surface-sunken);border-bottom:1px solid var(--border-soft);font-size:11px;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.4px;">
-              <span>ID Tiket</span><span>Subjek</span><span>Aplikasi</span><span>Prioritas</span><span>Waktu buat tiket<br></span><span>Sisa SLA</span><span>Status · PIC</span><span style="text-align:right;">Aksi</span>
+            <div style="min-width:1040px;display:grid;grid-template-columns:100px 90px 130px 1fr 96px 110px 130px 150px 108px;gap:12px;padding:10px 26px;background:var(--surface-sunken);border-bottom:1px solid var(--border-soft);font-size:11px;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.4px;">
+              <span>ID Tiket</span><span>Layanan</span><span>Sub-kategori</span><span>Subjek</span><span>Prioritas</span><span>Waktu buat tiket<br></span><span>Sisa SLA</span><span>Status · PIC</span><span style="text-align:right;">Aksi</span>
             </div>
             <sc-for list="{{ monRows }}" as="r" hint-placeholder-count="8">
-              <div style="min-width:940px;display:grid;grid-template-columns:100px 1fr 80px 96px 110px 130px 150px 108px;gap:12px;align-items:center;padding:15px 26px;border-bottom:1px solid var(--border-soft);" style-hover="background:var(--blue-050-cool);">
+              <div style="min-width:1040px;display:grid;grid-template-columns:100px 90px 130px 1fr 96px 110px 130px 150px 108px;gap:12px;align-items:center;padding:15px 26px;border-bottom:1px solid var(--border-soft);" style-hover="background:var(--blue-050-cool);">
                 <a onClick="{{ r.onDetail }}" style="font-size:12px;font-weight:700;color:var(--blue-500);cursor:pointer;font-variant-numeric:tabular-nums;">{{ r.id }}</a>
+                <span style="justify-self:start;font-size:11px;font-weight:600;color:var(--ink-700);background:var(--surface-tint);padding:4px 10px;border-radius:8px;">{{ r.app }}</span>
+                <span style="font-size:11px;color:var(--slate-500);">{{ r.subCat }}</span>
                 <span style="display:flex;flex-direction:column;gap:4px;padding-right:8px;min-width:0;">
                   <span style="font-size:13.5px;font-weight:600;color:var(--ink-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.subj }}</span>
                   <span style="align-self:flex-start;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;background:{{ r.cat.bg }};color:{{ r.cat.color }};">{{ r.cat.label }}</span>
                 </span>
-                <span style="justify-self:start;font-size:11px;font-weight:600;color:var(--ink-700);background:var(--surface-tint);padding:4px 10px;border-radius:8px;">{{ r.app }}</span>
                 <span style="justify-self:start;font-size:11px;font-weight:700;padding:4px 11px;border-radius:999px;background:{{ r.p.bg }};color:{{ r.p.color }};">{{ r.p.label }}</span>
                 <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--slate-500);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M12 7v5l3 2"></path></svg>{{ r.age }}</span>
                 <span style="display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:{{ r.color }};font-variant-numeric:tabular-nums;"><span style="width:7px;height:7px;border-radius:999px;background:{{ r.color }};flex:none;"></span>{{ r.remaining }}</span>
@@ -921,14 +958,14 @@
               <span style="width:38px;height:38px;border-radius:11px;background:var(--red-tint);color:var(--red-600);display:flex;align-items:center;justify-content:center;flex:none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V9 M8 12l4-4 4 4 M8 4h8"></path></svg></span>
               <div>
                 <h2 style="margin:0 0 2px 0;font-size:15px;font-weight:700;color:var(--ink-900);">Eskalasi SLA Breach</h2>
-                <span style="font-size:12px;color:var(--slate-500);">Tiket melewati SLA yang otomatis naik ke Team Lead untuk tindakan korektif</span>
+                <span style="font-size:12px;color:var(--slate-500);">Tiket melewati SLA — dipantau Supervisor IT (view-only)</span>
               </div>
             </div>
-            <span style="font-size:12px;font-weight:700;padding:5px 13px;border-radius:999px;background:var(--red-tint);color:var(--red-600);">{{ escOpen }} perlu tindakan</span>
+            <span style="font-size:12px;font-weight:700;padding:5px 13px;border-radius:999px;background:var(--red-tint);color:var(--red-600);">{{ escOpen }} dipantau</span>
           </div>
           <div style="overflow-x:auto;">
             <div style="min-width:900px;display:grid;grid-template-columns:106px 1fr 80px 96px 120px 110px 200px;gap:12px;padding:10px 26px;background:var(--surface-sunken);border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);font-size:11px;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.4px;">
-              <span>ID Tiket</span><span>Subjek</span><span>Aplikasi</span><span>Prioritas</span><span>Overdue</span><span>Agen Asal</span><span style="text-align:right;">Tindakan</span>
+              <span>ID Tiket</span><span>Subjek</span><span>Aplikasi</span><span>Prioritas</span><span>Overdue</span><span>Agen Asal</span><span style="text-align:right;">Status</span>
             </div>
             <sc-for list="{{ escRows }}" as="e" hint-placeholder-count="4">
               <div style="min-width:900px;display:grid;grid-template-columns:106px 1fr 80px 96px 120px 110px 200px;gap:12px;align-items:center;padding:15px 26px;border-bottom:1px solid var(--border-soft);" style-hover="background:var(--blue-050-cool);">
@@ -943,9 +980,7 @@
                     <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--green-600);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M8.5 12l2.5 2.5 4.5-5"></path></svg>{{ e.handledLabel }}</span>
                   </sc-if>
                   <sc-if value="{{ e.open }}" hint-placeholder-val="{{ yes }}">
-                    <span style="display:flex;gap:8px;">
-                      <button onClick="{{ e.onReassign }}" style="display:flex;align-items:center;gap:5px;border:none;cursor:pointer;font-family:var(--font-sans);font-size:11px;font-weight:700;padding:8px 12px;border-radius:10px;background:var(--blue-500);color:#fff;box-shadow:var(--elev-card);" style-hover="background:var(--blue-600);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8h13 M16 5l4 3-4 3 M17 16H4 M8 13l-4 3 4 3"></path></svg>Alihkan</button>
-                    </span>
+                    <span style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:var(--red-tint);color:var(--red-600);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"></path></svg>Dipantau</span>
                   </sc-if>
                 </div>
               </div>
@@ -994,12 +1029,7 @@
                 <span style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:12.5px;font-weight:600;color:var(--ink-800);">{{ e.by }}</span><span style="font-size:11px;color:var(--slate-500);">{{ e.byRole }}</span></span>
                 <span style="font-size:12px;font-weight:700;color:rgb(180,83,9);">{{ e.waiting }}</span>
                 <div style="display:flex;justify-content:flex-end;">
-                  <sc-if value="{{ e.done }}" hint-placeholder-val="{{ no }}">
-                    <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--green-600);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M8.5 12l2.5 2.5 4.5-5"></path></svg>Diteruskan</span>
-                  </sc-if>
-                  <sc-if value="{{ e.pending }}" hint-placeholder-val="{{ yes }}">
-                    <button onClick="{{ e.onForward }}" style="display:flex;align-items:center;gap:5px;border:none;cursor:pointer;font-family:var(--font-sans);font-size:11px;font-weight:700;padding:8px 12px;border-radius:10px;background:var(--white);color:var(--blue-500);box-shadow:inset 0 0 0 1px var(--blue-400);" style-hover="background:var(--blue-050);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14 M13 6l6 6-6 6"></path></svg>Teruskan ke Admin</button>
-                  </sc-if>
+                  <span style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:var(--orange-tint);color:rgb(180,83,9);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"></path></svg>Dipantau</span>
                 </div>
               </div>
             </sc-for>
@@ -1273,20 +1303,15 @@
           <!-- Hasil pencarian subjek / PIC (dari Support) -->
           <sc-if value="{{ hasSubjResults }}" hint-placeholder-val="{{ no }}">
             <div style="display:flex;flex-direction:column;gap:6px;">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--slate-500);padding:0 2px;">PIC per Subjek · {{ subjResultCount }} hasil</div>
-              <div style="display:grid;grid-template-columns:120px 1fr 130px;gap:10px;padding:8px 14px;background:var(--surface-sunken);border-radius:9px;font-size:10.5px;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:.4px;">
-                <span>Aplikasi</span><span>Subjek</span><span style="text-align:right;">PIC · Aksi</span>
-              </div>
-              <sc-for list="{{ reassignSubjResults }}" as="r" hint-placeholder-count="4">
-                <button onClick="{{ r.onClick }}" style="display:grid;grid-template-columns:120px 1fr 130px;gap:10px;align-items:center;padding:10px 14px;border:none;border-bottom:1px solid var(--border-soft);background:transparent;cursor:pointer;text-align:left;width:100%;" style-hover="background:var(--blue-050-cool);">
-                  <span style="display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--ink-900);"><span style="width:8px;height:8px;border-radius:3px;background:{{ r.color }};flex:none;"></span>{{ r.app }}</span>
-                  <span style="display:flex;flex-direction:column;gap:2px;min-width:0;">
-                    <span style="font-size:12.5px;font-weight:600;color:var(--ink-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.subject }}</span>
-                    <span style="font-size:10.5px;color:var(--slate-500);">PIC ini mengerjakan: {{ r.works }}</span>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--slate-500);padding:0 2px;">PIC ditemukan · {{ subjResultCount }}</div>
+              <sc-for list="{{ reassignSubjResults }}" as="r" hint-placeholder-count="2">
+                <button onClick="{{ r.onClick }}" style="display:flex;align-items:center;gap:11px;padding:11px 13px;border:1px solid var(--border);border-radius:12px;background:var(--white);cursor:pointer;text-align:left;width:100%;" style-hover="border-color:var(--blue-400);background:var(--blue-050-cool);">
+                  <span style="width:34px;height:34px;flex:none;border-radius:999px;background:var(--blue-050-alt);color:var(--blue-ink);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">{{ r.init }}</span>
+                  <span style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;">
+                    <span style="font-size:13.5px;font-weight:700;color:var(--ink-900);">{{ r.person }}</span>
+                    <span style="font-size:11px;color:var(--slate-500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.count }} subjek · {{ r.works }}</span>
                   </span>
-                  <span style="display:flex;align-items:center;justify-content:flex-end;gap:8px;">
-                    <span style="display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--ink-700);"><span style="width:18px;height:18px;flex:none;border-radius:999px;background:var(--blue-050-alt);color:var(--blue-ink);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;">{{ r.init }}</span>{{ r.person }}</span>
-                  </span>
+                  <span style="font-size:11px;font-weight:800;color:#fff;background:var(--blue-500);padding:6px 13px;border-radius:9px;flex:none;">Alihkan</span>
                 </button>
               </sc-for>
             </div>
@@ -1450,7 +1475,7 @@ const ICON = {
 };
 
 class Component extends DCLogic {
-  state = { active:"operational", period:"30d", priority:"all", sortNB:false, reportType:"sla_compliance", escalated:{}, reassignFor:null, reassigned:{}, escHandled:{}, warnDismissed:false, detailFor:null, notes:{}, noteDraft:"", escT:{}, notifOpen:false, profileOpen:false, monQuery:"", filterOpen:false, appFilter:"all", unitFilter:"all", tegFilter:"all", tegSent:{}, repFrom:"2026-06-01", repTo:"2026-06-30", repUnit:"Semua Unit", monPage:1, statusFilter:"all", priOverride:{}, escView:"sla", apprFwd:{}, appTrendSel:null, typeFilter:"all", tick:0, autoRefresh:true, agentFor:null, audit:[], auditFilter:"all", appDirQuery:"", appFilterQuery:"", reassignTab:"agen", reassignQuery:"", picQuery:"", swQuery:"", slaTopQuery:"", slaTopApp:"all", slaTopSub:"all", slaTopType:"all", slaTopCompFilter:"all", slaTopOpen:null, slaTopFilterOpen:false, reccTier:"sub", appTrendDdOpen:false, slaTopPage:1 };
+  state = { active:"operational", period:"30d", priority:"all", sortNB:false, reportType:"sla_compliance", escalated:{}, reassignFor:null, reassigned:{}, escHandled:{}, warnDismissed:false, detailFor:null, notes:{}, noteDraft:"", escT:{}, notifOpen:false, profileOpen:false, monQuery:"", filterOpen:false, appFilter:"all", unitFilter:"all", tegFilter:"all", tegSent:{}, repFrom:"2026-06-01", repTo:"2026-06-30", repUnit:"Semua Unit", monPage:1, statusFilter:"all", priOverride:{}, escView:"sla", apprFwd:{}, appTrendSel:null, typeFilter:"all", tick:0, autoRefresh:true, agentFor:null, audit:[], auditFilter:"all", appDirQuery:"", appFilterQuery:"", reassignTab:"agen", reassignQuery:"", picQuery:"", swQuery:"", slaTopQuery:"", slaTopApp:"all", slaTopSub:"all", slaTopType:"all", slaTopCompFilter:"all", slaTopOpen:null, slaTopFilterOpen:false, reccTier:"sub", appTrendDdOpen:false, slaTopPage:1, picApp:"all", picSub:"all", picFilterOpen:false, monSub:"all" };
 
   ip = (n) => ICON[n] || ICON.info;
   nav = (k) => this.setState({ active:k, notifOpen:false, profileOpen:false, filterOpen:false, agentFor:null });
@@ -1534,6 +1559,11 @@ class Component extends DCLogic {
       { id:"#HD-4082", subj:"Tidak bisa release vendor", app:"ELISA", pri:"high", mins:-40, agent:"Gita M." },
       { id:"#HD-4051", subj:"Mailbox penuh & bounce", app:"MAILIA", pri:"medium", mins:-25, agent:"Citra L." },
       { id:"#HD-4099", subj:"VPN terputus berkala", app:"VPN", pri:"high", mins:-12, agent:"Bagus W." },
+      { id:"#HD-4044", subj:"Report PS error dump", app:"SAP", pri:"critical", mins:-88, agent:"Andi P." },
+      { id:"#HD-4039", subj:"Tidak bisa login SAP", app:"SAP", pri:"high", mins:-52, agent:"Fajar N." },
+      { id:"#HD-4028", subj:"WiFi putus lantai 5", app:"NETWORK", pri:"medium", mins:-33, agent:"Hadi T." },
+      { id:"#HD-4015", subj:"Data profil tidak sesuai", app:"SINTA", pri:"medium", mins:-20, agent:"Dedi A." },
+      { id:"#HD-4008", subj:"Printer jaringan offline", app:"NETWORK", pri:"low", mins:-9, agent:"Indah K." },
     ];
   }
   _overdue(m) { const a = Math.max(0,-m); return a>=60 ? Math.floor(a/60)+"j "+(a%60)+"m" : a+"m"; }
@@ -2271,6 +2301,7 @@ class Component extends DCLogic {
     if (this.state.unitFilter !== "all") mon = mon.filter(r => r.unit===this.state.unitFilter);
     if (this.state.statusFilter !== "all") mon = mon.filter(r => this._statusOf(r)===this.state.statusFilter);
     if (this.state.typeFilter !== "all") mon = mon.filter(r => (r.type||"incident")===this.state.typeFilter);
+    if (this.state.monSub !== "all" && this.state.monSub) mon = mon.filter(r => this._catOf(r).sub===this.state.monSub);
     const q = this.state.monQuery.trim().toLowerCase();
     if (q) mon = mon.filter(r => (r.id+" "+r.subj+" "+r.app+" "+(this.state.reassigned[r.id]||r.assignee)+" "+r.pri).toLowerCase().indexOf(q) !== -1);
     if (this.state.sortNB) mon = mon.slice().sort((a,b) => a.mins-b.mins);
@@ -2285,7 +2316,7 @@ class Component extends DCLogic {
       const liveMins = live.sec/60;
       const st = this._stateOf(liveMins);
       const ws = this._ticketStatus(this._statusOf(r));
-      return { id:r.id, subj:r.subj, app:r.app, cat:this._ticketType(r.type||"incident"), p:this._prio(r.pri), assignee:this.state.reassigned[r.id]||r.assignee, remaining:live.text, color:st.color, stateLabel:st.label, stateBg:st.bg, ws, age:this._fmtAge(this._ageOf(r.id)), onReassign:() => this.openReassign(r.id), onDetail:() => this.openDetail(r.id) };
+      return { id:r.id, subj:r.subj, app:r.app, subCat:this._catOf(r).sub, cat:this._ticketType(r.type||"incident"), p:this._prio(r.pri), assignee:this.state.reassigned[r.id]||r.assignee, remaining:live.text, color:st.color, stateLabel:st.label, stateBg:st.bg, ws, age:this._fmtAge(this._ageOf(r.id)), onReassign:() => this.openReassign(r.id), onDetail:() => this.openDetail(r.id) };
     });
     const priDefs = [ ["all","Semua"], ["critical","Critical"], ["high","High"], ["medium","Medium"], ["low","Low"] ];
     const priChips = priDefs.map(([k,l]) => ({ label:l, style:this._chip(this.state.priority===k), onClick:() => this.setState({ priority:k, monPage:1 }) }));
@@ -2304,8 +2335,10 @@ class Component extends DCLogic {
     const statusChips = statusDefs.map(([k,l]) => ({ label:l, style:this._chip(this.state.statusFilter===k), onClick:() => this.setState({ statusFilter:k, monPage:1 }) }));
     const typeDefs = [ ["all","Semua"], ["incident","Incident"], ["service","Service Request"], ["access","Access Request"] ];
     const typeChips = typeDefs.map(([k,l]) => ({ label:l, style:this._chip(this.state.typeFilter===k), onClick:() => this.setState({ typeFilter:k, monPage:1 }) }));
-    const resetFilters = () => this.setState({ priority:"all", appFilter:"all", unitFilter:"all", statusFilter:"all", typeFilter:"all", monPage:1 });
-    const activeCount = [this.state.priority!=="all", this.state.appFilter!=="all", this.state.unitFilter!=="all", this.state.statusFilter!=="all", this.state.typeFilter!=="all"].filter(Boolean).length;
+    const monSubVals = Array.from(new Set(this._monData().map(r=>this._catOf(r).sub))).sort((a,b)=>a.localeCompare(b));
+    const monSubChips = [["all","Semua"]].concat(monSubVals.map(v=>[v,v])).map(([k,l]) => ({ label:l, style:this._chip((this.state.monSub||"all")===k), onClick:() => this.setState({ monSub:k, monPage:1 }) }));
+    const resetFilters = () => this.setState({ priority:"all", appFilter:"all", unitFilter:"all", statusFilter:"all", typeFilter:"all", monSub:"all", monPage:1 });
+    const activeCount = [this.state.priority!=="all", this.state.appFilter!=="all", this.state.unitFilter!=="all", this.state.statusFilter!=="all", this.state.typeFilter!=="all", (this.state.monSub||"all")!=="all"].filter(Boolean).length;
     const filterActive = activeCount>0;
     const filterLabel = filterActive ? "Filter · "+activeCount : "Filter";
     const filterBtnStyle = "display:flex;align-items:center;gap:8px;border:none;cursor:pointer;font-family:var(--font-sans);font-size:13px;font-weight:700;padding:10px 16px;border-radius:12px;transition:all .15s ease;"
@@ -2495,7 +2528,15 @@ class Component extends DCLogic {
         // tier filter untuk daftar agen: sub (sub-kategori sama) → app (aplikasi sama) → all
         const tier=this.state.reccTier||"sub";
         const inScope=(name)=>{ if(tier==="all") return true; if(tier==="app") return reccApp?(appsOf[name]&&appsOf[name].has(reccApp)):true; return reccGroup?(grpOf[name]&&grpOf[name].has(reccGroup)):true; };
-        const results = q ? flat.filter(f=>(f.subject+" "+f.person+" "+f.app+" "+f.group).toLowerCase().indexOf(q)!==-1).slice(0,8) : [];
+        // jika query cocok nama PIC → tampilkan 1 baris per PIC (bukan per subjek)
+        const persons=Array.from(new Set(flat.map(f=>f.person)));
+        const personHit = q ? persons.filter(p=>p.toLowerCase().indexOf(q)!==-1) : [];
+        let byPerson=[];
+        if(personHit.length){
+          byPerson=personHit.map(p=>{ const f=flat.find(x=>x.person===p); const ws=workOf[p]||[];
+            return { person:p, init:f?f.init:this._init(p), app:f?f.app:"", color:f?f.color:"var(--blue-500)",
+              works:ws.slice(0,3).join(", ")+(ws.length>3?", …":""), count:ws.length, onClick:()=>this.doReassign(p) }; });
+        }
         return {
           reccHas:!!recc, recc:recc||{},
           reccScope:name=>inScope(name),
@@ -2504,8 +2545,8 @@ class Component extends DCLogic {
           reccTiers:[["sub","Sub-kategori sama"],["app","Aplikasi sama"],["all","Semua aplikasi"]].map(([k,l])=>({ label:l, onClick:()=>this.setState({ reccTier:k }), style:this._chip(tier===k) })),
           reccAgents:pickAgents.filter(a=>inScope(a.name)),
           reccAgentsEmpty:pickAgents.filter(a=>inScope(a.name)).length===0,
-          hasSubjResults:results.length>0, subjResultCount:results.length,
-          reassignSubjResults:results.map(r=>({ ...r, works:(workOf[r.person]||[]).slice(0,3).join(", ")+((workOf[r.person]||[]).length>3?", …":""), onClick:()=>this.doReassign(r.person) })),
+          hasSubjResults:byPerson.length>0, subjResultCount:byPerson.length,
+          reassignSubjResults:byPerson,
         };
       })(),
       reassignTab:this.state.reassignTab, reassignQuery:this.state.reassignQuery,
@@ -2600,9 +2641,22 @@ class Component extends DCLogic {
         ];
         const cols = ["var(--red-600)","var(--blue-500)","var(--green-500)"];
         const names = ["Incident","Service Request","Access Request"];
+        const typeByCat = ["incident","service","access"];
+        const subMap = {
+          "Transaksi MM":"Faulty PO Header Data","Transaksi PS":"Report PS (Error Dump)","Data (Duplikat/Hilang)":"Data Tidak Sesuai","Login & Akses":"Password Expired","Transaksi SD":"Data Tidak Sesuai",
+          "Instalasi & Setup":"Instalasi FortiClient","Permintaan Laporan":"Permintaan laporan / rekap data","Konfigurasi Aplikasi":"Perubahan setting aplikasi",
+          "Akun Aplikasi":"Reset Password","Perubahan Akses":"Perubahan akses aplikasi","VPN & Remote":"Instalasi FortiClient"
+        };
+        const validSubs = new Set(this._monData().map(r=>this._catOf(r).sub));
         return names.map((nm,i) => {
           const total = PD.cat[i].c;
-          const subs = subDefs[i].map(([sn,f]) => ({ name:sn, count:this._nf(Math.round(total*f)), pctW:Math.round(f*100)+"%" }));
+          const subs = subDefs[i].map(([sn,f]) => {
+            const target = subMap[sn];
+            const go = (target && validSubs.has(target))
+              ? { active:"monitoring", typeFilter:typeByCat[i], monSub:target, monQuery:"", monPage:1, filterOpen:false }
+              : { active:"monitoring", typeFilter:typeByCat[i], monSub:"all", monQuery:"", monPage:1, filterOpen:false };
+            return { name:sn, count:this._nf(Math.round(total*f)), pctW:Math.round(f*100)+"%", onClick:()=>this.setState(go) };
+          });
           return { name:nm, count:this._nf(total), pct:PD.cat[i].pct, pctW:PD.cat[i].pct+"%", color:cols[i], subs };
         });
       })(),
@@ -2654,10 +2708,11 @@ class Component extends DCLogic {
         const sc=({today:0.15,"7d":0.4,"30d":1,quarter:2.7})[this.state.period]||1;
         const n=this._slaTopCount((this.state.slaTopQuery||"").trim().toLowerCase(), this.state.slaTopApp||"all", this.state.slaTopCompFilter||"all", this.state.slaTopSub||"all", this.state.slaTopType||"all");
         const per=6, tot=Math.max(1,Math.ceil(n/per)), pg=Math.min(this.state.slaTopPage||1,tot);
-        return { show:n>per, label:"Halaman "+pg+" / "+tot, atStart:pg<=1, atEnd:pg>=tot,
+        const from=n===0?0:(pg-1)*per+1, to=Math.min(n,pg*per);
+        return { show:n>per, label:from+"–"+to+" dari "+n+" subjek", pageLabel:"Hal "+pg+" / "+tot, atStart:pg<=1, atEnd:pg>=tot,
           prev:()=>this.setState(s=>({ slaTopPage:Math.max(1,(s.slaTopPage||1)-1) })), next:()=>this.setState(s=>({ slaTopPage:(s.slaTopPage||1)+1 })),
-          prevStyle:"border:none;cursor:pointer;font-family:var(--font-sans);font-size:12px;font-weight:700;padding:7px 14px;border-radius:9px;background:var(--white);color:"+(pg<=1?"var(--ink-400)":"var(--ink-700)")+";box-shadow:inset 0 0 0 1px var(--border);",
-          nextStyle:"border:none;cursor:pointer;font-family:var(--font-sans);font-size:12px;font-weight:700;padding:7px 14px;border-radius:9px;background:var(--white);color:"+(pg>=tot?"var(--ink-400)":"var(--ink-700)")+";box-shadow:inset 0 0 0 1px var(--border);" };
+          prevStyle:"display:flex;align-items:center;gap:5px;border:none;cursor:"+(pg<=1?"default":"pointer")+";font-family:var(--font-sans);font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:10px;background:var(--surface-tint);color:"+(pg<=1?"var(--ink-400)":"var(--ink-800)")+";",
+          nextStyle:"display:flex;align-items:center;gap:5px;border:none;cursor:"+(pg>=tot?"default":"pointer")+";font-family:var(--font-sans);font-size:12.5px;font-weight:700;padding:8px 16px;border-radius:10px;background:"+(pg>=tot?"var(--surface-tint)":"var(--blue-500)")+";color:"+(pg>=tot?"var(--ink-400)":"#fff")+";" };
       })(),
       slaTopEmpty:(() => {
         const q=(this.state.slaTopQuery||"").trim().toLowerCase(), af=this.state.slaTopApp||"all", cf=this.state.slaTopCompFilter||"all", sf=this.state.slaTopSub||"all", tf=this.state.slaTopType||"all";
@@ -2716,18 +2771,29 @@ class Component extends DCLogic {
       tegRows, tegFilters, tegEmpty:tegRows.length===0,
       picRows:(() => {
         const q=(this.state.picQuery||"").trim().toLowerCase();
+        const af=this.state.picApp||"all", sf=this.state.picSub||"all";
         let rows=[];
         this._picCatalog().forEach(g => g.subjects.forEach(s => rows.push({ subject:s.subject, group:g.group, app:g.app, person:s.person, init:s.init, color:g.color })));
         if(q) rows=rows.filter(r => (r.subject+" "+r.group+" "+r.app+" "+r.person).toLowerCase().indexOf(q)!==-1);
+        if(af!=="all") rows=rows.filter(r=>r.app===af);
+        if(sf!=="all") rows=rows.filter(r=>r.group===sf);
         return rows;
       })(),
       picEmpty:(() => {
         const q=(this.state.picQuery||"").trim().toLowerCase();
-        if(!q) return false;
-        let n=0; this._picCatalog().forEach(g => g.subjects.forEach(s => { if((s.subject+" "+g.group+" "+g.app+" "+s.person).toLowerCase().indexOf(q)!==-1) n++; }));
+        const af=this.state.picApp||"all", sf=this.state.picSub||"all";
+        let n=0; this._picCatalog().forEach(g => g.subjects.forEach(s => { const ok=(!q||(s.subject+" "+g.group+" "+g.app+" "+s.person).toLowerCase().indexOf(q)!==-1)&&(af==="all"||g.app===af)&&(sf==="all"||g.group===sf); if(ok) n++; }));
         return n===0;
       })(),
       picQuery:this.state.picQuery, onPicQuery:(e) => this.setState({ picQuery:e.target.value }),
+      picFilterOpen:this.state.picFilterOpen,
+      togglePicFilter:()=>this.setState(s=>({ picFilterOpen:!s.picFilterOpen })),
+      closePicFilter:()=>this.setState({ picFilterOpen:false }),
+      resetPicFilter:()=>this.setState({ picApp:"all", picSub:"all" }),
+      picFilterLabel:(()=>{ const n=[(this.state.picApp||"all")!=="all",(this.state.picSub||"all")!=="all"].filter(Boolean).length; return n?"Filter · "+n:"Filter"; })(),
+      picFilterBtnStyle:"display:flex;align-items:center;gap:7px;border:none;cursor:pointer;font-family:var(--font-sans);font-size:12.5px;font-weight:700;padding:9px 15px;border-radius:10px;transition:all .15s ease;flex:none;"+(((this.state.picApp||"all")!=="all"||(this.state.picSub||"all")!=="all"||this.state.picFilterOpen)?"background:var(--blue-050);color:var(--blue-ink);":"background:var(--surface-tint);color:var(--ink-700);"),
+      picAppChips:[["all","Semua"]].concat(this._allAppNames().map(a=>[a,a])).map(([k,l])=>({ label:l, onClick:()=>this.setState({ picApp:k }), style:this._chip((this.state.picApp||"all")===k) })),
+      picSubChips:[["all","Semua"]].concat(this._allSubcats().map(a=>[a,a])).map(([k,l])=>({ label:l, onClick:()=>this.setState({ picSub:k }), style:this._chip((this.state.picSub||"all")===k) })),
       _picMapOld:[
         { group:"Transaksi MM", app:"SAP", color:"var(--red-600)", active:24, avg:"5.6h", subjects:[
           { subject:"Faulty PO Header Data", person:"Person A", init:"A" },
@@ -2783,7 +2849,7 @@ class Component extends DCLogic {
       monNextStyle:"display:flex;align-items:center;gap:5px;border:none;font-family:var(--font-sans);font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:10px;transition:all .15s ease;"+(monPage>=monPages?"background:var(--surface-tint);color:var(--ink-400);cursor:not-allowed;":"background:var(--blue-500);color:#fff;box-shadow:var(--elev-card);cursor:pointer;"),
       monQuery:this.state.monQuery, onMonQuery:this.onMonQuery,
       filterOpen:this.state.filterOpen, toggleFilter:this.toggleFilter, closeFilter:this.closeFilter,
-      priChips, appFilterList, appFilterCount, appFilterQuery:this.state.appFilterQuery, onAppFilterQuery, unitChips, statusChips, typeChips, resetFilters, filterLabel, filterBtnStyle,
+      priChips, appFilterList, appFilterCount, appFilterQuery:this.state.appFilterQuery, onAppFilterQuery, unitChips, statusChips, typeChips, monSubChips, resetFilters, filterLabel, filterBtnStyle,
       toggleAutoRefresh:this.toggleAutoRefresh,
       liveLabel:this.state.autoRefresh ? "Live · tiap detik" : "Dijeda",
       liveDot:this.state.autoRefresh ? "var(--green-500)" : "var(--ink-400)",

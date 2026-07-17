@@ -51,16 +51,13 @@
 
     <div style="flex: 1;"></div>
 
-    <div style="width: 280px; display: flex; align-items: center; gap: 8px; background: var(--surface-tint); border-radius: 10px; padding: 8px 12px;">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: var(--slate-500);"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
-      <span style="font-size: 13px; color: var(--slate-500);">Cari tiket, aplikasi…</span>
-    </div>
+    
 
     <div style="position: relative;">
       <button type="button" onClick="{{ toggleNotif }}" style="position: relative; width: 36px; height: 36px; border-radius: 10px; border: none; display: flex; align-items: center; justify-content: center; color: var(--ink-700); cursor: pointer; background: {{ notifBtnBg }};">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z"></path><path d="M10 21h4"></path></svg>
         <sc-if value="{{ hasUnread }}" hint-placeholder-val="{{ true }}">
-          <span style="position: absolute; top: 4px; right: 4px; min-width: 9px; height: 9px; border-radius: 999px; background: var(--red-600);"></span>
+          <span style="position: absolute; top: 4px; right: 4px; min-width: 15px; height: 15px; border-radius: 999px; background: var(--red-600); color: var(--white); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 3px;">{{ unreadCount }}</span>
         </sc-if>
       </button>
       <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
@@ -71,7 +68,7 @@
           </div>
           <div style="max-height: 360px; overflow-y: auto;">
             <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="4">
-              <div onClick="{{ n.onOpen }}" style="display: flex; gap: 11px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border-soft); background: {{ n.rowBg }};">
+              <div onClick="{{ n.onOpen }}" style="display: flex; gap: 11px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border-soft); background: {{ n.rowBg }};" style-hover="background: var(--blue-050-cool);">
                 <span style="width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: {{ n.iconBg }}; color: {{ n.iconColor }};">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.iconPath }}"></path></svg>
                 </span>
@@ -86,6 +83,7 @@
               <div style="padding: 32px 16px; text-align: center; font-size: 13px; color: var(--slate-500);">Tidak ada notifikasi baru.</div>
             </sc-if>
           </div>
+          <a href="#" style="padding: 12px 16px; text-align: center; font-size: 12px; font-weight: 700; color: var(--blue-500); border-top: 1px solid var(--border-soft); text-decoration: none;" style-hover="background: var(--blue-050-cool);">Lihat semua notifikasi</a>
         </div>
       </sc-if>
     </div>
@@ -246,13 +244,10 @@
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
         <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 12px; font-weight: 600; color: var(--slate-500);">Urutkan</span>
-            <div style="display: flex; gap: 6px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 6px;">
-              <sc-for list="{{ sortControl }}" as="s" hint-placeholder-count="2">
-                <button type="button" onClick="{{ s.onClick }}" style="display: flex; align-items: center; gap: 8px; padding: 7px 15px; border: none; border-radius: 8px; font-family: var(--font-sans); font-size: 13px; cursor: pointer; background: {{ s.bg }}; color: {{ s.color }}; font-weight: {{ s.weight }};">{{ s.label }}</button>
-              </sc-for>
-            </div>
+            
+            
           </div>
+          
           <div style="display: flex; gap: 8px;">
             <sc-for list="{{ prios }}" as="p" hint-placeholder-count="5">
               <button type="button" onClick="{{ p.onClick }}" style="height: 30px; padding: 0 14px; border-radius: 999px; cursor: pointer; font-family: var(--font-sans); font-weight: 600; font-size: 12px; border: 1px solid {{ p.border }}; background: {{ p.bg }}; color: {{ p.color }};">{{ p.label }}</button>
@@ -267,8 +262,13 @@
 
       <!-- ticket table -->
       <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); overflow: hidden;">
-        <div style="min-width: 1040px; display: grid; grid-template-columns: 1.1fr 2.1fr 0.85fr 1.15fr 1.35fr 1.3fr 1.15fr; gap: 12px; padding: 10px 22px; background: var(--canvas); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">
-          <span>No. Tiket</span><span>Judul</span><span>Prioritas</span><span>Status</span><span>SLA Penyelesaian</span><span>Requester</span><span>Pembuatan Tiket</span>
+        <div style="min-width: 1040px; display: grid; grid-template-columns: 1.1fr 2.1fr 0.85fr 1.15fr 1.35fr 1.3fr 1.15fr; gap: 12px; padding: 10px 22px; background: var(--canvas); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;">
+          <sc-for list="{{ queueHeaders }}" as="h" hint-placeholder-count="7">
+            <button type="button" onClick="{{ h.onClick }}" style="display: flex; align-items: center; gap: 4px; border: none; background: transparent; padding: 0; cursor: pointer; font-family: var(--font-sans); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: {{ h.color }}; text-align: left;">
+              {{ h.label }}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{ h.arrowOpacity }}; flex-shrink: 0;"><path d="{{ h.arrow }}"></path></svg>
+            </button>
+          </sc-for>
         </div>
 
         <sc-if value="{{ queueEmpty }}">
@@ -286,7 +286,7 @@
               <span style="font-size: 11.5px; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.metaLine }}</span>
             </div>
             <div><span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ item.prioBg }}; color: {{ item.prioColor }};">{{ item.priorityLabel }}</span></div>
-            <div><span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ item.statusBg }}; color: {{ item.statusColor }}; white-space: nowrap;">{{ item.statusLabel }}</span></div>
+            <div><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-700); white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 999px; background: {{ item.statusDot }}; flex-shrink: 0;"></span>{{ item.statusLabel }}</span></div>
             <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0; padding-right: 8px;">
               <span style="font-size: 12.5px; font-weight: 700; color: {{ item.sla.color }}; white-space: nowrap;">{{ item.sla.text }}</span>
               <span style="width: 100%; height: 4px; border-radius: 999px; background: var(--surface-tint); overflow: hidden;">
@@ -327,6 +327,11 @@
         </sc-for>
       </div>
 
+      <div style="display: flex; align-items: center; gap: 10px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 11px 16px; box-shadow: var(--elev-card);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input value="{{ historyQuery }}" onChange="{{ onHistoryQuery }}" placeholder="Cari tiket, judul, atau aplikasi…" style="flex: 1; border: none; outline: none; background: transparent; font-family: var(--font-sans); font-size: 13px; color: var(--ink-900);">
+      </div>
+
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
           <sc-for list="{{ historyChips }}" as="c" hint-placeholder-count="5">
@@ -341,8 +346,13 @@
       </div>
 
       <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); overflow: hidden;">
-        <div style="min-width: 900px; display: grid; grid-template-columns: 2.6fr 1.5fr 0.9fr 1.3fr 1.25fr 1.1fr; gap: 12px; padding: 10px 22px; background: var(--canvas); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.4px;">
-          <span>Tiket</span><span>Kategori</span><span>Prioritas</span><span>Status</span><span>SLA</span><span>Diselesaikan</span>
+        <div style="min-width: 900px; display: grid; grid-template-columns: 2.6fr 1.5fr 0.9fr 1.3fr 1.25fr 1.1fr; gap: 12px; padding: 10px 22px; background: var(--canvas); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;">
+          <sc-for list="{{ historyHeaders }}" as="h" hint-placeholder-count="6">
+            <button type="button" onClick="{{ h.onClick }}" style="display: flex; align-items: center; gap: 4px; border: none; background: transparent; padding: 0; cursor: pointer; font-family: var(--font-sans); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: {{ h.color }}; text-align: left;">
+              {{ h.label }}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{ h.arrowOpacity }}; flex-shrink: 0;"><path d="{{ h.arrow }}"></path></svg>
+            </button>
+          </sc-for>
         </div>
 
         <sc-if value="{{ historyEmpty }}">
@@ -363,7 +373,7 @@
               <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--surface-tint); color: var(--ink-700);">{{ item.app }}</span>
             </div>
             <div><span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ item.prioBg }}; color: {{ item.prioColor }};">{{ item.priorityLabel }}</span></div>
-            <div><span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ item.statusBg }}; color: {{ item.statusColor }}; white-space: nowrap;">{{ item.statusLabel }}</span></div>
+            <div><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-700); white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 999px; background: {{ item.statusDot }}; flex-shrink: 0;"></span>{{ item.statusLabel }}</span></div>
             <div style="font-size: 12.5px; font-weight: 700; color: var(--green-500);">{{ item.sla.text }}</div>
             <div style="font-size: 12px; color: var(--slate-500);">{{ item.closedAt }}</div>
           </div>
@@ -425,7 +435,7 @@
         <div style="display: flex; flex-direction: column; gap: 8px; min-width: 0;">
           <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             <span style="font-size: 13px; font-weight: 800; color: var(--blue-500); font-variant-numeric: tabular-nums;">#{{ ticket.id }}</span>
-            <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ ticket.statusBg }}; color: {{ ticket.statusColor }};">{{ ticket.statusLabel }}</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-700); white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 999px; background: {{ ticket.statusDot }}; flex-shrink: 0;"></span>{{ ticket.statusLabel }}</span>
             <span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ ticket.prioBg }}; color: {{ ticket.prioColor }};">{{ ticket.priorityLabel }}</span>
           </div>
           <h1 style="margin: 0; font-size: 21px; font-weight: 800; color: var(--ink-900); letter-spacing: -0.2px;">{{ ticket.subject }}</h1>
@@ -539,7 +549,7 @@
             <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Aksi Penanganan</h2>
             <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-soft);">
               <span style="font-size: 12px; color: var(--slate-500);">Status saat ini</span>
-              <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ ticket.statusBg }}; color: {{ ticket.statusColor }};">{{ ticket.statusLabel }}</span>
+              <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-700); white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 999px; background: {{ ticket.statusDot }}; flex-shrink: 0;"></span>{{ ticket.statusLabel }}</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-soft); margin-bottom: 4px;">
               <span style="font-size: 12px; color: var(--slate-500);">PIC</span>
@@ -691,24 +701,27 @@
 class Component extends DCLogic {
   ME = "Rizky Pratama";
 
+  // Status pills follow the Team Lead "status · PIC" style: a leading
+  // colored dot + tinted pill + colored label. The dot keeps status
+  // readable next to the (dot-less) Priority badges.
   STATUS = {
-    "draft": { label: "Draft", bg: "var(--surface-tint)", color: "var(--slate-500)" },
-    "waiting-approval": { label: "Waiting for Approval", bg: "var(--blue-050-cool)", color: "var(--navy-700)" },
-    "rejected": { label: "Rejected", bg: "rgba(186,26,26,0.10)", color: "var(--red-600)" },
-    "open": { label: "Open", bg: "var(--surface-tint)", color: "var(--ink-700)" },
-    "assigned": { label: "Assigned", bg: "var(--blue-050-alt)", color: "var(--blue-ink)" },
-    "in-progress": { label: "In Progress", bg: "var(--blue-050)", color: "var(--blue-ink)" },
-    "waiting-response": { label: "Waiting for Response", bg: "rgba(124,58,237,0.12)", color: "rgb(109,40,217)" },
-    "resolved": { label: "Resolved", bg: "rgba(52,199,89,0.14)", color: "var(--green-500)" },
-    "completed": { label: "Completed", bg: "rgba(52,199,89,0.14)", color: "var(--green-500)" },
-    "closed": { label: "Closed", bg: "var(--surface-tint)", color: "var(--slate-500)" },
+    "draft": { label: "Draft", bg: "var(--surface-tint)", color: "var(--ink-700)", dot: "var(--slate-500)" },
+    "waiting-approval": { label: "Waiting for Approval", bg: "rgba(255,159,10,0.14)", color: "#b45309", dot: "#f59e0b" },
+    "rejected": { label: "Rejected", bg: "rgba(186,26,26,0.10)", color: "var(--red-600)", dot: "var(--red-600)" },
+    "open": { label: "Open", bg: "var(--surface-tint)", color: "var(--ink-700)", dot: "var(--slate-500)" },
+    "assigned": { label: "Open", bg: "var(--surface-tint)", color: "var(--ink-700)", dot: "var(--slate-500)" },
+    "in-progress": { label: "In Progress", bg: "var(--blue-050)", color: "var(--blue-ink)", dot: "var(--blue-500)" },
+    "waiting-response": { label: "Waiting for Response", bg: "var(--blue-050)", color: "var(--blue-ink)", dot: "var(--blue-500)" },
+    "resolved": { label: "Resolved", bg: "rgba(52,199,89,0.12)", color: "#187C45", dot: "var(--green-500)" },
+    "completed": { label: "Resolved", bg: "rgba(52,199,89,0.12)", color: "#187C45", dot: "var(--green-500)" },
+    "closed": { label: "Closed", bg: "var(--surface-tint)", color: "var(--ink-700)", dot: "var(--slate-500)" },
   };
 
   PRIORITY = {
     critical: { label: "Critical", bg: "rgba(186,26,26,0.10)", color: "var(--red-600)", solid: "var(--red-600)" },
     high: { label: "High", bg: "rgba(255,149,0,0.16)", color: "rgb(180,83,9)", solid: "rgb(255,149,0)" },
     medium: { label: "Medium", bg: "var(--blue-050)", color: "var(--blue-ink)", solid: "var(--blue-500)" },
-    low: { label: "Low", bg: "var(--surface-tint)", color: "var(--slate-500)", solid: "var(--slate-500)" },
+    low: { label: "Low", bg: "rgba(99,102,241,0.12)", color: "#4f46e5", solid: "#6366f1" },
   };
 
   // Canonical end-to-end status flow per category — every ticket shows the full
@@ -719,14 +732,14 @@ class Component extends DCLogic {
       { label: "Assigned", match: ["assigned", "ditugaskan", "dialihkan", "team lead", "sla respons"], at: ["assigned"], pend: "Menunggu penugasan PIC" },
       { label: "In Progress", match: ["in progress", "dikerjakan", "waiting for response", "klarifikasi"], at: ["in-progress", "waiting-response"], pend: "Menunggu penanganan Support" },
       { label: "Resolved", match: ["resolved"], at: ["resolved"], pend: "Menunggu penyelesaian" },
-      { label: "Completed → Closed", match: ["completed", "closed", "service closed", "ditutup"], at: ["completed", "closed"], pend: "Menunggu konfirmasi requester" },
+      { label: "Resolved → Closed", match: ["completed", "closed", "service closed", "ditutup", "resolved"], at: ["completed", "closed", "resolved"], pend: "Menunggu konfirmasi requester" },
     ],
     service: [
       { label: "Open", match: ["open"], at: ["open"], pend: "Menunggu tiket masuk antrean" },
       { label: "Approval", match: ["approval", "persetujuan", "disetujui"], at: ["waiting-approval"], pend: "Menunggu persetujuan" },
       { label: "Assigned", match: ["assigned", "ditugaskan"], at: ["assigned"], pend: "Menunggu penugasan PIC" },
       { label: "In Progress", match: ["in progress", "dikerjakan", "waiting for response", "klarifikasi"], at: ["in-progress", "waiting-response"], pend: "Menunggu penanganan Support" },
-      { label: "Completed", match: ["completed"], at: ["completed", "resolved"], pend: "Menunggu penyelesaian" },
+      { label: "Resolved", match: ["completed", "resolved"], at: ["completed", "resolved"], pend: "Menunggu penyelesaian" },
       { label: "Closed", match: ["closed", "service closed", "ditutup"], at: ["closed"], pend: "Menunggu konfirmasi requester" },
     ],
     access: [
@@ -734,7 +747,7 @@ class Component extends DCLogic {
       { label: "Manager Approval", match: ["manager approval"], at: ["waiting-approval"], pend: "Menunggu approval Manager (Level 1)" },
       { label: "App Owner Approval", match: ["app owner", "application owner", "owner"], at: [], pend: "Menunggu approval Application Owner (Level 2)" },
       { label: "In Progress · Provisioning", match: ["in progress", "provisioning", "dikerjakan", "waiting for response", "klarifikasi"], at: ["assigned", "in-progress", "waiting-response"], pend: "Menunggu provisioning oleh Support" },
-      { label: "Completed", match: ["completed"], at: ["completed", "resolved"], pend: "Menunggu penyelesaian" },
+      { label: "Resolved", match: ["completed", "resolved"], at: ["completed", "resolved"], pend: "Menunggu penyelesaian" },
       { label: "Closed", match: ["closed", "service closed", "ditutup"], at: ["closed"], pend: "Menunggu konfirmasi requester" },
     ],
   };
@@ -758,6 +771,8 @@ class Component extends DCLogic {
       activeId: null,
       segment: "all",
       sortBy: "sla",
+      qSortKey: "sla",
+      qSortDir: "desc",
       noteError: "",
       priority: "all",
       query: "",
@@ -771,6 +786,8 @@ class Component extends DCLogic {
       period: "month",
       historyFilter: "all",
       historyPeriod: "month",
+      hSortKey: "closed",
+      hSortDir: "desc",
       confirmOpen: false,
       confirmKey: null,
       confirmNote: "",
@@ -1050,7 +1067,7 @@ class Component extends DCLogic {
         timeline: [
           { label: "Open", actor: "Sistem", time: "4 Jul 08:10" },
           { label: "In Progress", actor: "Rizky Pratama · IT Support", time: "4 Jul 09:00" },
-          { label: "Completed", actor: "Rizky Pratama · IT Support", time: "4 Jul 13:45" },
+          { label: "Resolved", actor: "Rizky Pratama · IT Support", time: "4 Jul 13:45" },
         ],
       }),
       D(0, {
@@ -1064,7 +1081,7 @@ class Component extends DCLogic {
         timeline: [
           { label: "Open", actor: "Sistem", time: "2 Jul 09:00" },
           { label: "In Progress", actor: "Rizky Pratama · IT Support", time: "2 Jul 10:00" },
-          { label: "Completed", actor: "Rizky Pratama · IT Support", time: "2 Jul 14:00" },
+          { label: "Resolved", actor: "Rizky Pratama · IT Support", time: "2 Jul 14:00" },
           { label: "Closed", actor: "Melati Puspita · Requester", time: "3 Jul 08:30" },
         ],
         rating: 4, ratingBy: "Melati Puspita · Requester", ratingDate: "3 Jul 08:32",
@@ -1113,12 +1130,12 @@ class Component extends DCLogic {
   }
 
   decorate(t) {
-    const st = this.STATUS[t.status] || { label: t.status, bg: "var(--surface-tint)", color: "var(--slate-500)" };
+    const st = this.STATUS[t.status] || { label: t.status, bg: "var(--surface-tint)", color: "var(--ink-700)", dot: "var(--slate-500)" };
     const pr = this.PRIORITY[t.priority] || this.PRIORITY.low;
     const responded = !["draft", "waiting-approval", "open"].includes(t.status);
     const timelineNotes = {
       resolved: "Tiket akan otomatis ditutup 3 hari setelah requester tidak menindaklanjuti balasan Resolved.",
-      completed: "Tiket akan otomatis ditutup 3 hari setelah requester tidak menindaklanjuti balasan Completed.",
+      completed: "Tiket akan otomatis ditutup 3 hari setelah requester tidak menindaklanjuti balasan Resolved.",
       closed: "Tiket ini telah ditutup dan diarsipkan.",
     };
     return {
@@ -1126,6 +1143,7 @@ class Component extends DCLogic {
       statusLabel: st.label,
       statusBg: st.bg,
       statusColor: st.color,
+      statusDot: st.dot,
       priorityLabel: pr.label,
       prioBg: pr.bg,
       prioColor: pr.color,
@@ -1219,7 +1237,7 @@ class Component extends DCLogic {
       start: { status: () => "in-progress", tl: "In Progress", toast: "Status → In Progress" },
       serviceClose: { status: () => "closed", tl: "Service Closed", toast: "Layanan ditutup (Service Closed)" },
       escalate: { status: (s) => s, tl: "Dieskalasi ke Tim IT Lanjutan", escalate: true, toast: "Tiket dieskalasi ke Tim IT Lanjutan" },
-      complete: { status: () => "completed", tl: "Completed", toast: "Tiket ditandai Completed" },
+      complete: { status: () => "completed", tl: "Resolved", toast: "Tiket ditandai Resolved" },
     }[key];
     if (!map) return;
     const n = (note || "").trim();
@@ -1239,7 +1257,7 @@ class Component extends DCLogic {
       if (t.status === "open" || t.status === "assigned") btn("start", "Mulai Kerjakan", "primary");
       if (t.status === "in-progress" && !t.escalated) {
         btn("serviceClose", "Service Closed", "outline");
-        if (t.catKey === "access") btn("complete", "Tandai Completed", "primary");
+        if (t.catKey === "access") btn("complete", "Tandai Resolved", "primary");
         else btn("escalate", "Eskalasi IT", "primary");
       }
     }
@@ -1298,12 +1316,49 @@ class Component extends DCLogic {
     const q = this.state.query.trim().toLowerCase();
     if (q) list = list.filter((t) => (t.id + " " + t.subject + " " + t.app).toLowerCase().includes(q));
     const sortBy = this.state.sortBy;
-    list = [...list].sort((a, b) => sortBy === "created"
-      ? (a.daysAgo || 0) - (b.daysAgo || 0)
-      : ((b.sla.slaSort || 0) - (a.sla.slaSort || 0)));
+    const PRANK = { critical: 4, high: 3, medium: 2, low: 1 };
+    const SRANK = { "draft": 0, "open": 1, "assigned": 2, "waiting-approval": 3, "in-progress": 4, "waiting-response": 5, "resolved": 6, "completed": 7, "closed": 8, "rejected": 9 };
+    const qKey = this.state.qSortKey, qDir = this.state.qSortDir === "asc" ? 1 : -1;
+    const qVal = (t) => {
+      if (qKey === "id") return t.id;
+      if (qKey === "subject") return (t.subject || "").toLowerCase();
+      if (qKey === "priority") return PRANK[t.priority] || 0;
+      if (qKey === "status") return SRANK[t.status] != null ? SRANK[t.status] : 99;
+      if (qKey === "sla") return t.sla.slaSort || 0;
+      if (qKey === "requester") return ((t.requester && t.requester.name) || "").toLowerCase();
+      if (qKey === "created") return -(t.daysAgo != null ? t.daysAgo : 0);
+      return 0;
+    };
+    list = [...list].sort((a, b) => {
+      const va = qVal(a), vb = qVal(b);
+      if (va < vb) return -1 * qDir;
+      if (va > vb) return 1 * qDir;
+      return 0;
+    });
+    const setQSort = (key) => this.setState((s) => ({ qSortKey: key, qSortDir: s.qSortKey === key && s.qSortDir === "asc" ? "desc" : "asc" }));
+    const queueHeaders = [
+      { key: "id", label: "No. Tiket" },
+      { key: "subject", label: "Judul" },
+      { key: "priority", label: "Prioritas" },
+      { key: "status", label: "Status" },
+      { key: "sla", label: "SLA Penyelesaian" },
+      { key: "requester", label: "Requester" },
+      { key: "created", label: "Pembuatan Tiket" },
+    ].map((h) => ({
+      label: h.label, onClick: () => setQSort(h.key),
+      arrow: this.state.qSortKey === h.key ? (this.state.qSortDir === "asc" ? "M6 15l6-6 6 6" : "M6 9l6 6 6-6") : "M8 9l4-4 4 4 M8 15l4 4 4-4",
+      arrowOpacity: this.state.qSortKey === h.key ? "1" : "0.4",
+      color: this.state.qSortKey === h.key ? "var(--blue-ink)" : "var(--slate-500)",
+    }));
     const sortControl = [["sla", "SLA Penyelesaian"], ["created", "Pembuatan Tiket"]].map(([k, l]) => ({
       key: k, label: l, onClick: () => this.setState({ sortBy: k }), ...this.segStyle(k === sortBy),
     }));
+    const nbActive = this.state.qSortKey === "sla";
+    const toggleNB = () => this.setState({ qSortKey: "sla", qSortDir: "desc" });
+    const nbLabel = nbActive ? "Sorted: Nearest Breach" : "Sort by Nearest Breach";
+    const nbBg = nbActive ? "var(--blue-050)" : "var(--white)";
+    const nbColor = nbActive ? "var(--blue-ink)" : "var(--ink-700)";
+    const nbShadow = nbActive ? "none" : "var(--elev-card)";
     const rows = list.map((t) => ({ ...t, onOpen: () => this.openTicket(t.id), slaFill: (t.sla.fillPct || 0) + "%" }));
 
     const segDefs = [
@@ -1379,7 +1434,9 @@ class Component extends DCLogic {
       { key: "closed", label: "Closed" },
     ];
     const historyFilter = this.state.historyFilter;
-    const historyList = historyFilter === "all" ? historyAll : historyAll.filter((t) => bucketOf(t.status) === historyFilter);
+    const historyQuery = (this.state.historyQuery || "").trim().toLowerCase();
+    let historyList = historyFilter === "all" ? historyAll : historyAll.filter((t) => bucketOf(t.status) === historyFilter);
+    if (historyQuery) historyList = historyList.filter((t) => (t.id + " " + t.subject + " " + (t.app || "") + " " + (t.sub || "")).toLowerCase().includes(historyQuery));
     const historyChips = HFILTERS.map((f) => ({
       key: f.key, label: f.label,
       onClick: () => this.setState({ historyFilter: f.key }),
@@ -1419,6 +1476,40 @@ class Component extends DCLogic {
     });
 
     const historyPeriodLabel = { week: "7 hari terakhir", month: "30 hari terakhir", year: "setahun terakhir" }[historyPeriod];
+
+    // Per-column sorting
+    const hPRANK = { critical: 4, high: 3, medium: 2, low: 1 };
+    const hSRANK = { "open": 1, "assigned": 2, "in-progress": 3, "waiting-response": 4, "resolved": 5, "completed": 6, "closed": 7 };
+    const hVal = (t, key) => {
+      if (key === "id") return (t.subject || "").toLowerCase();
+      if (key === "category") return (t.category || "").toLowerCase();
+      if (key === "priority") return hPRANK[t.priority] || 0;
+      if (key === "status") return hSRANK[t.status] != null ? hSRANK[t.status] : 99;
+      if (key === "sla") return t.sla.slaSort || 0;
+      if (key === "closed") return -(t.daysAgo != null ? t.daysAgo : 0);
+      return 0;
+    };
+    const hk = this.state.hSortKey, hdir = this.state.hSortDir === "asc" ? 1 : -1;
+    historyList = historyList.slice().sort((a, b) => {
+      const va = hVal(a, hk), vb = hVal(b, hk);
+      if (va < vb) return -1 * hdir;
+      if (va > vb) return 1 * hdir;
+      return 0;
+    });
+    const setHSort = (key) => this.setState((s) => ({ hSortKey: key, hSortDir: s.hSortKey === key && s.hSortDir === "asc" ? "desc" : "asc" }));
+    const historyHeaders = [
+      { key: "id", label: "Tiket" },
+      { key: "category", label: "Kategori" },
+      { key: "priority", label: "Prioritas" },
+      { key: "status", label: "Status" },
+      { key: "sla", label: "SLA" },
+      { key: "closed", label: "Diselesaikan" },
+    ].map((h) => ({
+      label: h.label, onClick: () => setHSort(h.key),
+      arrow: this.state.hSortKey === h.key ? (this.state.hSortDir === "asc" ? "M6 15l6-6 6 6" : "M6 9l6 6 6-6") : "M8 9l4-4 4 4 M8 15l4 4 4-4",
+      arrowOpacity: this.state.hSortKey === h.key ? "1" : "0.4",
+      color: this.state.hSortKey === h.key ? "var(--blue-ink)" : "var(--slate-500)",
+    }));
     const historyRows = historyList.map((t) => ({ ...t, onOpen: () => this.openTicket(t.id), closedAt: t.timeline[t.timeline.length - 1].time }));
     const historySub = historyAll.length + " tiket tercatat dalam " + historyPeriodLabel + " — mencakup seluruh status penanganan Anda.";
     const historyEmpty = historyList.length === 0;
@@ -1497,12 +1588,13 @@ class Component extends DCLogic {
       isQueue: this.state.view === "queue",
       isRiwayat: this.state.view === "riwayat",
       isDetail: this.state.view === "detail",
-      rows, queueEmpty: rows.length === 0, segments, prios, kpis, sortControl,
+      rows, queueEmpty: rows.length === 0, segments, prios, kpis, sortControl, queueHeaders, toggleNB, nbLabel, nbBg, nbColor, nbShadow,
       query: this.state.query, onQuery: (e) => this.setState({ query: e.target.value }),
       barChart, pieGradient, pieLegend, queueTotal,
       periodSegments, periodLabel, periodResolved,
       slaPct, slaColor, slaGauge, slaMet, slaBreach: pd.breach,
-      historySub, historyChips, historyRows, historyEmpty, historyKpis, historyPeriodSegments,
+      historySub, historyChips, historyRows, historyEmpty, historyKpis, historyPeriodSegments, historyHeaders,
+      historyQuery: this.state.historyQuery, onHistoryQuery: (e) => this.setState({ historyQuery: e.target.value }),
       ticket, actions, noActions: actions.length === 0, hasActions: actions.length > 0,
       ticketForum, forumEmpty: ticketForum.length === 0, ticketTimeline, ticketProvision, provisionProgress, ticketPeople,
       reply: this.state.reply, onReply: (e) => this.setState({ reply: e.target.value }), sendReply: () => this.addReply(),
@@ -1530,6 +1622,7 @@ class Component extends DCLogic {
       stop: (e) => e.stopPropagation(),
       markAllRead: () => this.markAllRead(),
       hasUnread: this.state.notifications.some((n) => n.unread),
+      unreadCount: this.state.notifications.filter((n) => n.unread).length,
       notifEmpty: this.state.notifications.length === 0,
       notifications: this.state.notifications.map((n) => ({
         ...n,
