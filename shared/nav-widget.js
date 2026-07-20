@@ -1,5 +1,6 @@
 // Floating role switcher, injected into every mockup screen so a reviewer
-// can jump between Requester / Approver / Support / Team Lead / Admin
+// can jump between Requester / Approver / Support / Team Lead / Admin /
+// EVA Knowledge
 // without using the browser back button. Appends itself as a sibling of
 // <x-dc> (the dc-runtime never touches anything outside that element), so
 // it can't interfere with any screen's own template/logic.
@@ -29,6 +30,10 @@
     {
       label: "Admin",
       pages: [{ label: "Admin Console", href: "/admin/index.html" }],
+    },
+    {
+      label: "EVA Knowledge",
+      pages: [{ label: "Knowledge Admin Console", href: "/eva/index.html" }],
     },
   ];
 

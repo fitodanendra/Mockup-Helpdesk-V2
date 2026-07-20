@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Helpdesk v2.0 — EVA Knowledge Admin</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  #hd-eva-frame { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; }
+</style>
+</head>
+<body>
+<!-- console.html is the standalone EVA Knowledge build (compiled x-dc bundle),
+     same arrangement as /admin: the wrapper only hosts it and adds the shared
+     Switch Role widget, so nothing is injected into the bundle itself. -->
+<iframe id="hd-eva-frame" src="console.html" title="EVA Knowledge Admin Console"></iframe>
+<script src="../shared/nav-widget.js" defer></script>
+</body>
+</html>
