@@ -1,4 +1,8 @@
 // Auto-generated from "Insiden & Service List Issue for Helpdesk 2.0.xlsx"
+// Sub-category names for ADELE/ARISE/CLOUDIA/ERISKA/MAILIA/SINTA restored from
+// the CSV export (they were blank here, so the New Ticket form fell back to "Insiden").
+// "Aktivasi VPN Forticlient" had an empty app, which meant neither branch of the
+// New Ticket access filter (SAP / SILO (OTHER APPS)) could ever select it.
 // Master applications + Incident / Service / Access issue catalog for the New Ticket form.
 window.HELPDESK_CATALOG = {
   "applications": [
@@ -478,154 +482,154 @@ window.HELPDESK_CATALOG = {
     },
     {
       "app": "ADELE",
-      "module": "",
+      "module": "Account & Profile Issues",
       "subject": "User Session Belum Logout",
       "approval": false,
       "bpo": false
     },
     {
       "app": "ADELE",
-      "module": "",
+      "module": "Account & Profile Issues",
       "subject": "Username tidak ditemukan",
       "approval": false,
       "bpo": false
     },
     {
       "app": "ADELE",
-      "module": "",
+      "module": "Account & Profile Issues",
       "subject": "Unit Kerja Belum Update",
       "approval": false,
       "bpo": false
     },
     {
       "app": "ARISE",
-      "module": "",
+      "module": "Employee Self-Service (ESS) Features",
       "subject": "Tidak bisa presensi",
       "approval": false,
       "bpo": true
     },
     {
       "app": "ARISE",
-      "module": "",
+      "module": "Employee Self-Service (ESS) Features",
       "subject": "Tidak bisa update CV",
       "approval": false,
       "bpo": true
     },
     {
       "app": "ERISKA",
-      "module": "",
+      "module": "Risk Data & Reporting",
       "subject": "Gagal Submit Data Risiko / Upload Eviden",
       "approval": false,
       "bpo": false
     },
     {
       "app": "ERISKA",
-      "module": "",
+      "module": "Risk Data & Reporting",
       "subject": "Dashboard Risiko Tidak Sesuai",
       "approval": false,
       "bpo": false
     },
     {
       "app": "ERISKA",
-      "module": "",
+      "module": "Risk Data & Reporting",
       "subject": "Gagal Export Risk Register",
       "approval": false,
       "bpo": false
     },
     {
       "app": "MAILIA",
-      "module": "",
+      "module": "Email Service & Operations",
       "subject": "Tidak Bisa Login Email",
       "approval": false,
       "bpo": false
     },
     {
       "app": "MAILIA",
-      "module": "",
+      "module": "Email Service & Operations",
       "subject": "Tidak Bisa Kirim Email",
       "approval": false,
       "bpo": false
     },
     {
       "app": "MAILIA",
-      "module": "",
+      "module": "Email Service & Operations",
       "subject": "Tidak Bisa Terima Email",
       "approval": false,
       "bpo": false
     },
     {
       "app": "MAILIA",
-      "module": "",
+      "module": "Email Service & Operations",
       "subject": "Email / Outlook Bermasalah",
       "approval": false,
       "bpo": false
     },
     {
       "app": "MAILIA",
-      "module": "",
+      "module": "Email Service & Operations",
       "subject": "Attachment Bermasalah",
       "approval": false,
       "bpo": false
     },
     {
       "app": "MAILIA",
-      "module": "",
+      "module": "Email Service & Operations",
       "subject": "Mailbox Penuh",
       "approval": false,
       "bpo": false
     },
     {
       "app": "MAILIA",
-      "module": "",
+      "module": "Email Service & Operations",
       "subject": "Email Terblokir / Spam",
       "approval": false,
       "bpo": false
     },
     {
       "app": "SINTA",
-      "module": "",
+      "module": "Akses & Data Karyawan",
       "subject": "Data profil tidak sesuai",
       "approval": false,
       "bpo": true
     },
     {
       "app": "SINTA",
-      "module": "",
+      "module": "Akses & Data Karyawan",
       "subject": "Slip gaji tidak bisa didownload",
       "approval": false,
       "bpo": true
     },
     {
       "app": "SINTA",
-      "module": "",
+      "module": "Akses & Data Karyawan",
       "subject": "Tidak bisa akses ke Aplikasi Internal",
       "approval": false,
       "bpo": false
     },
     {
       "app": "CLOUDIA",
-      "module": "",
+      "module": "Pengelolaan File & Sinkronisasi",
       "subject": "Menu / tombol hilang",
       "approval": false,
       "bpo": false
     },
     {
       "app": "CLOUDIA",
-      "module": "",
+      "module": "Pengelolaan File & Sinkronisasi",
       "subject": "Share link expired",
       "approval": false,
       "bpo": false
     },
     {
       "app": "CLOUDIA",
-      "module": "",
+      "module": "Pengelolaan File & Sinkronisasi",
       "subject": "Kuota habis",
       "approval": false,
       "bpo": false
     },
     {
       "app": "CLOUDIA",
-      "module": "",
+      "module": "Pengelolaan File & Sinkronisasi",
       "subject": "Gagal sinkronisasi pada desktop",
       "approval": false,
       "bpo": false
@@ -1168,7 +1172,7 @@ window.HELPDESK_CATALOG = {
     },
     {
       "section": "VPN",
-      "app": "",
+      "app": "SILO (OTHER APPS)",
       "subject": "Aktivasi VPN Forticlient",
       "scope": "",
       "approval": true,
