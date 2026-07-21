@@ -66,7 +66,7 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="14" y="12" width="7" height="9" rx="1.5"></rect><rect x="3" y="16" width="7" height="5" rx="1.5"></rect></svg>
         Dashboards
       </a>
-      <a href="my-tickets.html" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px; color: var(--ink-700); font-size: 13px; font-weight: 500;" style-hover="background: var(--surface-tint); color: var(--ink-900);">
+      <a href="My Tickets.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px; color: var(--ink-700); font-size: 13px; font-weight: 500;" style-hover="background: var(--surface-tint); color: var(--ink-900);">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z"></path><path d="M14 5v14"></path></svg>
         My Tickets
       </a>
@@ -89,7 +89,7 @@
           </div>
           <div style="max-height: 348px; overflow-y: auto;">
             <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="4">
-              <a href="ticket-detail.html" style="display: flex; gap: 11px; padding: 12px 16px; border-bottom: 1px solid var(--border-soft); background: {{ n.rowBg }}; text-decoration: none;" style-hover="background: var(--blue-050-cool);">
+              <a href="Ticket Detail.dc.html" style="display: flex; gap: 11px; padding: 12px 16px; border-bottom: 1px solid var(--border-soft); background: {{ n.rowBg }}; text-decoration: none;" style-hover="background: var(--blue-050-cool);">
                 <span style="width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: {{ n.iconBg }}; color: {{ n.iconColor }};"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.iconPath }}"></path></svg></span>
                 <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
                   <span style="font-size: 12.5px; color: var(--ink-800); line-height: 1.45;">{{ n.text }}</span>
@@ -288,7 +288,7 @@
           <h2 style="margin: 0 0 2px 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Tickets Approaching SLA Limit</h2>
           <span style="font-size: 12px; color: var(--slate-500);">Sorted by least time remaining</span>
         </div>
-        <a href="my-tickets.html" style="font-size: 12px; font-weight: 600;">View all tickets →</a>
+        <a href="My Tickets.dc.html" style="font-size: 12px; font-weight: 600;">View all tickets →</a>
       </div>
       <div style="overflow-x: auto;">
         <div style="min-width: 760px; display: grid; grid-template-columns: minmax(108px, auto) minmax(160px, 1.8fr) minmax(80px, auto) minmax(70px, auto) minmax(130px, auto) minmax(110px, 150px); gap: 12px; padding: 8px 22px; background: var(--canvas); border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;">
@@ -300,7 +300,7 @@
           </sc-for>
         </div>
         <sc-for list="{{ slaRows }}" as="row" hint-placeholder-count="5">
-          <a href="ticket-detail.html" style="text-decoration: none; color: inherit; min-width: 760px; display: grid; grid-template-columns: minmax(108px, auto) minmax(160px, 1.8fr) minmax(80px, auto) minmax(70px, auto) minmax(130px, auto) minmax(110px, 150px); gap: 12px; padding: 13px 22px; border-bottom: 1px solid var(--border-soft); align-items: center; background: {{ row.rowBg }}; cursor: pointer;" style-hover="background: var(--blue-050-cool);">
+          <a href="Ticket Detail.dc.html" style="text-decoration: none; color: inherit; min-width: 760px; display: grid; grid-template-columns: minmax(108px, auto) minmax(160px, 1.8fr) minmax(80px, auto) minmax(70px, auto) minmax(130px, auto) minmax(110px, 150px); gap: 12px; padding: 13px 22px; border-bottom: 1px solid var(--border-soft); align-items: center; background: {{ row.rowBg }}; cursor: pointer;" style-hover="background: var(--blue-050-cool);">
             <span style="font-size: 12px; font-weight: 700; color: var(--blue-500); font-variant-numeric: tabular-nums;">{{ row.id }}</span>
             <div style="min-width: 0;">
               <div style="font-size: 13px; font-weight: 600; color: var(--ink-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.title }}</div>
@@ -308,7 +308,7 @@
             </div>
             <span style="font-size: 12px; color: var(--ink-700);">{{ row.category }}</span>
             <span style="justify-self: start; white-space: nowrap; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ row.prioBg }}; color: {{ row.prioColor }};">{{ row.priority }}</span>
-            <span style="justify-self: start; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-size: 12px; color: var(--ink-700);"><span style="width: 7px; height: 7px; border-radius: 999px; background: {{ row.statusDot }}; flex-shrink: 0;"></span>{{ row.status }}</span>
+            <span style="justify-self: start; white-space: nowrap; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ row.statusBg }}; color: {{ row.statusColor }};">{{ row.status }}</span>
             <div style="display: flex; flex-direction: column; gap: 5px;">
               <span style="font-size: 12px; font-weight: 700; color: {{ row.slaColor }}; font-variant-numeric: tabular-nums;">{{ row.slaLeft }}</span>
               <div style="height: 4px; border-radius: 999px; background: var(--border-soft); overflow: hidden;"><div style="height: 100%; border-radius: 999px; background: {{ row.slaColor }}; width: {{ row.slaPct }};"></div></div>
@@ -347,7 +347,13 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; transform: {{ appChevron }}; transition: transform 0.15s ease;"><path d="m6 9 6 6 6-6"></path></svg>
               </button>
               <sc-if value="{{ appOpen }}" hint-placeholder-val="{{ false }}">
-                <div onClick="{{ stopClick }}" style="position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 40; max-height: 260px; overflow-y: auto; background: var(--white); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--elev-pop); padding: 6px;">
+                <div onClick="{{ stopClick }}" style="position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 40; max-height: 300px; overflow-y: auto; background: var(--white); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--elev-pop); padding: 6px;">
+                  <div style="position: sticky; top: -6px; margin: -6px -6px 4px; padding: 8px; background: var(--white); border-bottom: 1px solid var(--border-soft);">
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-tint);">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+                      <input value="{{ appQuery }}" onChange="{{ onAppQuery }}" placeholder="Cari aplikasi…" style="flex: 1; border: none; outline: none; background: transparent; font-family: var(--font-sans); font-size: 13px; color: var(--ink-900);">
+                    </div>
+                  </div>
                   <sc-for list="{{ appItems }}" as="it" hint-placeholder-count="8">
                     <button type="button" onClick="{{ it.onClick }}" style="width: 100%; text-align: left; padding: 9px 12px; border: none; border-radius: 8px; background: {{ it.selBg }}; color: {{ it.selColor }}; font-family: var(--font-sans); font-size: 13px; font-weight: {{ it.selWeight }}; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px;" style-hover="background: var(--surface-tint);">
                       <span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ it.label }}</span>
@@ -367,7 +373,13 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; transform: {{ subCatChevron }}; transition: transform 0.15s ease;"><path d="m6 9 6 6 6-6"></path></svg>
               </button>
               <sc-if value="{{ subCatOpen }}" hint-placeholder-val="{{ false }}">
-                <div onClick="{{ stopClick }}" style="position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 40; max-height: 260px; overflow-y: auto; background: var(--white); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--elev-pop); padding: 6px;">
+                <div onClick="{{ stopClick }}" style="position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 40; max-height: 300px; overflow-y: auto; background: var(--white); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--elev-pop); padding: 6px;">
+                  <div style="position: sticky; top: -6px; margin: -6px -6px 4px; padding: 8px; background: var(--white); border-bottom: 1px solid var(--border-soft);">
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-tint);">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+                      <input value="{{ subCatQuery }}" onChange="{{ onSubCatQuery }}" placeholder="Cari sub kategori…" style="flex: 1; border: none; outline: none; background: transparent; font-family: var(--font-sans); font-size: 13px; color: var(--ink-900);">
+                    </div>
+                  </div>
                   <sc-for list="{{ subCatItems }}" as="it" hint-placeholder-count="4">
                     <button type="button" onClick="{{ it.onClick }}" style="width: 100%; text-align: left; padding: 9px 12px; border: none; border-radius: 8px; background: {{ it.selBg }}; color: {{ it.selColor }}; font-family: var(--font-sans); font-size: 13px; font-weight: {{ it.selWeight }}; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px;" style-hover="background: var(--surface-tint);">
                       <span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ it.label }}</span>
@@ -393,7 +405,13 @@
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; transform: {{ subjectChevron }}; transition: transform 0.15s ease;"><path d="m6 9 6 6 6-6"></path></svg>
                 </button>
                 <sc-if value="{{ subjectOpen }}" hint-placeholder-val="{{ false }}">
-                  <div onClick="{{ stopClick }}" style="position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 40; max-height: 260px; overflow-y: auto; background: var(--white); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--elev-pop); padding: 6px;">
+                  <div onClick="{{ stopClick }}" style="position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 40; max-height: 300px; overflow-y: auto; background: var(--white); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--elev-pop); padding: 6px;">
+                    <div style="position: sticky; top: -6px; margin: -6px -6px 4px; padding: 8px; background: var(--white); border-bottom: 1px solid var(--border-soft);">
+                      <div style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-tint);">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+                        <input value="{{ subjectQuery }}" onChange="{{ onSubjectQuery }}" placeholder="Cari subjek…" style="flex: 1; border: none; outline: none; background: transparent; font-family: var(--font-sans); font-size: 13px; color: var(--ink-900);">
+                      </div>
+                    </div>
                     <sc-for list="{{ subjectItems }}" as="it" hint-placeholder-count="5">
                       <button type="button" onClick="{{ it.onClick }}" style="width: 100%; text-align: left; padding: 9px 12px; border: none; border-radius: 8px; background: {{ it.selBg }}; color: {{ it.selColor }}; font-family: var(--font-sans); font-size: 13px; font-weight: {{ it.selWeight }}; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px;" style-hover="background: var(--surface-tint);">
                         <span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ it.label }}</span>
@@ -586,8 +604,10 @@ class Component extends DCLogic {
     const applicationOptions = this.appList();
     const application = this.state.application;
     const appOpen = this.state.appOpen;
-    const toggleApp = (e) => { e.stopPropagation(); this.setState({ appOpen: !this.state.appOpen, subjectOpen: false }); };
-    const appItems = applicationOptions.map((opt) => ({
+    const toggleApp = (e) => { e.stopPropagation(); this.setState({ appOpen: !this.state.appOpen, subjectOpen: false, appQuery: "" }); };
+    const appQuery = this.state.appQuery || "";
+    const onAppQuery = (e) => this.setState({ appQuery: e.target.value });
+    const appItems = applicationOptions.filter((opt) => opt.toLowerCase().includes(appQuery.trim().toLowerCase())).map((opt) => ({
       label: opt, selected: opt === application,
       selBg: opt === application ? "var(--blue-050-alt)" : "transparent",
       selColor: opt === application ? "var(--blue-ink)" : "var(--ink-800)",
@@ -604,8 +624,10 @@ class Component extends DCLogic {
     const subCategory = this.state.subCategory;
     const subCatOpen = this.state.subCatOpen;
     const subCatDisabled = !application;
-    const toggleSubCat = (e) => { e.stopPropagation(); if (subCatDisabled) return; this.setState({ subCatOpen: !this.state.subCatOpen, appOpen: false, subjectOpen: false }); };
-    const subCatItems = subCatOptions.map((opt) => ({
+    const toggleSubCat = (e) => { e.stopPropagation(); if (subCatDisabled) return; this.setState({ subCatOpen: !this.state.subCatOpen, appOpen: false, subjectOpen: false, subCatQuery: "" }); };
+    const subCatQuery = this.state.subCatQuery || "";
+    const onSubCatQuery = (e) => this.setState({ subCatQuery: e.target.value });
+    const subCatItems = subCatOptions.filter((opt) => opt.toLowerCase().includes(subCatQuery.trim().toLowerCase())).map((opt) => ({
       label: opt, selected: opt === subCategory,
       selBg: opt === subCategory ? "var(--blue-050-alt)" : "transparent",
       selColor: opt === subCategory ? "var(--blue-ink)" : "var(--ink-800)",
@@ -623,8 +645,10 @@ class Component extends DCLogic {
     const subject = this.state.subject;
     const subjectOpen = this.state.subjectOpen;
     const subjectDisabled = !subCategory;
-    const toggleSubject = (e) => { e.stopPropagation(); if (subjectDisabled) return; this.setState({ subjectOpen: !this.state.subjectOpen, appOpen: false, subCatOpen: false }); };
-    const subjectItems = subjectOptions.map((opt) => ({
+    const toggleSubject = (e) => { e.stopPropagation(); if (subjectDisabled) return; this.setState({ subjectOpen: !this.state.subjectOpen, appOpen: false, subCatOpen: false, subjectQuery: "" }); };
+    const subjectQuery = this.state.subjectQuery || "";
+    const onSubjectQuery = (e) => this.setState({ subjectQuery: e.target.value });
+    const subjectItems = subjectOptions.filter((opt) => opt.toLowerCase().includes(subjectQuery.trim().toLowerCase())).map((opt) => ({
       label: opt, selected: opt === subject,
       selBg: opt === subject ? "var(--blue-050-alt)" : "transparent",
       selColor: opt === subject ? "var(--blue-ink)" : "var(--ink-800)",
@@ -738,7 +762,7 @@ class Component extends DCLogic {
     ].map(n => ({ ...n, iconBg: notiIcon[n.type].bg, iconColor: notiIcon[n.type].color, iconPath: notiIcon[n.type].d, rowBg: n.unread ? "var(--blue-050-cool)" : "var(--white)" }));
     const profileMenu = [
       { label: "My Profile", href: "#", d: "M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5" },
-      { label: "My Tickets", href: "my-tickets.html", d: "M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z M14 5v14" },
+      { label: "My Tickets", href: "My Tickets.dc.html", d: "M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z M14 5v14" },
       { label: "Notification Preferences", href: "#", d: "M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z M10 21h4" },
       { label: "Help & Support", href: "#", d: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3 M12 17h.01" }
     ];
@@ -752,12 +776,11 @@ class Component extends DCLogic {
       Medium:   { bg: "var(--blue-050)",      color: "var(--blue-ink)" },
       Low:      { bg: "var(--surface-tint)",  color: "var(--slate-500)" }
     };
-    // Team Lead "status · PIC" style: leading colored dot + tinted pill.
     const st = {
-      "In Progress":          { bg: "var(--blue-050)",     color: "var(--blue-ink)", dot: "var(--blue-500)" },
-      "Assigned":             { bg: "var(--blue-050-alt)", color: "var(--blue-ink)", dot: "var(--blue-500)" },
-      "Open":                 { bg: "var(--surface-tint)", color: "var(--ink-700)",  dot: "var(--slate-500)" },
-      "Waiting for Response": { bg: "var(--blue-050)",     color: "var(--blue-ink)", dot: "var(--blue-500)" }
+      "In Progress":          { bg: "var(--blue-050)",     color: "var(--blue-ink)" },
+      "Assigned":             { bg: "var(--blue-050-alt)", color: "var(--blue-ink)" },
+      "Open":                 { bg: "var(--surface-tint)", color: "var(--ink-700)" },
+      "Waiting for Response": { bg: "rgba(124, 58, 237, 0.12)", color: "rgb(109, 40, 217)" }
     };
 
     const rows = [
@@ -770,7 +793,7 @@ class Component extends DCLogic {
     ].map(r => ({
       ...r,
       prioBg: prio[r.priority].bg, prioColor: prio[r.priority].color,
-      statusBg: st[r.status].bg, statusColor: st[r.status].color, statusDot: st[r.status].dot
+      statusBg: st[r.status].bg, statusColor: st[r.status].color
     }));
 
     // Per-column sorting
@@ -817,9 +840,9 @@ class Component extends DCLogic {
     }));
 
     return { userName, firstName, initials, showDeltas, slaRows: sortedRows, slaHeaders, modalOpen, openModal, closeModal, stopClick, priorities, notifOpen, profileOpen, toggleNotif, toggleProfile, closeMenus, anyMenuOpen, notifBtnBg, profileBtnBg, notifications, profileMenu,
-      applicationOptions, application, appOpen, toggleApp, appItems, appLabel, appLabelColor, appChevron,
-      subCatOptions, subCategory, subCatOpen, subCatDisabled, toggleSubCat, subCatItems, subCatLabel, subCatLabelColor, subCatChevron, subCatTriggerCursor, subCatTriggerOpacity,
-      subjectOptions, subject, subjectOpen, subjectDisabled, toggleSubject, subjectItems, subjectLabel, subjectLabelColor, subjectChevron, subjectTriggerCursor, subjectTriggerOpacity, closeDropdowns, submitTicket, subjectError,
+      applicationOptions, application, appOpen, toggleApp, appItems, appLabel, appLabelColor, appChevron, appQuery, onAppQuery,
+      subCatOptions, subCategory, subCatOpen, subCatDisabled, toggleSubCat, subCatItems, subCatLabel, subCatLabelColor, subCatChevron, subCatTriggerCursor, subCatTriggerOpacity, subCatQuery, onSubCatQuery,
+      subjectOptions, subject, subjectOpen, subjectDisabled, toggleSubject, subjectItems, subjectLabel, subjectLabelColor, subjectChevron, subjectTriggerCursor, subjectTriggerOpacity, subjectQuery, onSubjectQuery, closeDropdowns, submitTicket, subjectError,
       issueCategory, categoryPlaceholder, needsApproval, issueCategoryColor,
       isOther, notOther, onSubjectText,
       otherCategory, otherCatOpen, toggleOtherCat, otherCatItems, otherCatLabel, otherCatLabelColor, otherCatChevron,

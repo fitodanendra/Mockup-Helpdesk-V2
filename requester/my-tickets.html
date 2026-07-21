@@ -38,7 +38,7 @@
     </div>
 
     <nav style="display: flex; align-items: center; gap: 4px;">
-      <a href="dashboard.html" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px; color: var(--ink-700); font-size: 13px; font-weight: 500;" style-hover="background: var(--surface-tint); color: var(--ink-900);">
+      <a href="Requester Dashboard.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px; color: var(--ink-700); font-size: 13px; font-weight: 500;" style-hover="background: var(--surface-tint); color: var(--ink-900);">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="14" y="12" width="7" height="9" rx="1.5"></rect><rect x="3" y="16" width="7" height="5" rx="1.5"></rect></svg>
         Dashboards
       </a>
@@ -68,7 +68,7 @@
           </div>
           <div style="max-height: 348px; overflow-y: auto;">
             <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="4">
-              <a href="ticket-detail.html" style="display: flex; gap: 11px; padding: 12px 16px; border-bottom: 1px solid var(--border-soft); background: {{ n.rowBg }}; text-decoration: none;" style-hover="background: var(--blue-050-cool);">
+              <a href="Ticket Detail.dc.html" style="display: flex; gap: 11px; padding: 12px 16px; border-bottom: 1px solid var(--border-soft); background: {{ n.rowBg }}; text-decoration: none;" style-hover="background: var(--blue-050-cool);">
                 <span style="width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: {{ n.iconBg }}; color: {{ n.iconColor }};"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.iconPath }}"></path></svg></span>
                 <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
                   <span style="font-size: 12.5px; color: var(--ink-800); line-height: 1.45;">{{ n.text }}</span>
@@ -217,7 +217,7 @@
             </div>
             <span style="font-size: 12px; color: var(--ink-700);">{{ row.category }}</span>
             <span style="justify-self: start; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{ row.prioBg }}; color: {{ row.prioColor }};">{{ row.priority }}</span>
-            <span style="justify-self: start; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-700); white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 999px; background: {{ row.statusDot }}; flex-shrink: 0;"></span>{{ row.status }}</span>
+            <span style="justify-self: start; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: {{ row.statusBg }}; color: {{ row.statusColor }}; white-space: nowrap;">{{ row.status }}</span>
             <span style="font-size: 12px; font-weight: 600; color: {{ row.slaColor }};">{{ row.sla }}</span>
             <span style="font-size: 12px; color: var(--slate-500); font-variant-numeric: tabular-nums;">{{ row.created }}</span>
           </a>
@@ -496,7 +496,7 @@ class Component extends DCLogic {
     ].map(n => ({ ...n, iconBg: notiIcon[n.type].bg, iconColor: notiIcon[n.type].color, iconPath: notiIcon[n.type].d, rowBg: n.unread ? "var(--blue-050-cool)" : "var(--white)" }));
     const profileMenu = [
       { label: "My Profile", href: "#", d: "M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5" },
-      { label: "My Tickets", href: "my-tickets.html", d: "M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z M14 5v14" },
+      { label: "My Tickets", href: "My Tickets.dc.html", d: "M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z M14 5v14" },
       { label: "Notification Preferences", href: "#", d: "M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z M10 21h4" },
       { label: "Help & Support", href: "#", d: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3 M12 17h.01" }
     ];
@@ -665,27 +665,17 @@ class Component extends DCLogic {
       Medium:   { bg: "var(--blue-050)",      color: "var(--blue-ink)" },
       Low:      { bg: "var(--surface-tint)",  color: "var(--slate-500)" }
     };
-    // Status pills follow the Team Lead "status · PIC" style: a leading
-    // colored dot + tinted pill + colored label. The dot (which the
-    // Priority badges don't have) keeps the two columns readable even
-    // when a status and a priority share a hue.
-    const S_GRAY  = { bg: "var(--surface-tint)",   color: "var(--ink-700)",  dot: "var(--slate-500)" };
-    const S_BLUE  = { bg: "var(--blue-050)",       color: "var(--blue-ink)", dot: "var(--blue-500)" };
-    const S_BLUEA = { bg: "var(--blue-050-alt)",   color: "var(--blue-ink)", dot: "var(--blue-500)" };
-    const S_GREEN = { bg: "rgba(52,199,89,0.12)",  color: "#187C45",         dot: "var(--green-500)" };
-    const S_AMBER = { bg: "rgba(255,159,10,0.14)", color: "#b45309",         dot: "#f59e0b" };
-    const S_RED   = { bg: "rgba(186,26,26,0.10)",  color: "var(--red-600)",  dot: "var(--red-600)" };
     const st = {
-      "Draft":                S_GRAY,
-      "Waiting for Approval": S_AMBER,
-      "Rejected":             S_RED,
-      "Open":                 S_GRAY,
-      "Assigned":             S_BLUEA,
-      "In Progress":          S_BLUE,
-      "Waiting for Response": S_BLUE,
-      "Resolved":             S_GREEN,
-      "Completed":            S_GREEN,
-      "Closed":               S_GRAY
+      "Draft":                { bg: "var(--surface-tint)",       color: "var(--slate-500)" },
+      "Waiting for Approval": { bg: "var(--blue-050-cool)",      color: "var(--navy-700)" },
+      "Rejected":             { bg: "rgba(186,26,26,0.10)",      color: "var(--red-600)" },
+      "Open":                 { bg: "var(--surface-tint)",       color: "var(--ink-700)" },
+      "Assigned":             { bg: "var(--blue-050-alt)",       color: "var(--blue-ink)" },
+      "In Progress":          { bg: "var(--blue-050)",           color: "var(--blue-ink)" },
+      "Waiting for Response": { bg: "rgba(124, 58, 237, 0.12)",  color: "rgb(109, 40, 217)" },
+      "Resolved":             { bg: "rgba(52,199,89,0.14)",      color: "var(--green-500)" },
+      "Completed":            { bg: "rgba(52,199,89,0.14)",      color: "var(--green-500)" },
+      "Closed":               { bg: "var(--surface-tint)",       color: "var(--slate-500)" }
     };
     const slaColors = { ontrack: "var(--green-500)", warning: "var(--clay-600)", breach: "var(--red-600)", none: "var(--slate-500)" };
 
@@ -718,9 +708,9 @@ class Component extends DCLogic {
 
     const rows = all.filter(matchTab).map(r => ({
       ...r,
-      href: r.status === "Rejected" ? "ticket-detail-rejected.html" : "ticket-detail.html",
+      href: r.status === "Rejected" ? "Ticket Detail Rejected.dc.html" : "Ticket Detail.dc.html",
       prioBg: prio[r.priority].bg, prioColor: prio[r.priority].color,
-      statusBg: st[r.status].bg, statusColor: st[r.status].color, statusDot: st[r.status].dot,
+      statusBg: st[r.status].bg, statusColor: st[r.status].color,
       slaColor: slaColors[r.slaKind]
     }));
 

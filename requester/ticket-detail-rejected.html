@@ -37,11 +37,11 @@
     </div>
 
     <nav style="display: flex; align-items: center; gap: 4px;">
-      <a href="dashboard.html" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px; color: var(--ink-700); font-size: 13px; font-weight: 500;" style-hover="background: var(--surface-tint); color: var(--ink-900);">
+      <a href="Requester Dashboard.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px; color: var(--ink-700); font-size: 13px; font-weight: 500;" style-hover="background: var(--surface-tint); color: var(--ink-900);">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="14" y="12" width="7" height="9" rx="1.5"></rect><rect x="3" y="16" width="7" height="5" rx="1.5"></rect></svg>
         Dashboards
       </a>
-      <a href="my-tickets.html" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px; background: var(--blue-050); color: var(--blue-ink); font-size: 13px; font-weight: 600;">
+      <a href="My Tickets.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px; background: var(--blue-050); color: var(--blue-ink); font-size: 13px; font-weight: 600;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z"></path><path d="M14 5v14"></path></svg>
         My Tickets
       </a>
@@ -67,7 +67,7 @@
           </div>
           <div style="max-height: 348px; overflow-y: auto;">
             <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="4">
-              <a href="ticket-detail.html" style="display: flex; gap: 11px; padding: 12px 16px; border-bottom: 1px solid var(--border-soft); background: {{ n.rowBg }}; text-decoration: none;" style-hover="background: var(--blue-050-cool);">
+              <a href="Ticket Detail.dc.html" style="display: flex; gap: 11px; padding: 12px 16px; border-bottom: 1px solid var(--border-soft); background: {{ n.rowBg }}; text-decoration: none;" style-hover="background: var(--blue-050-cool);">
                 <span style="width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: {{ n.iconBg }}; color: {{ n.iconColor }};"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.iconPath }}"></path></svg></span>
                 <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
                   <span style="font-size: 12.5px; color: var(--ink-800); line-height: 1.45;">{{ n.text }}</span>
@@ -126,7 +126,7 @@
 
     <!-- Breadcrumb -->
     <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--slate-500);">
-      <a href="my-tickets.html" style="font-weight: 600;">My Tickets</a>
+      <a href="My Tickets.dc.html" style="font-weight: 600;">My Tickets</a>
       <span>/</span>
       <span style="font-weight: 600; color: var(--ink-700);">AR-2026-0078</span>
     </div>
@@ -137,7 +137,7 @@
         <div style="display: flex; flex-direction: column; gap: 8px; min-width: 0;">
           <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             <span style="font-size: 13px; font-weight: 800; color: var(--blue-500); font-variant-numeric: tabular-nums;">AR-2026-0078</span>
-            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-700); white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 999px; background: var(--red-600); flex-shrink: 0;"></span>Rejected</span>
+            <span style="display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: rgba(186,26,26,0.10); color: var(--red-600);"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>Rejected</span>
             <span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: var(--blue-050); color: var(--blue-ink);">Medium</span>
           </div>
           <h1 style="margin: 0; font-size: 21px; font-weight: 800; color: var(--ink-900); letter-spacing: -0.2px;">Access to sensitive finance dashboard</h1>
@@ -217,7 +217,7 @@
         <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--elev-card); display: flex; flex-direction: column; overflow: hidden;">
           <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 24px 0;">
             <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-900);">Discussion</h2>
-            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-700); white-space: nowrap;"><span style="width: 7px; height: 7px; border-radius: 999px; background: var(--slate-500); flex-shrink: 0;"></span>Closed — rejected</span>
+            <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--surface-tint); color: var(--slate-500);">Closed — rejected</span>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 16px; padding: 18px 24px;">
@@ -475,7 +475,7 @@ class Component extends DCLogic {
 
     const profileMenu = [
       { label: "My Profile", href: "#", d: "M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5" },
-      { label: "My Tickets", href: "my-tickets.html", d: "M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z M14 5v14" },
+      { label: "My Tickets", href: "My Tickets.dc.html", d: "M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z M14 5v14" },
       { label: "Notification Preferences", href: "#", d: "M18.4 5.6a8 8 0 0 1 1.9 8.9c-.5 1.2-.3 2.6.5 3.6l.2.3H3l.2-.3c.8-1 1-2.4.5-3.6a8 8 0 0 1 14.7-8.9Z M10 21h4" },
       { label: "Help & Support", href: "#", d: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3 M12 17h.01" }
     ];
