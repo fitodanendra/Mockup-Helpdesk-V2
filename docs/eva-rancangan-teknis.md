@@ -182,7 +182,7 @@ bisa dihitung: berapa dari 139 subject yang punya minimal satu artikel/FAQ aktif
 | `conversations` | percakapan dan hasil akhirnya | Log Percakapan |
 | `answer_logs` | pertanyaan, sumber terpilih, skor, apakah dikoreksi | Analytics, Unanswered Questions |
 | `answer_ratings` | bintang 1–5, alasan, komentar, menunjuk `answer_logs` | Rating & Feedback |
-| `test_cases` | contoh pertanyaan uji + sasaran yang benar | Training Overview, Ticket Recommendation |
+| `test_cases` | contoh pertanyaan uji + sasaran yang benar (artikel, FAQ, atau subject) | Editor artikel & FAQ, Ticket Recommendation |
 
 `answer_logs` sering dilupakan tetapi wajib. Tanpa itu, Unanswered Questions dan
 Analytics tidak punya sumber data, dan tidak ada bahan untuk memperbaiki EVA.
@@ -293,10 +293,18 @@ dengan *locked*. Frasa tersebut berubah fungsi menjadi **kasus uji**:
 Nilainya justru naik: ketika model embedding diganti atau strategi pemotongan
 teks diubah, kasus uji inilah yang menangkap kemunduran.
 
-Ada di dua tempat:
+Kasus uji **menempel pada materi yang diuji**, bukan pada satu layar terpisah —
+sehingga admin melihat hasilnya tepat saat sedang menyunting materi itu:
 
-- **Training Overview** — menguji pencarian jawaban (Pencarian A)
-- **Ticket Recommendation** — menguji pemilihan subject (Pencarian B)
+| Ditulis di | Menguji | Hasil tampil |
+|---|---|---|
+| Editor artikel & FAQ, tab EVA Training | Pencarian A — apakah EVA menemukan materi ini | Lolos/Gagal di samping tiap pertanyaan |
+| Ticket Recommendation, per baris subject | Pencarian B — apakah EVA menggolongkan ke subject ini | Chip berwarna + ringkasan "N / M lolos" |
+
+Rancangan ini disengaja. Panel agregat terpisah pernah dicoba di Training
+Overview lalu dibuang: admin harus berpindah layar untuk tahu apakah suntingannya
+berhasil, dan angkanya tidak memberi tahu materi mana yang perlu diperbaiki.
+Menempelkan hasil pada materinya membuat perbaikan bisa langsung dikerjakan.
 
 Sumber terbaik untuk kasus uji baru adalah menu Unanswered Questions, yang berisi
 kalimat asli karyawan.
