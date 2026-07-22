@@ -181,10 +181,20 @@ bisa dihitung: berapa dari 139 subject yang punya minimal satu artikel/FAQ aktif
 |---|---|---|
 | `conversations` | percakapan dan hasil akhirnya | Log Percakapan |
 | `answer_logs` | pertanyaan, sumber terpilih, skor, apakah dikoreksi | Analytics, Unanswered Questions |
+| `answer_ratings` | bintang 1–5, alasan, komentar, menunjuk `answer_logs` | Rating & Feedback |
 | `test_cases` | contoh pertanyaan uji + sasaran yang benar | Training Overview, Ticket Recommendation |
 
 `answer_logs` sering dilupakan tetapi wajib. Tanpa itu, Unanswered Questions dan
 Analytics tidak punya sumber data, dan tidak ada bahan untuk memperbaiki EVA.
+
+`answer_ratings` menempel pada **jawaban**, bukan langsung pada artikel. Ini
+disengaja: satu artikel bisa dikutip untuk bermacam pertanyaan, dan yang dinilai
+karyawan adalah jawaban untuk pertanyaannya sendiri. Rata-rata per artikel adalah
+hasil agregasi, bukan kolom yang disimpan.
+
+Alasan yang bisa dipilih saat penilaian rendah — *Langkah tidak berhasil,
+Informasi kurang lengkap, Kurang jelas, Kasus saya berbeda* — disimpan sebagai
+kolom terpisah, bukan teks bebas. Itulah yang membentuk panel "Tema masukan".
 
 ---
 
@@ -293,7 +303,66 @@ kalimat asli karyawan.
 
 ---
 
-## 11. Urutan pengerjaan
+## 11. Umpan balik karyawan
+
+Setelah EVA menjawab, karyawan menilai jawaban itu **1–5 bintang**. Bila
+penilaiannya rendah, muncul pilihan alasan dan kolom komentar.
+
+### Dua sinyal untuk dua masalah berbeda
+
+Ini yang membuat umpan balik penting dan **tidak bisa digantikan** oleh
+Unanswered Questions:
+
+| Menu | Menjawab | Masalah yang ditemukan |
+|---|---|---|
+| Unanswered Questions | Apa yang **belum ada**? | Knowledge Base bolong |
+| Rating & Feedback | Apa yang **ada tapi jelek**? | Knowledge Base salah, kurang lengkap, atau usang |
+
+Contoh dari data mockup: artikel **"Printer jaringan offline"** berating 2,6
+dengan tren menurun. Artikelnya ada, EVA mengutipnya, tetapi karyawan menyatakan
+tidak membantu.
+
+Kasus seperti ini **tidak akan pernah muncul** di Unanswered Questions, karena
+dari sisi sistem EVA merasa sudah menjawab. Inilah yang di Analytics disebut
+**deflection palsu**: dihitung berhasil, padahal karyawan tetap kesulitan.
+
+### Lingkarannya harus tertutup
+
+Rating tidak boleh berhenti sebagai angka pajangan. Alurnya:
+
+```
+Karyawan beri bintang
+      │
+      ▼
+answer_ratings  ──agregasi──▶  Rating & Feedback
+                                     │
+                                     ▼
+                        Admin urutkan "rating terendah"
+                                     │
+                                     ▼
+                        Klik artikel ──▶ perbaiki isinya
+                                     │
+                                     ▼
+                              kembali ke Siklus 1
+```
+
+Di mockup, tombol **Buka** pada tabel "Performa per artikel" sudah membawa admin
+langsung ke artikel yang bermasalah. Perilaku itu yang perlu ditiru: setiap
+angka buruk harus punya jalan menuju perbaikannya.
+
+### Yang perlu diwaspadai
+
+- **Bias jumlah.** Artikel dengan 842 penilaian tidak akan bergeser rata-ratanya
+  oleh satu bintang. Untuk mendeteksi penurunan kualitas, pantau **tren periode
+  terakhir**, bukan hanya rata-rata sepanjang masa.
+- **Penilaian ganda.** Satu jawaban hanya boleh dinilai sekali oleh orang yang
+  sama.
+- **Sampel kecil.** Artikel dengan 3 penilaian jangan disejajarkan dengan yang
+  punya 800. Tampilkan jumlahnya berdampingan dengan rata-rata.
+
+---
+
+## 12. Urutan pengerjaan
 
 ### Fase 1 — EVA bisa menjawab
 
@@ -316,11 +385,12 @@ Selesai fase ini EVA sudah berguna: menjawab dari dokumen perusahaan.
 9. Contoh pertanyaan uji + penjalannya
 10. Coverage Dashboard
 11. Unanswered Questions dari `answer_logs`
-12. Rating & umpan balik
+12. Rating & umpan balik — beserta jalan dari angka buruk menuju perbaikannya
+    (`answer_ratings` → agregasi per artikel → buka artikel)
 
 ---
 
-## 12. Risiko
+## 13. Risiko
 
 | Risiko | Dampak | Penanganan |
 |---|---|---|
@@ -332,7 +402,7 @@ Selesai fase ini EVA sudah berguna: menjawab dari dokumen perusahaan.
 
 ---
 
-## 13. Yang masih perlu diputuskan
+## 14. Yang masih perlu diputuskan
 
 1. **Layanan embedding mana** — pihak ketiga, atau full-text search PostgreSQL
    dulu untuk versi pertama
