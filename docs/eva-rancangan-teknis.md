@@ -1,236 +1,354 @@
-# EVA — Rancangan Teknis: Dari Mockup ke Sistem Nyata
+# EVA — Rancangan Teknis
 
-**Status dokumen:** draf untuk review
-**Ruang lingkup:** EVA Knowledge Admin Console (`/eva`) dan asisten virtual EVA
-**Terakhir diperbarui:** 20 Juli 2026
+**Terakhir ditulis ulang:** 22 Juli 2026
+**Menggantikan:** versi 20 Juli, yang sudah tidak sesuai — masih menyebut Review
+Queue, status "Needs Update", dan EVA membuat tiket. Ketiganya sudah dibatalkan.
 
----
-
-## 1. Tujuan dokumen
-
-Mockup di `/eva` sudah menunjukkan **alur kerja** EVA secara lengkap — bagaimana pengetahuan dikelola, ditinjau, dipublikasikan, dinilai, dan diperbaiki. Yang belum ditunjukkan adalah **mesin di baliknya**.
-
-Dokumen ini memisahkan keduanya secara jujur: mana yang sudah benar-benar berfungsi di mockup, mana yang disimulasikan, dan apa yang dibutuhkan supaya EVA bekerja sungguhan di lingkungan ADHI Karya.
-
-Dokumen ini **bukan** rencana proyek. Estimasi fase di bagian 5 adalah urutan prioritas, bukan komitmen jadwal.
+**Untuk siapa:** developer yang akan membangun EVA, dan mentor yang menilai
+rancangannya.
 
 ---
 
-## 2. Yang sudah ada vs. yang disimulasikan
+## 1. Apa itu EVA
 
-| Bagian | Di mockup | Kenyataannya |
+Asisten virtual di Portal SSO ADHI Karya. Karyawan bertanya soal layanan TI;
+EVA menjawab dari Knowledge Base. Bila tidak bisa menjawab, EVA **menyiapkan
+draf tiket** — bukan menerbitkannya.
+
+Satu kalimat yang menentukan seluruh rancangan:
+
+> EVA menyiapkan, karyawan mengirim, Helpdesk menangani.
+
+---
+
+## 2. Enam aturan yang tidak boleh dilanggar
+
+Aturan ini berasal dari mentor dan sudah disepakati. Setiap keputusan teknis di
+dokumen ini turun dari sini.
+
+| # | Aturan | Konsekuensi teknis |
 |---|---|---|
-| Alur artikel (draft → review → publish) | **Berfungsi penuh** | Tinggal disambungkan ke database |
-| Pertanyaan tak terjawab → artikel/FAQ | **Berfungsi penuh** | Prefill editor sudah benar |
-| Rekomendasi tipe tiket | **Berfungsi penuh** | 11 aturan keyword, first-match-wins |
-| Rating & feedback | **Berfungsi penuh** | Data terkumpul, tapi belum dipakai apa-apa |
-| Kutipan sumber & skor keyakinan | **Berfungsi** (baru) | Skor dihitung dari kecocokan kata kunci, bukan makna |
-| Pertanyaan klarifikasi | **Berfungsi** (baru) | Daftar keluhan generik masih hardcoded |
-| **Pencarian jawaban** | **Disimulasikan** | `includes()` ke 5 entri hardcoded |
-| **Indexing dokumen** | **Disimulasikan** | Status `Processing → Indexed` pakai `setTimeout` |
-| **Pembuatan tiket** | **Disimulasikan** | Nomor tiket dikarang di frontend |
-| **Identitas penanya** | **Tidak ada** | EVA tidak tahu siapa yang bertanya |
-
-Poin penting untuk reviewer: **alur kerjanya sudah matang, mesin pencarinya belum ada.** Itu pembagian kerja yang wajar untuk tahap mockup, tapi perlu disadari agar ekspektasi tidak melenceng.
+| 1 | Artikel **tidak ditulis manual**. Artikel lahir dari dokumen yang diunggah admin, lalu disunting. | Tidak ada tombol "artikel baru" di mana pun. Perlu pipeline: unggah → ekstraksi → ringkas → artikel. |
+| 2 | FAQ ditulis manual admin, **langsung tayang** tanpa review. | Tidak ada tabel status/approval untuk FAQ. Gerbang satu-satunya: toggle Show in EVA. |
+| 3 | EVA membaca **hanya artikel dan FAQ**. Tidak membaca tiket. | Sumber retrieval hanya dua tabel itu. |
+| 4 | EVA **hanya merekomendasikan** tiket. | EVA tidak boleh punya izin tulis ke tabel tiket. Penomoran & SLA milik sistem Helpdesk. |
+| 5 | Service Catalog milik **role Admin**. | EVA hanya membaca. Tidak ada endpoint tulis katalog dari EVA. |
+| 6 | BPO & approval diatur di Admin, tampil di Requester. | EVA tidak menyentuh keduanya. Berhenti setelah memilih subject. |
 
 ---
 
-## 3. Celah teknis utama
+## 3. Dua pencarian yang berbeda
 
-### 3.1 Pencarian jawaban — dari kata kunci ke makna
+Bagian ini paling sering disalahpahami, jadi ditegaskan lebih dulu.
 
-Logika sekarang, disederhanakan:
+EVA melakukan **dua pencarian ke tempat berbeda**, untuk tujuan berbeda:
 
-```js
-evaAnswer(text){
-  const q = text.toLowerCase();
-  for (const e of this.evaKb) {
-    const hits = e.kw.filter(k => q.includes(k.trim()));
-    // ...skor dari jumlah & panjang kata kunci yang cocok
-  }
-}
+| | Mencari | Sumber | Kapan |
+|---|---|---|---|
+| **Pencarian A** | Jawaban | Knowledge Base — artikel & FAQ | Selalu, begitu karyawan bertanya |
+| **Pencarian B** | Nama masalah | Service Catalog (139 subject) | Hanya bila perlu draf tiket |
+
+**Service Catalog tidak berisi jawaban.** Isinya hanya nama masalah —
+`Password Expired`, `User Locked`. Tidak ada satu pun langkah penyelesaian di
+sana. Menganggap keduanya sama akan menghasilkan rancangan yang salah.
+
+Satu istilah bisa muncul di dua tempat dengan peran berbeda:
+
+- Di Knowledge Base — artikel berisi *cara menyelesaikannya*
+- Di Service Catalog — nama masalah untuk *label tiket*
+
+Selisih keduanya adalah angka kesiapan di Coverage Dashboard: dari 139 jenis
+masalah yang mungkin terjadi, berapa yang sudah punya panduan tertulis.
+
+---
+
+## 4. Alur lengkap
+
+```
+Karyawan bertanya
+      │
+      ▼
+[A] Cari di Knowledge Base (artikel + FAQ)
+      │
+      ├── skor ≥ ambang ──▶ Claude susun jawaban + kutip sumber ──▶ SELESAI
+      │                     (dihitung sebagai deflection)
+      │
+      └── skor < ambang
+                │
+                ▼
+        [B] Cari kandidat subject di Service Catalog (139)
+                │
+                ▼
+        Claude pilih satu subject (structured output)
+                │
+                ├── "tidak ada yang cocok" ──┐
+                ├── skor < ambang ───────────┤
+                │                            ▼
+                │                   Tipe cadangan / EVA tanya balik
+                │
+                ▼
+        Subject terpilih → jenis tiket ikut otomatis
+                │
+                ▼
+        EVA isikan form Requester (app, sub category, subject, deskripsi)
+                │
+                ▼
+        Requester tampilkan BPO & approval (dari data Admin)
+                │
+                ▼
+        Karyawan periksa → kirim → nomor tiket terbit
 ```
 
-Ini **pencocokan substring**, bukan pemahaman makna. Konsekuensinya:
+Perhatikan: EVA berhenti sebelum kotak terakhir. Tidak ada panah dari EVA
+langsung ke pembuatan tiket.
 
-- Pertanyaan yang tidak memakai kata kunci persis → tidak ketemu, walaupun maksudnya sama
-- Menambah cakupan berarti menambah kata kunci manual, selamanya
-- Tidak ada cara mengukur "seberapa mirip" dua pertanyaan
+---
 
-Sementara itu fitur **Documents** sudah memakai bahasa RAG — dokumen dipecah jadi *chunk* (58 halaman → 210 chunk). Tapi tidak ada retrieval yang benar-benar memakai chunk itu. **Ada ketidaksinkronan antara janji UI dan logika di baliknya**, dan ini celah nomor satu.
+## 5. Service Catalog — asal dan struktur
 
-**Yang dibutuhkan:**
+### Asalnya
 
-1. **Embedding** untuk tiap artikel, FAQ, dan chunk dokumen — ubah teks jadi vektor
-2. **Vector store** untuk pencarian kemiripan (pgvector, Qdrant, atau Elasticsearch dense vector)
-3. **Hybrid search** — gabungkan skor semantik dengan keyword/BM25. Kata kunci tetap berguna untuk istilah spesifik seperti `ME22N` atau `FortiClient` yang tidak punya makna umum
-4. **Re-ranking** hasil teratas sebelum disajikan
+Berkas Excel **"Insiden & Service List Issue for Helpdesk 2.0.xlsx"**, disusun
+tim Service Management. Di mockup sudah dikonversi menjadi
+`shared/helpdesk-catalog.js`.
 
-Trigger phrases yang sudah ada di Editor tetap berguna — jadi contoh positif untuk mengevaluasi kualitas retrieval.
+### Isinya
 
-### 3.2 Penanganan Bahasa Indonesia
+| Kelompok | Jumlah | Menentukan jenis tiket |
+|---|---|---|
+| Incident | 82 | `Incident` |
+| Service Request | 41 | `Service Request` |
+| Access Request | 16 | `Access Request` |
+| **Total subject** | **139** | |
+| Applications | 34 | membawa BPO |
 
-Ini sering diremehkan tapi menentukan. Contoh nyata dari data mockup sendiri: `"sap gui lemot banget"`, `"ganti hp mfa gimana reset"`, `"buka elisa kontrak lewat hp"`.
+**Jenis tiket tidak pernah ditebak.** Ia melekat pada kelompok asal subject.
+`Password Expired` ada di daftar Incident, maka jenis tiketnya pasti Incident.
+AI hanya memilih subject; jenis tiket ikut serta.
 
-Yang perlu ditangani:
+### Bentuk datanya
 
-- **Stemming** — "memperpanjang" / "diperpanjang" / "perpanjangan" harus mengarah ke akar yang sama. Sastrawi adalah pustaka standar untuk ini
-- **Bahasa informal** — "lemot", "gabisa", "gimana", "hp" tidak ada di kamus formal
-- **Campur kode** — karyawan menulis "reset password" bukan "atur ulang kata sandi". Model embedding harus multilingual
-- **Typo** — toleransi jarak edit untuk kesalahan ketik umum
+```js
+// incidents
+{ app:"SAP", module:"LOGIN SAP", subject:"Password Expired",
+  approval:false, bpo:false }
 
-Fitur **Sinonim** di Search Settings sudah menangani sebagian kecil masalah ini secara manual (`password → sandi, kata sandi, pw`), tapi tidak mungkin diskalakan dengan tangan.
+// applications
+{ name:"ADELE", bpo:"IT" }
+```
 
-### 3.3 Ambang keyakinan
+### Siapa yang membaca
 
-Sudah diimplementasikan di mockup dengan tiga band:
+Satu sumber, tiga pemakai — sudah dibuktikan di mockup, tempat
+`shared/helpdesk-catalog.js` dipakai bersama oleh Requester dan EVA:
 
-| Keyakinan | Perilaku |
+| Pemakai | Untuk apa |
 |---|---|
-| ≥ 80% | Jawab langsung |
-| 55–79% | Jawab + "Apakah ini yang Anda maksud?" |
-| < 55% | Jangan menebak — tawarkan tiket |
+| Requester | mengisi dropdown form Buat Tiket |
+| EVA | daftar pilihan yang boleh dipilih AI |
+| Admin | tempat mengelola isinya |
 
-Yang perlu diubah di sistem nyata: skornya harus berasal dari **jarak vektor + skor re-ranker**, bukan hitungan kata kunci. Ambangnya sendiri harus **dikalibrasi dari data nyata**, bukan ditetapkan di awal — jalankan pada beberapa ratus pertanyaan riil, lihat di titik mana jawaban mulai sering salah.
+Konsekuensinya: layanan baru cukup ditambah sekali di Admin, otomatis muncul di
+Requester maupun pilihan EVA.
 
-Prinsip yang perlu dipegang: **kegagalan paling merusak bukan "EVA tidak tahu", tapi "EVA menjawab dengan yakin tapi salah".** Lebih baik ambang terlalu tinggi di awal.
+---
 
-### 3.4 Identitas dan konteks penanya
+## 6. Rancangan basis data
 
-Saat ini `evaSend()` tidak membawa identitas sama sekali. Ini menutup sebagian besar kasus penggunaan yang justru paling bernilai:
+### Tabel master (milik Admin)
 
-- **"Status tiket saya bagaimana?"** — kemungkinan besar pertanyaan paling sering, dan sekarang mustahil dijawab
-- "Saya tidak bisa akses ELISA" — EVA tidak tahu user ini memang belum punya lisensi
-- Karyawan Finance dan karyawan Site Office menerima jawaban identik untuk konteks yang berbeda
+| Tabel | Isi | Catatan |
+|---|---|---|
+| `applications` | 34 aplikasi + BPO | Sumber BPO satu-satunya |
+| `catalog_subjects` | 139 subject, jenis tiket, flag approval/bpo | Turunan Excel; jenis tiket dari kelompok asal |
 
-**Yang dibutuhkan:** sesi EVA membawa konteks dari SSO — NIK, departemen, lokasi kerja, daftar aplikasi yang dia punya akses, dan tiket terbukanya.
+### Tabel Knowledge Base (milik EVA)
 
-**Catatan keamanan:** begitu EVA tahu identitas, ia harus menghormati otorisasi. Artikel internal SCM tidak boleh muncul ke semua orang hanya karena cocok secara semantik. Perlu penyaringan hak akses **di tahap retrieval**, bukan di tampilan.
+| Tabel | Isi |
+|---|---|
+| `documents` | berkas asli, status indeks, pengunggah |
+| `articles` | ringkasan dokumen, `source_document_id`, `subject_id`, `is_active` |
+| `faqs` | tanya-jawab, `subject_id`, `is_active` |
+| `kb_chunks` | potongan teks + vektor, menunjuk artikel atau FAQ |
+| `subject_vectors` | vektor nama subject, untuk Pencarian B |
 
-### 3.5 Percakapan multi-giliran
+`subject_id` pada `articles` dan `faqs` adalah kunci yang membuat angka coverage
+bisa dihitung: berapa dari 139 subject yang punya minimal satu artikel/FAQ aktif.
 
-Tiap `evaSend()` berdiri sendiri, tanpa memori. Yang tidak bisa dilakukan:
+### Tabel operasional
 
-- Lanjutan: *"kalau masih gagal gimana?"* — EVA tidak tahu "masih gagal" merujuk apa
-- Klarifikasi berantai — sudah ada satu tingkat (bagian 3.4 mockup), tapi tidak bisa berlanjut
+| Tabel | Isi | Mengisi menu |
+|---|---|---|
+| `conversations` | percakapan dan hasil akhirnya | Log Percakapan |
+| `answer_logs` | pertanyaan, sumber terpilih, skor, apakah dikoreksi | Analytics, Unanswered Questions |
+| `test_cases` | contoh pertanyaan uji + sasaran yang benar | Training Overview, Ticket Recommendation |
 
-Klarifikasi justru yang paling menaikkan akurasi, karena pertanyaan karyawan biasanya pendek dan ambigu. **Yang dibutuhkan:** riwayat percakapan per sesi, dan penulisan ulang pertanyaan dengan konteks sebelumnya sebelum masuk ke retrieval.
+`answer_logs` sering dilupakan tetapi wajib. Tanpa itu, Unanswered Questions dan
+Analytics tidak punya sumber data, dan tidak ada bahan untuk memperbaiki EVA.
 
-### 3.6 Integrasi tiket
+---
 
-Sekarang nomor tiket dikarang di frontend:
+## 7. Pemakaian Claude
 
-```js
-const num = pre + '-2026-' + String(482 + st.evaSeq).padStart(4,'0');
+Model: **`claude-opus-4-8`**.
+
+### Pencarian A — menjawab dari Knowledge Base
+
+Kirim pertanyaan + 3–5 potongan teks teratas. Minta jawaban yang **hanya**
+bersumber dari potongan itu, disertai kutipan. Bila potongan tidak cukup, model
+harus menyatakan tidak tahu — bukan mengarang.
+
+### Pencarian B — memilih subject
+
+Kirim pertanyaan + sekitar 10 kandidat subject hasil penyaringan. Pakai
+**structured output** (`output_config.format` dengan `json_schema`) sehingga
+model wajib memilih dari daftar dan tidak bisa mengarang subject baru:
+
+```json
+{ "subject_id": 2, "alasan": "akun terkunci akibat salah password" }
 ```
 
-**Yang dibutuhkan:**
+Daftar pilihan **wajib menyertakan opsi "tidak ada yang cocok"**. Alasannya di
+bagian berikut.
 
-1. Nomor tiket berasal dari sumber yang sama dengan Helpdesk 2.0 — satu penomoran, bukan dua
-2. Tiket dari EVA muncul di **My Tickets** milik Requester. Saat ini dua mockup ini terpisah total
-3. **Transkrip percakapan ikut terbawa ke tiket.** Ini sering dilupakan tapi sangat berharga: agent support langsung tahu langkah apa saja yang sudah dicoba, sehingga tidak menyuruh mengulang
-4. Rekomendasi tipe tiket dari EVA masuk sebagai **saran**, bukan keputusan final — helpdesk tetap yang menentukan tim dan PIC
+### Yang tidak disediakan Anthropic
 
-### 3.7 Umpan balik rating yang tidak kembali
-
-Artikel "Printer jaringan offline" punya rating **2.6 dengan tren −8**, tapi EVA tetap menyajikannya persis sama ke penanya berikutnya. Data mengalir masuk, tidak ada yang mengalir balik.
-
-**Yang dibutuhkan:**
-
-- Rating rendah menurunkan peringkat artikel di hasil retrieval
-- Ambang tertentu memicu status `Needs Update` secara otomatis (sekarang manual)
-- Artikel dengan rating sangat rendah bisa ditahan dari EVA sambil menunggu perbaikan
-
-### 3.8 Pengelompokan pertanyaan tak terjawab
-
-Mockup menampilkan *"Bagaimana memperpanjang timeout sesi SAP?" — 214×* dengan satu contoh kalimat. Di kenyataan, 214 orang menulis 214 kalimat berbeda.
-
-**Siapa yang mengelompokkan mereka jadi satu pertanyaan kanonik?** Itu pekerjaan clustering yang belum ada. Tanpa ini, layar Unanswered Questions akan berisi ribuan baris nyaris-duplikat dan menjadi tidak terpakai.
-
-**Yang dibutuhkan:** embedding pertanyaan → clustering → satu perwakilan per klaster, dengan jumlah dan contoh kalimat.
-
-### 3.9 Tata kelola persetujuan
-
-`applyReviewDecision()` memperbolehkan **siapa pun menyetujui apa pun**. Padahal data kepemilikannya sudah ada: Access Request → "HC + BPO", ELISA → SCM, SAP → "IT / BPO".
-
-Artinya staf IT bisa menyetujui artikel kebijakan milik HC. Untuk organisasi sebesar ADHI ini masalah tata kelola yang akan ditanyakan auditor.
-
-**Yang dibutuhkan:** Review Queue merutekan ke owner kategori, dan penulis tidak bisa menyetujui tulisannya sendiri.
+Anthropic tidak menyediakan layanan pembuat vektor. Pencarian A dan B memakai
+layanan embedding lain atau full-text search PostgreSQL. Claude hanya dipakai
+untuk menyusun jawaban dan memilih subject.
 
 ---
 
-## 4. Metrik yang belum diukur: deflection palsu
+## 8. Ambang keyakinan — dari mana angkanya
 
-Mockup mengukur **deflection rate** 68% — pertanyaan yang selesai tanpa jadi tiket. Tapi tidak ada yang mengukur kebalikannya:
+Ini keputusan teknis yang paling mudah salah, jadi ditulis eksplisit.
 
-> **EVA menjawab, tapi karyawan tetap membuat tiket untuk masalah yang sama.**
+**Cara yang salah:** menanyakan ke model *"seberapa yakin kamu, 0–100?"*. Model
+akan menjawab dengan angka, tetapi angka itu tidak terkalibrasi — model cenderung
+terlalu percaya diri dan menjawab 90% untuk hal yang sebenarnya ditebak.
 
-Ini sinyal paling tajam yang bisa didapat, karena artinya jawabannya *ada* tapi tidak menyelesaikan. Tanpa metrik ini, angka deflection 68% bisa menipu — terlihat sukses padahal sebagian karyawan hanya menyerah lalu membuat tiket lewat jalur lain.
+**Cara yang benar — dua sinyal:**
 
-**Cara mengukurnya sederhana:** catat bila user membuat tiket dalam ~10 menit setelah menerima jawaban untuk topik yang sama. Ini bisa dikerjakan lebih awal karena tidak butuh perubahan arsitektur.
+| Sinyal | Asal | Sifat |
+|---|---|---|
+| Skor kemiripan | Hasil pencarian vektor | Objektif, bisa diukur & disetel |
+| Model menolak memilih | Opsi "tidak ada yang cocok" | Jauh lebih andal daripada angka |
 
----
+Slider ambang di halaman Ticket Recommendation mengatur **skor kemiripan**. Bila
+model memilih "tidak ada yang cocok", langsung jatuh ke tipe cadangan berapa pun
+skornya.
 
-## 5. Urutan pengerjaan
-
-### Fase 1 — Membuat EVA benar-benar menjawab
-
-Tanpa fase ini, sisanya tidak ada gunanya. EVA yang sering salah akan ditinggalkan karyawan setelah dua atau tiga kali kecewa, dan sulit merebut kembali kepercayaan itu.
-
-1. Pipeline embedding untuk artikel, FAQ, dan chunk dokumen
-2. Vector store + hybrid search
-3. Penanganan Bahasa Indonesia (stemming, informal, typo)
-4. Kalibrasi ambang keyakinan dari data nyata
-5. Indexing dokumen yang sungguhan (menggantikan `setTimeout`)
-
-### Fase 2 — Membuat EVA berguna
-
-Yang mengubah EVA dari "FAQ pintar" jadi asisten sungguhan.
-
-1. Konteks identitas dari SSO + penyaringan hak akses saat retrieval
-2. Integrasi tiket dengan Helpdesk 2.0, termasuk transkrip percakapan
-3. Query "status tiket saya"
-4. Percakapan multi-giliran dengan memori sesi
-
-### Fase 3 — Membuat EVA membaik sendiri
-
-1. Clustering pertanyaan tak terjawab
-2. Rating memengaruhi peringkat retrieval
-3. Metrik deflection palsu
-4. Persetujuan dirutekan ke owner kategori
-5. SLA/aging pada Unanswered Questions
-
-**Catatan:** butir 3.9 (persetujuan by owner) dan metrik deflection palsu sebenarnya **murah dikerjakan** dan bisa dimajukan ke fase mana pun. Keduanya diletakkan di fase 3 karena tidak memblokir yang lain, bukan karena tidak penting.
+> **Catatan untuk developer:** di mockup, angka keyakinan dihitung dari kecocokan
+> kata kunci karena tidak ada model sungguhan. Jangan tiru rumusnya. Yang perlu
+> ditiru adalah perilakunya: ada ambang, dan di bawahnya EVA tidak menebak.
 
 ---
 
-## 6. Risiko utama
+## 9. Yang nyata vs yang disimulasikan di mockup
+
+Mockup menunjukkan tampilan dan alur, bukan implementasi. Tabel ini memisahkan
+keduanya supaya developer tidak salah menyalin.
+
+| Bagian | Di mockup | Di produksi |
+|---|---|---|
+| Pencarian jawaban | Cocok kata kunci ke 5 entri tetap | Pencarian vektor ke seluruh `kb_chunks` |
+| Pemilihan subject | Cocok kata kunci ke 139 aturan | Penyaringan vektor + Claude structured output |
+| Skor keyakinan | Rumus dari jumlah & panjang kata yang cocok | Skor kemiripan vektor |
+| Ringkasan dokumen | Teks tetap `"Ringkasan otomatis dari dokumen X"` | Ekstraksi teks + peringkasan oleh Claude |
+| Indeks dokumen | `setTimeout` 1,6 detik | Antrean pekerjaan: ekstraksi → potong → vektor |
+| Data | Seluruhnya di memori, hilang saat refresh | PostgreSQL |
+| Riwayat coverage | Lima titik contoh; titik terakhir dihitung nyata | Snapshot bulanan |
+
+**Yang sudah nyata di mockup** dan boleh dijadikan acuan perilaku:
+
+- Coverage dihitung dari data, bukan angka tetap
+- Toggle Show in EVA benar-benar memengaruhi jawaban EVA
+- Toggle sumber di Training Overview benar-benar mematikan sumber
+- Contoh pertanyaan uji benar-benar dijalankan, bukan hiasan
+- Dokumen yang diunggah benar-benar melahirkan artikel
+
+---
+
+## 10. Contoh Pertanyaan Uji
+
+Menggantikan konsep "frasa pemicu" yang sudah usang.
+
+Dengan pencarian kata kunci, admin harus mendaftarkan setiap variasi kata.
+Dengan pencarian makna, itu tidak perlu lagi — model paham *"terkunci"* sama
+dengan *locked*. Frasa tersebut berubah fungsi menjadi **kasus uji**:
+
+> Kalau karyawan menulis *"sap saya kekunci"*, EVA harus menemukan subject
+> **Aktivasi/Unlock akun**.
+
+Nilainya justru naik: ketika model embedding diganti atau strategi pemotongan
+teks diubah, kasus uji inilah yang menangkap kemunduran.
+
+Ada di dua tempat:
+
+- **Training Overview** — menguji pencarian jawaban (Pencarian A)
+- **Ticket Recommendation** — menguji pemilihan subject (Pencarian B)
+
+Sumber terbaik untuk kasus uji baru adalah menu Unanswered Questions, yang berisi
+kalimat asli karyawan.
+
+---
+
+## 11. Urutan pengerjaan
+
+### Fase 1 — EVA bisa menjawab
+
+1. Tabel master dari Excel (`applications`, `catalog_subjects`)
+2. Unggah dokumen → ekstraksi teks → potong → vektor
+3. Pencarian A + Claude menyusun jawaban dengan kutipan
+4. `answer_logs` sejak hari pertama
+
+Selesai fase ini EVA sudah berguna: menjawab dari dokumen perusahaan.
+
+### Fase 2 — EVA bisa merekomendasikan tiket
+
+5. `subject_vectors` + Pencarian B
+6. Claude memilih subject dengan structured output
+7. Ambang keyakinan + tipe cadangan
+8. Serah terima ke form Requester
+
+### Fase 3 — EVA bisa diperbaiki
+
+9. Contoh pertanyaan uji + penjalannya
+10. Coverage Dashboard
+11. Unanswered Questions dari `answer_logs`
+12. Rating & umpan balik
+
+---
+
+## 12. Risiko
 
 | Risiko | Dampak | Penanganan |
 |---|---|---|
-| EVA menjawab yakin tapi salah | Kepercayaan karyawan hilang, sulit dipulihkan | Ambang tinggi di awal; lebih baik sering bilang tidak tahu |
-| Kualitas KB rendah saat peluncuran | EVA terlihat bodoh padahal mesinnya benar | Isi KB dulu lewat Documents sebelum rilis |
-| Kebocoran informasi antar-unit | Masalah kepatuhan | Penyaringan hak akses di tahap retrieval, bukan tampilan |
-| Unanswered menumpuk tanpa ditindak | Fitur terbaik jadi tidak terpakai | SLA + clustering; tetapkan pemilik proses |
-| Ketergantungan pada satu admin | Pengetahuan mandek bila orangnya pindah | Owner per kategori, bukan satu Knowledge Administrator |
+| Ringkasan otomatis belum layak dikutip | EVA menjawab dengan teks placeholder | Artikel baru wajib disunting sebelum banyak dikutip; pantau lewat kartu "Perlu diperiksa" di Coverage Dashboard |
+| Tumpang tindih katalog | Dua subject bermakna dekat, AI memilih yang salah | Sudah terbukti di mockup: `Printer offline` vs `Tidak bisa cetak ke printer jaringan`. Rapikan katalog, atau biarkan EVA bertanya balik |
+| Deflection palsu | EVA dianggap menjawab padahal karyawan tetap membuat tiket | Catat di `answer_logs`, tampilkan sebagai metrik terpisah |
+| Bahasa campuran | Karyawan menulis campur Indonesia–Inggris | Pilih model embedding multibahasa; uji dengan kasus uji nyata |
+| Dokumen kedaluwarsa | EVA menjawab dari SOP lama | Tanggal berlaku pada dokumen; tandai yang lewat batas |
 
 ---
 
-## 7. Yang perlu diputuskan
+## 13. Yang masih perlu diputuskan
 
-Hal-hal yang tidak bisa dijawab dari sisi teknis dan butuh keputusan pemilik proses:
-
-1. **Model embedding di mana?** Layanan cloud lebih akurat, tapi berarti isi KB internal keluar dari jaringan ADHI. On-premise lebih aman tapi lebih berat.
-2. **Siapa pemilik proses EVA?** Mockup mengasumsikan satu Knowledge Administrator. Untuk 12 aplikasi dengan owner berbeda, ini kemungkinan tidak cukup.
-3. **Apakah EVA boleh bertindak, atau hanya memberi informasi?** Saat ini hanya membuat tiket. Pertanyaan lanjutan: bolehkah EVA mereset password sendiri, membuka akun terkunci, atau memberi akses? Setiap "boleh" menambah kebutuhan otorisasi.
-4. **Bahasa apa saja?** Settings menyebut "Bahasa + English". Perlu dipastikan apakah artikel wajib dwibahasa atau cukup satu.
+1. **Layanan embedding mana** — pihak ketiga, atau full-text search PostgreSQL
+   dulu untuk versi pertama
+2. **Artikel baru langsung aktif atau tidak** — di mockup langsung aktif; bila
+   ringkasan otomatis dianggap berisiko, ubah jadi nonaktif sampai disunting
+3. **Ambang awal berapa** — mockup memakai 55%, perlu disetel dengan data nyata
+4. **Berapa lama `answer_logs` disimpan** — menyangkut privasi dan biaya
+5. **Siapa merawat katalog** — perubahan Excel masuk lewat siapa
 
 ---
 
-## Lampiran — Berkas terkait
+## Lampiran — berkas terkait
 
 | Berkas | Isi |
 |---|---|
-| `/eva/console.html` | Admin console (bundle x-dc terkompilasi; sumber tersimpan di dalam tag `__bundler/template`) |
-| `/eva/index.html` | Wrapper + widget Switch Role |
-| `/shared/nav-widget.js` | Role switcher lintas mockup |
+| `shared/helpdesk-catalog.js` | 34 aplikasi + 139 subject, hasil konversi Excel |
+| `eva/console.html` | Mockup EVA Knowledge Admin Console |
+| `requester/dashboard.html` | Form Buat Tiket, pemakai katalog yang sama |
+| `admin/index.html` | Role Admin, pemilik katalog & BPO |
