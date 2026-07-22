@@ -63,50 +63,102 @@ Diperiksa langsung di mesin, bukan asumsi.
 | macOS | 26.5.1 |
 
 **Ekstensi PHP lengkap.** Enam belas ekstensi yang dibutuhkan sudah ada,
-termasuk `pdo_pgsql` dan `redis`.
+termasuk `pdo_mysql`, `mysqli`, `pdo_pgsql`, dan `redis`.
 
 ### Belum ada
 
 | | Untuk apa | Kapan diperlukan |
 |---|---|---|
-| Server PostgreSQL | pencarian vektor (pgvector) | Fase 1 langkah 2–3 |
+| Server MySQL | basis data pengembangan, mengikuti tim | Fase 1 langkah 1 |
 | Server Redis | antrean indeks dokumen | bisa ditunda, pakai antrean database dulu |
 | `ANTHROPIC_API_KEY` | memanggil Claude | Fase 1 langkah 3 |
 
 Catatan: ekstensi PHP-nya sudah ada, yang belum adalah **server database**-nya.
-Herd yang terpasang versi gratis, jadi tidak membawa PostgreSQL/Redis bawaan.
+Herd yang terpasang versi gratis, jadi tidak membawa MySQL/Redis bawaan, dan
+Homebrew belum terpasang di mesin ini.
 
-### Pilihan memasang PostgreSQL
+### Pilihan memasang MySQL
 
 | Cara | Kelebihan | Kekurangan |
 |---|---|---|
-| Postgres.app | gratis, tanpa terminal | pgvector dipasang terpisah |
-| Herd Pro | menyatu dengan Herd, sekalian Redis | berbayar |
-| Docker (`pgvector/pgvector`) | pgvector langsung ada | perlu pasang Docker dulu |
+| DBngin | gratis, satu aplikasi untuk MySQL + PostgreSQL + Redis, sepembuat Herd | perlu unduh terpisah |
+| Herd Pro | menyatu dengan Herd | berbayar |
+| Docker | versi bisa dipersis-samakan dengan tim | perlu pasang Docker dulu |
 
-**Saran: tunda dulu.** Fase 1 langkah 1 bisa dikerjakan penuh dengan SQLite.
-Pilih setelah paham kebutuhan sebenarnya.
+**Saran: DBngin.** Gratis, dan nanti PostgreSQL untuk tahap kantor bisa
+dijalankan dari aplikasi yang sama.
+
+Samakan **versi MySQL** dengan yang dipakai tim. Beda versi bisa berbeda
+perlakuan pada charset, mode `ONLY_FULL_GROUP_BY`, dan panjang indeks.
 
 ---
 
-## 3. Langkah pertama yang bisa dikerjakan sekarang
+## 3. MySQL sekarang, PostgreSQL nanti
 
-Semua ini jalan dengan SQLite, tanpa PostgreSQL, tanpa API key.
+Rekan tim sudah mulai membangun **Requester, Approver, Support, dan Admin**
+memakai **MySQL**. PostgreSQL milik kantor baru dipakai nanti.
 
-1. **Buat proyek Laravel**, sambungkan ke Herd
-2. **Migrasi tabel master** — `applications`, `catalog_subjects`
+**Ikut MySQL.** Satu basis data untuk semua role, satu set migrasi, satu skema.
+Memakai basis data berbeda dari tim untuk role EVA akan memecah migrasi dan
+menyembunyikan bentrokan skema sampai penggabungan — justru saat paling mahal
+untuk diperbaiki.
+
+### Yang perlu dijaga agar pindah ke PostgreSQL tidak menyakitkan
+
+| Jaga | Sebabnya |
+|---|---|
+| Pakai Schema Builder Laravel, hindari `DB::statement` berisi SQL khas MySQL | migrasi tetap jalan di kedua basis data |
+| Hindari `ENUM`; pakai `string` + validasi di aplikasi | perubahan `ENUM` di PostgreSQL merepotkan |
+| Jangan andalkan penamaan yang tidak peka huruf besar-kecil | MySQL memaklumi, PostgreSQL tidak |
+| Jangan andalkan urutan baris tanpa `ORDER BY` | urutan bawaan keduanya berbeda |
+| `utf8mb4` sejak awal | supaya emoji dan aksara non-latin tidak memutus data |
+
+### Pencarian vektor — jangan dibangun di atas MySQL
+
+Ini konsekuensi terpenting. **pgvector adalah ekstensi PostgreSQL dan tidak ada
+padanannya di MySQL.** Inti EVA — mencari artikel berdasarkan makna, bukan
+kecocokan kata — belum bisa dijalankan sepenuhnya selama masih di MySQL.
+
+Yang harus dilakukan: **kurung pencarian di balik satu antarmuka**, misalnya
+`KnowledgeSearch` dengan satu metode `cari(string $pertanyaan): array`.
+
+| Tahap | Penerapan |
+|---|---|
+| Sekarang (MySQL) | `FULLTEXT` MySQL — cocok kata, cukup untuk membangun seluruh layar dan alur |
+| Nanti (PostgreSQL) | pgvector — ganti satu kelas saja, sisanya tidak berubah |
+
+Simpan embedding di tabel tersendiri (`article_embeddings`) yang selama tahap
+MySQL boleh dibiarkan kosong. Dengan begitu perpindahan nanti berarti mengisi
+satu tabel dan menukar satu kelas, bukan membongkar ulang.
+
+**Jangan** memakai tipe `VECTOR` bawaan MySQL 9. Ia tidak punya indeks ANN,
+dukungan Laravel-nya tipis, dan tetap harus dibuang saat pindah ke pgvector.
+
+---
+
+## 4. Langkah pertama yang bisa dikerjakan sekarang
+
+Semua ini jalan dengan MySQL, tanpa PostgreSQL, tanpa API key.
+
+1. **Pasang MySQL**, samakan versinya dengan tim
+2. **Buat proyek Laravel**, sambungkan ke Herd, `DB_CONNECTION=mysql`
+3. **Sepakati kepemilikan tabel dengan tim** — tabel mana milik EVA, tabel mana
+   milik role lain, dan siapa memiliki `applications` serta `catalog_subjects`.
+   Katalog dipakai bersama Requester, jadi harus satu tabel, bukan dua salinan
+4. **Migrasi tabel master** — `applications`, `catalog_subjects`
    (struktur di rancangan teknis §6)
-3. **Seeder dari katalog** — impor `shared/helpdesk-catalog.js`:
+5. **Seeder dari katalog** — impor `shared/helpdesk-catalog.js`:
    34 aplikasi + 139 subject (82 incident + 41 service + 16 access)
-4. **CRUD dasar** — dokumen, artikel, FAQ beserta relasinya
-5. **Layar admin** mengikuti mockup
+6. **CRUD dasar** — dokumen, artikel, FAQ beserta relasinya
+7. **Layar admin** mengikuti mockup, dengan pencarian `FULLTEXT`
 
-Baru setelah itu masuk ke pencarian vektor, dan saat itulah PostgreSQL
-diperlukan.
+Langkah 3 mudah terlewat dan paling mahal bila terlewat. Requester dan EVA
+membaca katalog yang sama; bila masing-masing membuat tabelnya sendiri,
+muncul kembali pola cacat di §6 — satu konsep, dua sumber data.
 
 ---
 
-## 4. Aturan yang tidak boleh dilanggar
+## 5. Aturan yang tidak boleh dilanggar
 
 Ringkasan dari rancangan teknis §2. Diulang di sini karena inilah yang paling
 sering dilanggar tanpa sadar:
@@ -120,7 +172,7 @@ sering dilanggar tanpa sadar:
 
 ---
 
-## 5. Pola cacat yang berulang di mockup
+## 6. Pola cacat yang berulang di mockup
 
 Selama pengerjaan ditemukan **empat kali** cacat berbentuk sama: satu konsep,
 dua sumber data. Data contoh ditulis manual agar layar terlihat penuh, lalu
@@ -144,17 +196,23 @@ hasilnya. **Uji jalur yang membuat data baru, bukan hanya membaca data contoh.**
 
 ---
 
-## 6. Yang masih menggantung
+## 7. Yang masih menggantung
 
 1. **`admin/index.html` berstatus modified** dan belum pernah di-commit.
    Perubahannya menghapus skrip yang menyembunyikan subtitle di Dashboard Admin.
    Bukan bagian pekerjaan EVA — perlu diputuskan terpisah.
 
-2. **Lima keputusan terbuka** ada di rancangan teknis §14: layanan embedding,
+2. **Perlu disepakati dengan tim** sebelum menulis migrasi:
+   - versi MySQL yang dipakai
+   - siapa memiliki tabel `applications` dan `catalog_subjects`
+   - awalan nama tabel milik EVA, agar tidak bentrok
+   - apakah semua role satu proyek Laravel atau terpisah
+
+3. **Lima keputusan terbuka** ada di rancangan teknis §14: layanan embedding,
    status awal artikel baru, ambang awal, retensi `answer_logs`, dan siapa
    merawat katalog.
 
-3. **Dua kasus uji sengaja dibiarkan gagal** di Ticket Recommendation karena
+4. **Dua kasus uji sengaja dibiarkan gagal** di Ticket Recommendation karena
    mengungkap tumpang tindih katalog yang nyata:
    - "akun terkunci" bersaing antara `User Locked` dan `Penonaktifan akun`
    - "printer offline tidak bisa cetak" bersaing antara `Printer offline` dan
@@ -165,7 +223,7 @@ hasilnya. **Uji jalur yang membuat data baru, bukan hanya membaca data contoh.**
 
 ---
 
-## 7. Cara membaca mockup
+## 8. Cara membaca mockup
 
 `eva/console.html` adalah bundel terkompilasi 12 MB. Sumbernya utuh berupa
 string JSON di dalam `<script type="__bundler/template">`.

@@ -224,8 +224,13 @@ bagian berikut.
 ### Yang tidak disediakan Anthropic
 
 Anthropic tidak menyediakan layanan pembuat vektor. Pencarian A dan B memakai
-layanan embedding lain atau full-text search PostgreSQL. Claude hanya dipakai
-untuk menyusun jawaban dan memilih subject.
+layanan embedding lain, atau full-text search bawaan basis data. Claude hanya
+dipakai untuk menyusun jawaban dan memilih subject.
+
+Tahap pengembangan sekarang memakai **MySQL** mengikuti tim, jadi pencarian
+vektor belum bisa dijalankan — pgvector hanya ada di PostgreSQL. Sementara ini
+pakai `FULLTEXT` MySQL di balik satu antarmuka pencarian, lalu tukar ke pgvector
+saat pindah ke PostgreSQL kantor. Lihat serah terima §3.
 
 ---
 
@@ -266,7 +271,7 @@ keduanya supaya developer tidak salah menyalin.
 | Skor keyakinan | Rumus dari jumlah & panjang kata yang cocok | Skor kemiripan vektor |
 | Ringkasan dokumen | Teks tetap `"Ringkasan otomatis dari dokumen X"` | Ekstraksi teks + peringkasan oleh Claude |
 | Indeks dokumen | `setTimeout` 1,6 detik | Antrean pekerjaan: ekstraksi → potong → vektor |
-| Data | Seluruhnya di memori, hilang saat refresh | PostgreSQL |
+| Data | Seluruhnya di memori, hilang saat refresh | MySQL sekarang, PostgreSQL kantor nanti |
 | Riwayat coverage | Lima titik contoh; titik terakhir dihitung nyata | Snapshot bulanan |
 
 **Yang sudah nyata di mockup** dan boleh dijadikan acuan perilaku:
@@ -412,8 +417,8 @@ Selesai fase ini EVA sudah berguna: menjawab dari dokumen perusahaan.
 
 ## 14. Yang masih perlu diputuskan
 
-1. **Layanan embedding mana** — pihak ketiga, atau full-text search PostgreSQL
-   dulu untuk versi pertama
+1. **Layanan embedding mana** — pihak ketiga, atau tunda dulu dan pakai
+   full-text search sampai pindah ke PostgreSQL
 2. **Artikel baru langsung aktif atau tidak** — di mockup langsung aktif; bila
    ringkasan otomatis dianggap berisiko, ubah jadi nonaktif sampai disunting
 3. **Ambang awal berapa** — mockup memakai 55%, perlu disetel dengan data nyata
